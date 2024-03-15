@@ -88,11 +88,13 @@ class RecruitmentController extends Controller
         $jobs_even = DB::table('jobs_availables')
                      ->select(DB::raw('*'))
                      ->whereRaw('MOD(id, 2) = 0')
+                     ->where('active', 'Y')
                      ->get();
 
         $jobs_odd = DB::table('jobs_availables')
                      ->select(DB::raw('*'))
                      ->whereRaw('MOD(id, 2) = 1')
+                     ->where('active', 'Y')
                      ->get();
         return view('hr.job-posting', [
             "jobs_e" => $jobs_even,
