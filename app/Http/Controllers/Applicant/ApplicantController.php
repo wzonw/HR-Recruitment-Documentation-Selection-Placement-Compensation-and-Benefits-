@@ -91,14 +91,24 @@ class ApplicantController extends Controller
     }
 
     public function apply(Request $request){
+        $files = [];
         if( $request -> has('file')){
-            $file = $request->file('file');
-            $extension = $file->getClientOriginalExtension();
+            foreach($request->file('file') as $f)
+            {
+                $filename = $request->input('name') . '_' . $f->getClientOriginalName();
+                $path = ('uploads/file');
+                $f->move($path, $filename);
+                $files[] = $path.'/'.$filename;
+            }
+            //$file = $request->file('file');
+            //$extension = $file->getClientOriginalExtension();
 
-            $filename = $request->input('name') . '.' . $extension;
+            //$filename = $request->input('name') . '.' . $extension;
 
-            $path = ('uploads/file');
-            $file->move($path, $filename);
+            //$path = ('uploads/file');
+            //$file->move($path, $filename);
+            
+            $upload = json_encode($files);
         };
 
         Application::create([
@@ -106,7 +116,7 @@ class ApplicantController extends Controller
             'name' => request('name'),
             'email' => request('email'),
             'contact_number' => request('number'),
-            'file'=> $path.'/'.$filename,
+            'file'=> $upload,
         ]);
 
         

@@ -46,7 +46,7 @@
                 @csrf
                 <div class="mt-3 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="job_id" value="{{ __('Job ID') }}" />
-                    <x-input id="job_id" class="block mt-1 w-72 " type="text" name="job_id" value="{{$job->id}}"/>
+                    <x-input id="job_id" class="block mt-1 w-72 " type="text" name="job_id" value="{{$job->id}}" readonly/>
                 </div>
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
@@ -66,7 +66,7 @@
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="file" value="{{ __('Upload File(s)') }}" />
-                    <x-input id="file" class="block mt-1 w-72" type="file" name="file" />
+                    <x-input id="file" class="block mt-1 w-72" type="file" name="file[]" multiple/>
                 </div>
                 
                 <div class="w-[500px] mt-4 flex justify-center min-h-max text-black text-base text-left font-normal font-inter">

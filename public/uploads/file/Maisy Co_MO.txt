@@ -1,0 +1,27 @@
+ CREATE TABLE Student (
+   student_no       VARCHAR(10) NOT NULL,
+   lastname         VARCHAR(50) NOT NULL,
+   firstname        VARCHAR(50) NOT NULL,
+   email            VARCHAR(50) NOT NULL,
+   gender           VARCHAR(1) NOT NULL,
+   Status           VARCHAR(1) DEFAULT'Y',
+   CONSTRAINT student_no_pk PRIMARY KEY(student_no)
+);
+
+
+INSERT INTO Student VALUES ('202112101', 'Genisis', 'John','jigenesis2021@plm.edu.ph','M','Y');
+INSERT INTO Student VALUES ('202112102', 'Co', 'Cea','cco2021@plm.edu.ph','F','Y');
+INSERT INTO Student VALUES ('202112103', 'De leon', 'Carl','cdeleon2021@plm.edu.ph','M','Y');
+INSERT INTO Student VALUES ('202112104', 'Bellezas', 'Kenneth','kbellezas2021@plm.edu.ph','M','Y');
+INSERT INTO Student VALUES ('202112105', 'Victorio' 'John','jvictorio2021@plm.edu.ph','M','Y');
+INSERT INTO Student VALUES ('202112106', 'Diamante', 'Jacint','jdiamante2021@plm.edu.ph','F','Y');
+INSERT INTO Student VALUES ('202112107', 'Ilacad', 'Jassi','eilacad2021@plm.edu.ph','F','Y');
+INSERT INTO Student VALUES ('202112108', 'Campollo', 'Raphael','rcampollo2021@plm.edu.ph','M','Y');
+INSERT INTO Student VALUES ('202112109', 'Elejer', 'Dylan','delejer2021@plm.edu.ph','M','Y');
+INSERT INTO Student VALUES ('202112110', 'Mones', 'Von','vmones2021@plm.edu.ph','F','Y');
+INSERT INTO Student VALUES ('202112111', 'Madjus', 'Kent','kmadjus2021@plm.edu.ph','M','Y');
+INSERT INTO Student VALUES ('202112112', 'Tayo', 'Jerico','jtayo2021@plm.edu.ph','M','Y');
+INSERT INTO Student VALUES ('202112113', 'Uriza', 'Baste','buriza2021@plm.edu.ph','F','Y');
+
+SELECT*
+    FROM Student;
