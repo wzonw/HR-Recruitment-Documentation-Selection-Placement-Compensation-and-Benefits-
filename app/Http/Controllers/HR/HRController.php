@@ -5,9 +5,11 @@ namespace App\Http\Controllers\HR;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Employee;
+use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
@@ -26,6 +28,11 @@ class HRController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
+        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
+                                    ->where('start_date', '<=' ,Carbon::today())
+                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = $NumOnLeave->count();
+
         $PTJobs = JobsAvailable::where('status', 'COS/JO')
                 ->where('active', 'Y')
                 ->get();
@@ -34,6 +41,7 @@ class HRController extends Controller
                 ->get();
         return view('hr.dashboard.index', [
             "num_applicants" => $NumOfApplicants,
+            "num_onleave" => $NumOnLeave,
             "part_time" => $PTJobs,
             "full_time" => $FTJobs,
         ]);

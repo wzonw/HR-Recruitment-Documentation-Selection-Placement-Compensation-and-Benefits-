@@ -23,6 +23,11 @@ class CompensationController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
+        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
+                                    ->where('start_date', '<=' ,Carbon::today())
+                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = $NumOnLeave->count();
+
         $PTJobs = JobsAvailable::where('status', 'COS/JO')
                 ->where('active', 'Y')
                 ->get();
@@ -31,6 +36,7 @@ class CompensationController extends Controller
                 ->get();
         return view('hr.dashboard.index', [
             "num_applicants" => $NumOfApplicants,
+            "num_onleave" => $NumOnLeave,
             "part_time" => $PTJobs,
             "full_time" => $FTJobs,
         ]);

@@ -44,7 +44,7 @@
         <div class="w-[308px] h-[102px] relative">
             <div class="w-[306px] h-[102px] left-0 top-0 absolute bg-red-700 rounded-[10px] shadow"></div>
             <div class="w-[94px] h-[63px] left-[214px] top-[19px] absolute bg-red-800 rounded-[10px] shadow-md"></div>
-            <div class="w-[94px] h-[27px] left-[214px] top-[37px] absolute text-center text-white text-2xl font-semibold font-'Inter'">10</div>
+            <div class="w-[94px] h-[27px] left-[214px] top-[37px] absolute text-center text-white text-2xl font-semibold font-'Inter'">{{ $num_onleave }}</div>
             <div class="w-[191px] h-[33px] left-[17px] top-[32px] absolute text-white text-lg font-bold font-'Inter'">Employees On Leaves</div>
         </div>
     </div>

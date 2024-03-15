@@ -9,8 +9,10 @@ use App\Models\Application;
 use App\Models\JobsAvailable;
 use App\Models\User;
 use App\Actions\Fortify\PasswordValidationRules;
+use App\Models\EmployeeLeave;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -30,6 +32,11 @@ class RecruitmentController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
+        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
+                                    ->where('start_date', '<=' ,Carbon::today())
+                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = $NumOnLeave->count();
+
         $PTJobs = JobsAvailable::where('status', 'COS/JO')
                 ->where('active', 'Y')
                 ->get();
@@ -38,6 +45,7 @@ class RecruitmentController extends Controller
                 ->get();
         return view('hr.dashboard.index', [
             "num_applicants" => $NumOfApplicants,
+            "num_onleave" => $NumOnLeave,
             "part_time" => $PTJobs,
             "full_time" => $FTJobs,
         ]);
