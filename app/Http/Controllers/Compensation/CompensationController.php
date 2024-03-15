@@ -61,8 +61,8 @@ class CompensationController extends Controller
 
     public function leave_list(){
         $leaves = EmployeeLeave::where('employee_leaves.remarks', 'Approved')
-                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
-                                ->whereYear('employee_leaves.start_date', Carbon::now()->year)
+                                ->where('start_date', '<=' ,Carbon::today())
+                                ->where('end_date', '>=' ,Carbon::today())
                                 ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->get([
