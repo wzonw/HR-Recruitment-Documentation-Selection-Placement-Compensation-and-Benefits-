@@ -6,7 +6,7 @@ use Livewire\Component;
 
 class FileCabinet extends Component
 {
-    public $applicant;
+    public $applicant, $f;
     public function render()
     {
         return view('livewire.file-cabinet');

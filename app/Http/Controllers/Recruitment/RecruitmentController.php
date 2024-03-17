@@ -55,6 +55,8 @@ class RecruitmentController extends Controller
     {
         $applicant = Application::where('id', $id)->first();
 
+        $applicant->file = json_decode($applicant->file);
+
         return view('hr.view-applicant-profile', [
             'applicant' => $applicant,
         ]);
