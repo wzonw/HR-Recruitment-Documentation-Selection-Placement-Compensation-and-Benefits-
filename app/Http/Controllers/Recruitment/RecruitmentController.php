@@ -62,9 +62,9 @@ class RecruitmentController extends Controller
         ]);
     }
 
-    public function view_file($id)
-    {   
-        $data = Application::find($id);
+    public function view_file($file)
+    {
+        $data = $file;
 
         return view('livewire.view-file', compact('data'));
     }

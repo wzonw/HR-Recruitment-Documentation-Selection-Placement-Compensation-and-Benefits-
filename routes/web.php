@@ -123,7 +123,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         ->name('view-applicant-profile');
     });
 
-    Route::get('/view/applicant/profile/{id}/file', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'view_file'])
+    Route::get('/view/applicant/profile/{file}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'view_file'])
     ->name('view-file');
 
     Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
