@@ -90,40 +90,36 @@ class ApplicantController extends Controller
 
     }
 
+    public function g($id){
+        $job = JobsAvailable::findOrFail($id);
+        
+        return view('livewire.app-profile', [
+            'job' =>$job
+        ]);
+
+    }
+
     public function apply(Request $request){
-        $files = [];
-        if( $request -> has('file')){
-            foreach($request->file('file') as $f)
-            {
-                $filename = $request->input('name') . '_' . $f->getClientOriginalName();
-                $path = ('uploads/file');
-                $f->move($path, $filename);
-                $files[] = $path.'/'.$filename;
-            }
-            //$file = $request->file('file');
-            //$extension = $file->getClientOriginalExtension();
-
-            //$filename = $request->input('name') . '.' . $extension;
-
-            //$path = ('uploads/file');
-            //$file->move($path, $filename);
-            
-            $upload = json_encode($files);
-        };
+        
+        $request->validate([
+            'job_id'=> 'required',
+            'name'=> 'required',
+            'email'=> 'required',
+            'number'=> 'required',
+        ]);
 
         Application::create([
-            'job_id' => request('job_id'),
-            'name' => request('name'),
-            'email' => request('email'),
-            'contact_number' => request('number'),
-            'file'=> $upload,
+            'job_id' => $request->input('job_id'),
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'contact_number' => $request->input('number'),
+            //'file'=> $upload,
         ]);
 
         
         $message = 'Successfully Applied';
-        $data = Application::all();
 
-        return redirect()->route('guest-jobs')->with('message', $message)->with('data',$data);
+        return redirect()->route('guest-application-get', ['id'=>$request->job_id]);
     }
 
     /**

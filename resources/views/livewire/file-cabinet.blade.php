@@ -29,7 +29,7 @@
                     {{ Str::between($value, '_', '.') }}
                 </th>       
                 <td class="px-6 py-3">
-                    <a href="{{ route('view-file', ['file' => Str::after($value, 'file/')]) }}">{{ $value }} </a>
+                    <a href="{{ route('view-file', ['file' => $value]) }}">{{ $value }} </a>
                 </td>
             </tr>
             @empty

@@ -56,7 +56,7 @@
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="email" value="{{ __('Email') }}" />
-                    <x-input id="email" class="block mt-1 w-72" type="email" name="email" :value="old('email')"  />
+                    <x-input id="email" class="block mt-1 w-72" type="email" name="email" :value="old('email')" required />
                 </div>
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
@@ -66,7 +66,7 @@
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="file" value="{{ __('Upload File(s)') }}" />
-                    <x-input id="file" class="block mt-1 w-72" type="file" name="file[]" multiple/>
+                    <x-input id="file" class="block mt-1 w-72" type="file" name="file[]" multiple />
                 </div>
                 
                 <div class="w-[500px] mt-4 flex justify-center min-h-max text-black text-base text-left font-normal font-inter">
@@ -77,6 +77,15 @@
                         back
                     </a>
                 </div>
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
             </form>
         </div>
     </div>

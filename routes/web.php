@@ -27,6 +27,9 @@ Route::get('/plm/jobs', function () {
 Route::post('/plm/jobs/application/{id}', [\App\Http\Controllers\Applicant\ApplicantController::class, 'guest_application'])
 ->name('guest-application');
 
+Route::get('/plm/jobs/application/{id}', [\App\Http\Controllers\Applicant\ApplicantController::class, 'g'])
+->name('guest-application-get');
+
 Route::post('/plm/jobs/application/{id}/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'apply'])
 ->name('guest-application-success');
 
