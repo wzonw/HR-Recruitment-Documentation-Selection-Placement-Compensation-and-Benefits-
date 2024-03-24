@@ -7,6 +7,7 @@ use App\Models\Application;
 use App\Models\JobApplication;
 use App\Models\JobsAvailable;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
@@ -102,24 +103,48 @@ class ApplicantController extends Controller
     public function apply(Request $request){
         
         $request->validate([
-            'job_id'=> 'required',
-            'name'=> 'required',
-            'email'=> 'required',
-            'number'=> 'required',
+            'job_id'=> ['required', 'numeric'], //only numbers
+            'name'=> ['required', 'min:5', 'max:50', 'regex:/^[a-zA-Z \-\.]*$/'], //alpha, space, -, .
+            'email'=> ['required', 'regex:/^.+@.+\.com$/'], //must have @ and .com
+            'number'=> ['required', 'regex:/^(09\d{9}|\+639\d{9})+$/', 'min:11', 'max:13'], //"09,9digits", "+63,9digits"
+            'file.*'=> ['required', 'mimes:pdf', 'max:1024'], //only accept pdf w/ max size 1mb
         ]);
 
-        Application::create([
-            'job_id' => $request->input('job_id'),
-            'name' => $request->input('name'),
-            'email' => $request->input('email'),
-            'contact_number' => $request->input('number'),
-            //'file'=> $upload,
-        ]);
-
+        //checks if there's an ongoing application via email/number
+        $application = Application::orderBy('created_at', 'desc')
+                                    ->where('email', $request->email)
+                                    ->orWhere('contact_number', $request->number)
+                                    ->where('remarks', null)->first();
         
-        $message = 'Successfully Applied';
+        $files = [];
+        if($application == null){
+            if( $request -> has('file')){
+                foreach($request->file('file') as $f)
+                {
+                    $filename = Str::of($request->input('name'))->remove(' ');
+                    $filename = $filename . '_' . $f->getClientOriginalName();
+                    $path = ('uploads/file');
+                    $f->move($path, $filename);
+                    $files[] = $filename;
+                }
+                
+                $upload = json_encode($files); //encodes array, must be decoded when displayed
+            };
+            Application::create([
+                'job_id' => $request->input('job_id'),
+                'name' => $request->input('name'),
+                'email' => $request->input('email'),
+                'contact_number' => $request->input('number'),
+                'file'=> $upload,
+            ]);
 
-        return redirect()->route('guest-application-get', ['id'=>$request->job_id]);
+            $message = 'Successfully Applied!';
+        }
+        else{
+            $message = 'You have an ongoing application with id: '.''.$application->id;
+        }
+
+        return redirect()->route('guest-application-get', ['id'=>$request->job_id])->with('message', $message);
     }
 
     /**

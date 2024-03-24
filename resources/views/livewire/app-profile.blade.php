@@ -41,6 +41,26 @@
             </div>
         </div>
         <div class="w-[500px] h-full bg-slate-100 rounded-xl py-3 items-center">
+           <!--error messages-->
+            @if ($errors->any())
+            <div class="mx-3 alert alert-danger text-red-600 italic">
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            @endif
+            <!--Success message-->
+            @if(session('message') == 'Successfully Applied!')
+            <div class="min-w-max h-8 mx-3 text-green-600 items-end italic">
+                {{ session('message') }} 
+            </div>
+            @else <!--ongoing application message-->
+            <div class="min-w-max h-8 mx-3 text-red-500 items-end italic">
+                {{ session('message') }}
+            </div>
+            @endif
             <p class="w-26 h-9 text-indigo-800 text-[28px] text-center font-bold font-inter">Submit Application</p>
             <form action="{{route('guest-application-success', $job->id)}}" method="post" enctype="multipart/form-data">
                 @csrf
@@ -61,12 +81,12 @@
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="number" value="{{ __('Contact Number') }}" />
-                    <x-input id="number" class="block mt-1 w-72" type="tel" name="number" :value="old('number')"  />
+                    <x-input id="number" class="block mt-1 w-72" type="tel" name="number" :value="old('number')"  required/>
                 </div>
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="file" value="{{ __('Upload File(s)') }}" />
-                    <x-input id="file" class="block mt-1 w-72" type="file" name="file[]" multiple />
+                    <x-input id="file" class="block mt-1 w-72" type="file" name="file[]" multiple required/>
                 </div>
                 
                 <div class="w-[500px] mt-4 flex justify-center min-h-max text-black text-base text-left font-normal font-inter">
@@ -77,15 +97,6 @@
                         back
                     </a>
                 </div>
-                @if ($errors->any())
-                    <div class="alert alert-danger">
-                        <ul>
-                            @foreach ($errors->all() as $error)
-                                <li>{{ $error }}</li>
-                            @endforeach
-                        </ul>
-                    </div>
-                @endif
             </form>
         </div>
     </div>

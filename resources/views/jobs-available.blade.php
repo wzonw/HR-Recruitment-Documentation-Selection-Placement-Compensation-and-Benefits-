@@ -7,11 +7,6 @@
                     <p class="w-56 h-8 text-indigo-800 text-2xl text-left font-bold font-inter">
                         Careers Available
                     </p>
-                    @if(session('message'))
-                    <div class="min-w-max h-8 flex items-end italic">
-                        {{ session('message') }} 
-                    </div>
-                    @endif
                 </div>
                 <livewire:jobs-table />
             </div>

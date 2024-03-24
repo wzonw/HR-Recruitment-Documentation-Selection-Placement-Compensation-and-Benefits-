@@ -38,7 +38,7 @@
             <div class="sm:fixed mt-50" style="color: #fff">
                 You have reached the Official Applicant Website of the Pamantasan ng Lungsod ng Maynila, Intramuros, Manila.
                 <br>
-                <a href="{{route('guest-jobs')}}" class="font-semibold focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500" style="color:white">Apply for a job</a>
+                <a href="{{route('guest-jobs')}}" class="font-semibold focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500" style="color:yellow">Apply for a job</a>
             </div>
         </div>
     </body>
