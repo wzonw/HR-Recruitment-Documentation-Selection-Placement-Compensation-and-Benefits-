@@ -65,6 +65,11 @@
         </div>
         <div class="w-[500px] h-[510px] bg-white shadow shadow-gray-400 border border-black">
             <p class="w-26 h-11 pt-2 text-indigo-800 text-2xl shadow text-center font-bold font-inter">Add Vacancies</p>
+            @if(session('message'))
+            <div class="min-w-max h-8 text-blue-600 flex items-end italic">
+                {{ session('message') }} 
+            </div>
+            @endif
             <form action="{{route('job-post')}}" method="post" class="py-3">
                 @csrf
                 <div class="mt-2 mx-12 inline-flex justify-center items-center space-x-2">
@@ -104,16 +109,11 @@
                 </div>
                 
                 <div class="w-[500px] mt-4 flex justify-center min-h-max text-black text-base text-left font-normal font-inter">
-                    <x-button-gold class="w-28">
+                    <x-button-gold class="w-28" onclick="return confirm('Are you sure?')">
                         Apply
                     </x-button-gold>
                 </div>
             </form>
-            @if(session('message'))
-            <div class="min-w-max h-8 text-blue-600 flex items-end italic">
-                {{ session('message') }} 
-            </div>
-            @endif
         </div>
     </div>
 </x-admin-layout>

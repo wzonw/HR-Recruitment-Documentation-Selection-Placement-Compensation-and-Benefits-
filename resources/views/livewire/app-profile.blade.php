@@ -90,7 +90,7 @@
                 </div>
                 
                 <div class="w-[500px] mt-4 flex justify-center min-h-max text-black text-base text-left font-normal font-inter">
-                    <x-button-gold class="w-28">
+                    <x-button-gold class="w-28" onclick="return confirm('Are you sure?')">
                         Apply
                     </x-button-gold>
                     <a href="{{route('guest-jobs')}}" class="ms-4 px-4 inline-flex items-center justify-center py-2 bg-blue-900 border border-transparent rounded-md font-semibold text-xs text-white text-center font-inter uppercase">

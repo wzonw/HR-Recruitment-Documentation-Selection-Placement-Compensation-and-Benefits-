@@ -70,10 +70,10 @@
             </div>
             <div class="mt-14">
                 <h1 class="text-indigo-800 text-2xl font-bold font-inter">Application Status</h1>
-                <a  href="{{route('email-proceed', $applicant->id)}}" 
+                <a  onclick="return confirm('Are you sure?')" href="{{route('email-proceed', $applicant->id)}}" 
                     class="inline-flex mt-7 px-3 py-2 items-center justify-center bg-green-700 border border-transparent rounded-md 
                     font-semibold text-xs text-white text-center font-inter uppercase">Proceed</a>
-                <a  href="{{route('email-reject', $applicant->id)}}" 
+                <a  onclick="return confirm('Are you sure?')" href="{{route('email-reject', $applicant->id)}}" 
                     class="inline-flex mt-7 px-3 py-2 items-center justify-center bg-red-700 border border-transparent rounded-md 
                     font-semibold text-xs text-white text-center font-inter uppercase">Rejected</a>
             </div>
