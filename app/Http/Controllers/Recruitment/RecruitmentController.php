@@ -104,6 +104,34 @@ class RecruitmentController extends Controller
         ]);
     }
 
+    public function job_update($job_id){
+        $jobs = JobsAvailable::findOrFail($job_id);
+        
+        $jobs_even = DB::table('jobs_availables')
+                     ->select(DB::raw('*'))
+                     ->whereRaw('MOD(id, 2) = 0')
+                     ->get();
+
+        $jobs_odd = DB::table('jobs_availables')
+                     ->select(DB::raw('*'))
+                     ->whereRaw('MOD(id, 2) = 1')
+                     ->get();
+        return view('hr.job-update', [
+            "jobs_e" => $jobs_even,
+            "jobs_o" => $jobs_odd,
+            "jobs" => $jobs,
+        ]);
+    }
+
+    public function job_updateActive(Request $request){
+        $job = JobsAvailable::where('id', $request->job_id)->first();
+        $job->active = $request->active;
+        $job->save();
+        $message = 'Successfully Updated a Job!';
+
+        return redirect()->route('job-posting')->with('message', $message);
+    }
+
     public function job_post(){
         JobsAvailable::create([
             'job_name' => request('position'),

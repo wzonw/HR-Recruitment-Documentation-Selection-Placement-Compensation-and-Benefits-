@@ -145,8 +145,18 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
 
     Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
+        Route::get('/job-update/{job_id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update'])
+        ->name('job-update');
+    });
+
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
         Route::post('/job-posting/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_post'])
         ->name('job-post');
+    });
+
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
+        Route::post('/job-update/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_updateActive'])
+        ->name('job-update-active');
     });
 
     Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'admin'], function(){
