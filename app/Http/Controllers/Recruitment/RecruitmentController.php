@@ -124,27 +124,44 @@ class RecruitmentController extends Controller
     public function sendmail_rejected($id): RedirectResponse
     {
         $applicant = Application::where('id', $id)->first();
-        $applicant->remarks = 'Declined';
-        $applicant->save();
-        Mail::to($applicant->email)->send(new ApplicantRejected($applicant));
-        return redirect()->route('view-applicant-profile', $applicant->id);
+        $status = $applicant->remarks;
+        if ($status == null){
+            $applicant->remarks = 'Declined';
+            $applicant->save();
+            Mail::to($applicant->email)->send(new ApplicantRejected($applicant));
+
+            $message = 'This applicant failed the initial screening.';
+        }
+        else{
+            $message = 'This applicant status is '.$status;
+        }
+        return redirect()->route('view-applicant-profile', $applicant->id)->with('message', $message);
     }
 
     public function sendmail_proceed($id): RedirectResponse
     {
         $applicant = Application::where('id', $id)->first();
-        $password = Str::of($applicant->name)->remove(' ');
-        $password = strtolower($password);
-        $pass = $password;
-        User::create([
-            'name' => $applicant->name,
-            'email' => $applicant->email,
-            'password' => Hash::make($password),
-            'application_id' => $id,
-        ]); 
-        $applicant->remarks = 'Requirements';
-        $applicant->save();
-        Mail::to($applicant->email)->send(new ApplicantProceed($applicant, $password));
-        return redirect()->route('view-applicant-profile', $applicant->id);
+        $status = $applicant->remarks;
+        if ($status == null){
+            $password = Str::of($applicant->name)->remove(' ');
+            $password = strtolower($password);
+            $pass = $password;
+            User::create([
+                'name' => $applicant->name,
+                'email' => $applicant->email,
+                'password' => Hash::make($password),
+                'application_id' => $id,
+            ]); 
+            $applicant->remarks = 'For Interview';
+            $applicant->save();
+            Mail::to($applicant->email)->send(new ApplicantProceed($applicant, $password));
+
+            $message = 'This applicant passed the initial screening.';
+        }
+        else{
+            $message = 'This applicant status is '.$status;
+        }
+        
+        return redirect()->route('view-applicant-profile', $applicant->id)->with('message', $message);
     }
 }

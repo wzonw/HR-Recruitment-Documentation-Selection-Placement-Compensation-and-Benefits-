@@ -65,7 +65,13 @@
 
         <!-- File Cabinet -->
         <div class="flex">
-            <div class="pt-10 px-8 inline-flex space-x-16">
+            <div class="pt-10 px-8">
+                <!-- message -->
+                @if(session('message'))
+                <div class="min-w-max h-8 mx-3 text-blue-600 items-end italic">
+                    {{ session('message') }} 
+                </div>
+                @endif
                 <livewire:FileCabinet :applicant="$applicant" />
             </div>
             <div class="mt-14">

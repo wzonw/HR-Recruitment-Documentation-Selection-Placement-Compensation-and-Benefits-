@@ -4,7 +4,7 @@
     Congratulations! 
     We would like to inform you that you passed the pre-screening for applicants.
     <br><br>
-    Here's your login credentials to our website, <span class="text-slate-100 italic"> ---url--- </span>
+    Here's your login credentials to <span class="text-slate-100 italic"><a href="#">our website</a>,</span>
     <br> <br>
     Email: {{$applicant->email}} <br>
     Password: {{$password}}
@@ -22,6 +22,8 @@
     <br> 6. Photocopy of previous and current employment certificate with duties and responsibilities (if applicable)
     <br> 7. Photocopy of PRC License and Board Rating (if applicable)
     <br> 8. Other supporting documents
+    <br><br>
+    Please disregard the above message if you already passed your complete requirements.
     <br><br>
     Thank you for applying and we wish you the best of luck.
     <br>

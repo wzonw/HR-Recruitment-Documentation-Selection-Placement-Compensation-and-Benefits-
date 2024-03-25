@@ -21,7 +21,9 @@ class ApplicantController extends Controller
         if(Gate::denies('for-applicants')){
             abort(403);
         }
-        return view('applicant-dashboard');
+        $applicant = Application::where('id', Auth::user()->application_id)->first();
+        $applicant->file = json_decode($applicant->file);
+        return view('applicant-dashboard', ['applicant'=>$applicant]);
     }
 
     public function detail($id)
