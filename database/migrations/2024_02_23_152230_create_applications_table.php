@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('applications', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('job_id')->constrained()->onDelete('cascade');
+            $table->foreignId('job_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->string('email');
             $table->string('contact_number');
+            $table->text('file');
+            $table->text('remarks');
             $table->timestamps();
         });
     }
