@@ -72,23 +72,6 @@
                     {{ session('message') }} 
                 </div>
                 @endif
-                
-            <div>
-                <table>
-                    <tbody>
-                        @forelse (Auth::user()->notifications as $notification)
-                        <tr>
-                            {{$notification->data['remarks']}} 
-                        </tr>
-                        @empty
-                        <tr>
-                            Sorry, empty
-                        </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-                asd
-            </div>
                 <livewire:FileCabinet :applicant="$applicant" />
             </div>
             <div class="mt-14">
