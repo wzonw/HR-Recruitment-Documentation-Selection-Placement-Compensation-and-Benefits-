@@ -9,7 +9,9 @@ use App\Models\Application;
 use App\Models\JobsAvailable;
 use App\Models\User;
 use App\Actions\Fortify\PasswordValidationRules;
+use App\Events\StatusChanged;
 use App\Models\EmployeeLeave;
+use App\Notifications\NewStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -17,6 +19,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Str;
 
 class RecruitmentController extends Controller
@@ -156,6 +159,8 @@ class RecruitmentController extends Controller
         if ($status == null){
             $applicant->remarks = 'Declined';
             $applicant->save();
+
+            //notif via mail
             Mail::to($applicant->email)->send(new ApplicantRejected($applicant));
 
             $message = 'This applicant failed the initial screening.';
@@ -182,9 +187,16 @@ class RecruitmentController extends Controller
             ]); 
             $applicant->remarks = 'For Interview';
             $applicant->save();
+
+            //notif via mail
             Mail::to($applicant->email)->send(new ApplicantProceed($applicant, $password));
 
+            //notif via db (system)
+            event(new StatusChanged($applicant));
+
             $message = 'This applicant passed the initial screening.';
+            
+           
         }
         else{
             $message = 'This applicant status is '.$status;
