@@ -31,7 +31,8 @@ Route::get('/plm/jobs/application/{id}', [\App\Http\Controllers\Applicant\Applic
 Route::post('/plm/jobs/application/{id}/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'apply'])
 ->name('guest-application-success');
 
-Route::get('/search', [\App\Http\Controllers\JobsAvailableController::class, 'search']);
+Route::get('/plm/jobs/search', [\App\Http\Controllers\JobsAvailableController::class, 'search'])
+->name('search');
 
 
 Route::get('/create', function () {
