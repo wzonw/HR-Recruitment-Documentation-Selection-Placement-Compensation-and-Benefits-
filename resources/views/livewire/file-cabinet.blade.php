@@ -6,7 +6,7 @@
     
     @can('for-applicants')
     <div class="absolute mt-[-48px] ml-[550px]">
-        <a href="#" class="w-10 h-7 pt-4 text-black text-base font-medium font-inter underline leading-loose">Add</a>
+        
         <a href="#" class="w-10 h-7 pt-4 pl-12 text-black text-base font-medium font-inter underline leading-loose">Delete</a>
     </div>
     @endif
@@ -33,7 +33,7 @@
                 </td>
             </tr>
             @empty
-            <span>Sorry. Is empty!</span>
+            <span>Sorry, empty!</span>
             @endforelse
         </tbody>
     </table>

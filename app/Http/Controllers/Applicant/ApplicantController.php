@@ -50,28 +50,7 @@ class ApplicantController extends Controller
      */
     public function store(Request $request)
     {
-        $job = JobsAvailable::findOrFail($request->input('job_id'));
-
-        $application = JobApplication::where('user_id', Auth::user()->id)->first();
-
-        if($application == null){
-            $application = new JobApplication;
- 
-            $application->job_id = $job->id;
-
-            $application->user_id = Auth::user()->id;
-
-            $application->applied_date = now();
-    
-            $application->save();
-
-            $message = 'Successfully Applied';
-        }
-        else{
-            $message = 'You have an existing application.';
-        }
-
-        return redirect()->route('jobs-available')->with('message', $message);
+        
     }
 
     public function application()
@@ -147,6 +126,42 @@ class ApplicantController extends Controller
         }
 
         return redirect()->route('guest-application-get', ['id'=>$request->job_id])->with('message', $message);
+    }
+
+    public function add_file(Request $request){
+        $request->validate([
+            'file.*'=> ['required', 'mimes:pdf', 'max:1024'], //only accept pdf w/ max size 1mb
+        ]);
+
+        $applicant = Application::where('id', Auth::user()->application_id)->first();
+        $applicant->file = json_decode($applicant->file); // convert string to array
+
+        $files = [];
+        if( $request -> has('file')){
+            foreach($applicant->file as $value)
+                {
+                    $files[] = $value; // insert old files in array files[]
+                }
+            foreach($request->file('file') as $f)
+                {
+                    $filename = Str::of($applicant->name)->remove(' ');
+                    $filename = $filename . '_' . $f->getClientOriginalName();
+                    $path = ('uploads/file');
+                    $f->move($path, $filename);
+                    $files[] = $filename; // insert new upload file in array files[]
+                }
+            
+            $upload = json_encode($files); // convert array to string
+            $applicant->file = $upload; // update table, column file...
+            $applicant->save();
+
+            $message = "Successfully added file(s)";
+        }
+        else{
+            $message = 'Error in uploading file.';
+        }
+
+        return redirect()->route('applicant.dashboard.index')->with('message', $message);
     }
 
     /**

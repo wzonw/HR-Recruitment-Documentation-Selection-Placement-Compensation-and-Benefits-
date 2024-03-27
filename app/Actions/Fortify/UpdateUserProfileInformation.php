@@ -19,8 +19,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         Validator::make($input, [
             'name' => ['required', 'string', 'max:255'],
-            'surname' => ['nullable', 'string', 'max:255'], 
-            'surname' => ['nullable', 'string', 'min:3', 'max:255'], 
             'suffix' => ['nullable', 'string', 'max:3'],
             'gender' => ['nullable', 'string', 'max:20'], 
             'birthdate' => ['required', 'date'],
@@ -44,8 +42,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
         } else {
             $user->forceFill([
                 'name' => $input['name'],
-                'middle_name' => $input['middle_name'],
-                'surname' => $input['surname'],
                 'suffix' => $input['suffix'],
                 'gender' => $input['gender'],
                 'birthdate' => $input['birthdate'],
@@ -69,8 +65,6 @@ class UpdateUserProfileInformation implements UpdatesUserProfileInformation
     {
         $user->forceFill([
             'name' => $input['name'],
-            'middle_name' => $input['middle_name'],
-            'surname' => $input['surname'], 
             'suffix' => $input['suffix'],
             'gender' => $input['gender'],
             'birthdate' => $input['birthdate'],

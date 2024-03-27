@@ -79,20 +79,20 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::resource('dashboard', \App\Http\Controllers\Compensation\CompensationController::class);
     });
 
-
     Route::group(['middleware' => 'role:applicant', 'prefix' => 'applicant', 'as' => 'applicant.'], function(){
         Route::resource('dashboard', \App\Http\Controllers\Applicant\ApplicantController::class);
     });
 
-    Route::group(['middleware' => 'role:applicant'], function(){
-        Route::get('/applicant/jobs', function () {
-            return view('jobs-available');
-        })->name('jobs-available');
-    });
-
+    // application section
     Route::group(['middleware' => 'role:applicant'], function(){
         Route::get('/applicant/jobs/application', [\App\Http\Controllers\Applicant\ApplicantController::class, 'application'])
         ->name('application-section');
+    });
+
+    // add file
+    Route::group(['middleware' => 'role:applicant'], function(){
+        Route::post('/applicant/file/upload/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'add_file'])
+        ->name('add-file-success');
     });
 
     Route::group(['middleware' => 'role:applicant'], function(){
