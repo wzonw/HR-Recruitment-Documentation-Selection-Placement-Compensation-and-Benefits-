@@ -15,16 +15,6 @@
             </div>
 
             <div class="mt-4 inline-flex justify-center items-center space-x-2">
-                <x-label class="w-24" for="middle_name" value="{{ __('Middle Name') }}" />
-                <x-input id="middle_name" class="block mt-1 w-88" type="text" name="middle_name" :value="old('middle_name')" />
-            </div>
-
-            <div class="mt-3 inline-flex justify-center items-center space-x-2">
-                <x-label class="w-24" for="surname" value="{{ __('Surname') }}" />
-                <x-input id="surname" type="text" class="block mt-1 w-88" name="surname" required />
-            </div>
-
-            <div class="mt-4 inline-flex justify-center items-center space-x-2">
                 <x-label class="w-24" for="email" value="{{ __('Email') }}" />
                 <x-input id="email" class="block mt-1 w-88" type="email" name="email" :value="old('email')" required autocomplete="username" />
             </div>

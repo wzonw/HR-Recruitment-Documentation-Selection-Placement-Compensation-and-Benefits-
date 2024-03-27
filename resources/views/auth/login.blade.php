@@ -46,18 +46,6 @@
                 </x-button-gold>
             </div>
 
-            <div class="flex items-center">
-                <hr class="flex-grow border-t border-gray-300">
-                <div class="h-10 text-center text-black text-12 mx-6 py-2 opacity-50">or</div>
-                <hr class="flex-grow border-t border-gray-300">
-            </div>
-
-            <div class="justify-center flex mb-2">
-                <a href="/register" class="text-gray-500 hover:text-black text-center text-sm font-inter cursor-pointer">
-                    Register an Account
-                </a>
-            </div>
-
         </form>
     </x-authentication-card>
 </x-guest-layout>

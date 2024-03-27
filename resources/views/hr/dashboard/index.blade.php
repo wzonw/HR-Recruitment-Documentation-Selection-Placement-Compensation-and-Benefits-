@@ -8,7 +8,7 @@
             <img class=" opacity-20 " src="https://www.plm.edu.ph/images/banners/2020-PLM-facade.jpg"/>
         </div>
         <div class="ml-4">
-            <div class="min-w-max h-10 top-[200px] absolute text-black text-base font-semibold font-'Inter'"> {{ Auth::user()->name ." ".Auth::user()->middle_name." ". Auth::user()->surname }} </div>
+            <div class="min-w-max h-10 top-[200px] absolute text-black text-base font-semibold font-'Inter'"> {{ Auth::user()->name ." ".Auth::user()->suffix }} </div>
             @if (Auth::user()->role_id==2)
                 <div class="w-[190px] h-6 top-64 absolute text-black text-sm font-semibold font-'Inter'">Section : Personnel Management</div>
             @else

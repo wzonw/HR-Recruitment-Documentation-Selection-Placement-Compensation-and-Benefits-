@@ -10,6 +10,7 @@ use App\Models\JobsAvailable;
 use App\Models\User;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Events\StatusChanged;
+use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Notifications\NewStatus;
 use Illuminate\Http\RedirectResponse;
@@ -74,6 +75,9 @@ class RecruitmentController extends Controller
 
     public function join_data(){
         $data = Application::join('jobs_availables', 'jobs_availables.id', '=', 'applications.job_id')
+                            ->where('applications.remarks', '!=', 'Inactive')
+                            ->where('applications.remarks', '!=', 'Employee')
+                            ->orWhere('applications.remarks', null)
                             ->get([
                                 'applications.id',
                                 'applications.name',
@@ -171,37 +175,105 @@ class RecruitmentController extends Controller
         return redirect()->route('view-applicant-profile', $applicant->id)->with('message', $message);
     }
 
-    public function sendmail_proceed($id): RedirectResponse
+    public function sendmail_proceed(Request $request): RedirectResponse
     {
-        $applicant = Application::where('id', $id)->first();
+        $applicant = Application::where('id', $request->id)->first();
         $status = $applicant->remarks;
-        if ($status == null){
+
+        $account = User::where('application_id', $request->id)->first();
+
+        if ($status == null && $request->status != null){
             $password = Str::of($applicant->name)->remove(' ');
             $password = strtolower($password);
             $pass = $password;
-            User::create([
-                'name' => $applicant->name,
-                'email' => $applicant->email,
-                'password' => Hash::make($password),
-                'application_id' => $id,
-            ]); 
-            $applicant->remarks = 'For Interview';
+            if($account == null){
+                User::create([
+                    'name' => $applicant->name,
+                    'email' => $applicant->email,
+                    'password' => Hash::make($password),
+                    'application_id' => $request->id,
+                ]); 
+            }
+
+            $applicant->remarks = $request->status;
             $applicant->save();
 
-            //notif via mail
-            Mail::to($applicant->email)->send(new ApplicantProceed($applicant, $password));
+            if($request->status == 'Requirements'){
+                //notif via mail
+                Mail::to($applicant->email)->send(new ApplicantProceed($applicant, $password));
 
+                $message = 'This applicant passed the initial screening, but has incomplete requirement.';
+            }
+            elseif($request->status == 'Proceed (Hiring Office)'){
+                //notif via mail
+                
+
+                $message = 'This applicant passed the initial screening, and proceeded to Hiring Office.';
+            }
+            else{
+                $message = 'Something wrong.';
+            }
+        }
+        elseif($status != null && $request->status != null){
+            $applicant->remarks = $request->status;
+            $applicant->save();
             //notif via db (system)
             event(new StatusChanged($applicant));
+            $message = 'This applicant status is updated to '.$request->status;
+        }
+        elseif($status != null && $request->status == 'Signing of Documents'){
+            //notif via mail
 
-            $message = 'This applicant passed the initial screening.';
-            
-           
+            $message = 'This applicant status is updated to '.$request->status;
         }
         else{
-            $message = 'This applicant status is '.$status;
+            $message = 'This applicant status is null.';
         }
         
         return redirect()->route('view-applicant-profile', $applicant->id)->with('message', $message);
+    }
+
+    public function become_employee($id){
+        $applicant = Application::where('id', $id)->first();
+
+        $emp_acc = Employee::where('job_id', $applicant->job_id)
+                            ->where('active', 'Y')
+                            ->count();
+                            
+        // set applicant account to inactive
+        $others = Application::where('job_id', $applicant->job_id)
+                            ->where('id', '!=', $applicant->id)
+                            ->get();
+        foreach($others as $other){
+            $other->remarks = "Inactive";
+            $other->save();
+            $other = User::where('role_id', 1)
+                    ->where('application_id', $other->id)
+                    ->get();
+            foreach($other as $o){
+                $o->email = 'Inactive';
+                $o->password = 'Inactive';
+                $o->save();
+            }
+            
+        }
+
+        if($emp_acc == 0){
+            // create employee record
+            Employee::create([
+                'job_id' => $applicant->job_id,
+                'name' => $applicant->name,
+            ]);
+
+            $applicant->remarks = 'Employee';
+            $applicant->save();
+            
+            $message = $applicant->name.' is now an employee!';
+        }
+        else{
+            $message = 'There is still an employee with the same job.';
+        }
+
+        return redirect()->route('applicant-list')->with('message', $message);
     }
 }

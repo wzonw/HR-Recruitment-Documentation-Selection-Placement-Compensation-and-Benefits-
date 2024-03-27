@@ -159,38 +159,43 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         ->name('job-update-active');
     });
 
-    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'admin'], function(){
-        Route::get('/compensation/leave/request', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_request'])
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
+        Route::get('/view/applicant/profile/{id}/signed', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'become_employee'])
+        ->name('emp-accept');
+    });
+
+    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'compensation'], function(){
+        Route::get('/leave/request', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_request'])
         ->name('leave-request');
     });
 
-    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'admin'], function(){
-        Route::get('/compensation/leave/list', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_list'])
+    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'compensation'], function(){
+        Route::get('/leave/list', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_list'])
         ->name('leave-list');
     });
 
-    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'admin'], function(){
-        Route::get('/compensation/time-keeping', [\App\Http\Controllers\Compensation\CompensationController::class, 'time_keeping'])
+    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'compensation'], function(){
+        Route::get('/time-keeping', [\App\Http\Controllers\Compensation\CompensationController::class, 'time_keeping'])
         ->name('time-keeping');
     });
 
-    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'admin'], function(){
-        Route::get('/compensation/time-keeping/manage', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr'])
+    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'compensation'], function(){
+        Route::get('/time-keeping/manage', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr'])
         ->name('absent');
     });
 
-    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'admin'], function(){
-        Route::get('/compensation/time-keeping/manage/leave-credit', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_credits'])
+    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'compensation'], function(){
+        Route::get('/leave-credit', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_credits'])
         ->name('leave-credit');
     });
 
-    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'admin'], function(){
-        Route::post('/compensation/time-keeping/manage/leave-credit', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation'])
+    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'compensation'], function(){
+        Route::post('/leave-credit/computation', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation'])
         ->name('lc-computation');
     });
 
-    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'admin'], function(){
-        Route::POST('/compensation/time-keeping/manage/success', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_credit'])
+    Route::group(['middleware' => 'role:compen-ben', 'prefix' => 'compensation'], function(){
+        Route::POST('/time-keeping/manage/success', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_credit'])
         ->name('manage-dtr-success');
     });
 }); 

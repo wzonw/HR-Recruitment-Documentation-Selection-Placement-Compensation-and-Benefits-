@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="absolute end-5 pt-24">
-                <p class="w-32 h-9 inline-flex items-center justify-center px-4 py-2 bg-white border 
+                <p class="min-w-max h-9 inline-flex items-center justify-center px-4 py-2 bg-white border 
                 border-gray-400 rounded-md font-medium text-sm text-gray-400 font-inter">
                     @if($applicant->remarks == "")
                         Status
@@ -76,12 +76,43 @@
             </div>
             <div class="mt-14">
                 <h1 class="text-indigo-800 text-2xl font-bold font-inter">Application Status</h1>
-                <a  onclick="return confirm('Are you sure?')" href="{{route('email-proceed', $applicant->id)}}" 
-                    class="inline-flex mt-7 px-3 py-2 items-center justify-center bg-green-700 border border-transparent rounded-md 
-                    font-semibold text-xs text-white text-center font-inter uppercase">Proceed</a>
-                <a  onclick="return confirm('Are you sure?')" href="{{route('email-reject', $applicant->id)}}" 
-                    class="inline-flex mt-7 px-3 py-2 items-center justify-center bg-red-700 border border-transparent rounded-md 
-                    font-semibold text-xs text-white text-center font-inter uppercase">Rejected</a>
+                @if($applicant->remarks != 'Signing of Documents')
+                <form action="{{route('email-proceed', $applicant->id)}}" class="mt-5">
+                    <input name="id" value="{{$applicant->id}}" hidden/>
+                    <select name="status" id="status" class="rounded-md border-gray-300">
+                        <option value="none" selected disabled>Applicant Status</option>
+                        <option value="Requirements">Requirements</option>
+                        <option value="Proceed (Hiring Office)">Proceed to Hiring Office</option>
+                        @if($applicant->remarks != null)
+                        <option value="Initial Interview">Initial Interview (Recruitment)</option>
+                        <option value="PSB">PSB</option>
+                        <option value="FSB">FSB</option>
+                        @endif
+                        @if($applicant->remarks == 'PSB' || $applicant->remarks == 'FSB')
+                        <option value="Signing of Documents">Signing of Documents</option>
+                        @endif
+                    </select>
+                    <div>
+                        <button onclick="return confirm('Are you sure?')"
+                                class="inline-flex mt-4 px-3 py-2 items-center justify-center bg-green-700 border border-transparent rounded-md 
+                                font-semibold text-xs text-white text-center font-inter uppercase"> Proceed </button>
+                        <a  onclick="return confirm('Are you sure?')" href="{{route('email-reject', $applicant->id)}}" 
+                            class="inline-flex mt-4 px-3 py-2 items-center justify-center bg-red-700 border border-transparent rounded-md 
+                            font-semibold text-xs text-white text-center font-inter uppercase"> Rejected </a>
+                    </div>
+                </form>
+                @endif
+                @if($applicant->remarks == 'Signing of Documents')
+                <div class="mt-3">
+                    <h1 class="text-indigo-800 text-base font-bold font-inter">Appointment: </h1>
+                    <a  onclick="return confirm('Are you sure?')" href="{{route('emp-accept', $applicant->id)}}" 
+                        class="inline-flex mt-4 px-3 py-2 items-center justify-center bg-green-700 border border-transparent rounded-md 
+                        font-semibold text-xs text-white text-center font-inter uppercase"> Accepted </a>
+                    <a  onclick="return confirm('Are you sure?')" href="#" 
+                        class="inline-flex mt-4 px-3 py-2 items-center justify-center bg-red-700 border border-transparent rounded-md 
+                        font-semibold text-xs text-white text-center font-inter uppercase"> Rejected </a>
+                </div>
+                @endif
             </div>
         </div>
     </div>

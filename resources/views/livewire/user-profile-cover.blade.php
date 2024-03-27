@@ -7,8 +7,7 @@
         <livewire:UserProfile :applicant="$applicant"/>
     </div>
     <div class="absolute end-5 pt-24">
-        <p
-           class="w-32 h-9 inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-400 rounded-md font-medium text-sm 
+        <p class="min-w-max h-9 inline-flex items-center justify-center px-4 py-2 bg-white border border-gray-400 rounded-md font-medium text-sm 
                 text-gray-400 font-inter">
             {{$applicant->remarks}}
         </p>

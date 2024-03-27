@@ -4,6 +4,13 @@
             <p class="ml-5 text-white text-3xl font-bold font-inter">Applicant List</p>
         </div>
 
+        
+        @if(session('message'))
+        <div class="mt-10 min-w-max h-8 mx-3 text-blue-600 items-end italic">
+            {{ session('message') }} 
+        </div>
+        @endif
+
         <div class="mt-10 w-[1014px] ml-1 inline-flex items-center">
             <p class="w-[58px] text-indigo-800 text-sm text-center font-semibold font-inter">ID</p>
             <p class="w-[215px] pl-3 text-indigo-800 text-sm font-semibold font-inter">Name</p>
