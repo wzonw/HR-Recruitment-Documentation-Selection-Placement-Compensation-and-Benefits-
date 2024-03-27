@@ -19,9 +19,7 @@ Route::get('/', function () {
 })->name('landing-page');
 
 
-Route::get('/plm/jobs', function () {
-    return view('jobs-available');
-})->name('guest-jobs');
+Route::get('/plm/jobs', [\App\Http\Controllers\JobsAvailableController::class, 'index'])->name('guest-jobs');
 
 
 Route::post('/plm/jobs/application/{id}', [\App\Http\Controllers\Applicant\ApplicantController::class, 'guest_application'])
@@ -32,6 +30,8 @@ Route::get('/plm/jobs/application/{id}', [\App\Http\Controllers\Applicant\Applic
 
 Route::post('/plm/jobs/application/{id}/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'apply'])
 ->name('guest-application-success');
+
+Route::get('/search', [\App\Http\Controllers\JobsAvailableController::class, 'search']);
 
 
 Route::get('/create', function () {
@@ -64,7 +64,6 @@ Route::middleware([
         return view('livewire.user-personal-info');
     })->name('user-personal-info');
 });
-
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
     Route::group(['middleware' => 'role:personnel management', 'prefix' => 'admin', 'as' => 'hr.'], function(){

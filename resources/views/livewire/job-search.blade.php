@@ -1,6 +1,6 @@
 <div>
     {{-- Success is as dangerous as failure. --}}
-    <form action="{{ route('jobs-available') }}" method="get">
+    <form action="{{ url('/search') }}" method="get">
     <div class="w-[392px] h-[450px] bg-stone-50 border border-black border-opacity-10">
         <div class="w-[392px] h-20 bg-white shadow border border-black border-opacity-10 justify-center">
             <!--svg class=" h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
