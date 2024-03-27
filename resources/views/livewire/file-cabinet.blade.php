@@ -3,13 +3,6 @@
     <div class="w-[729px] h-16 bg-white shadow border-l border-r border-t border-black inline-flex">
         <h class="w-52 h-7 pt-3 pl-5 text-indigo-800 text-3xl font-bold font-inter">File Cabinet</h> 
     </div>
-    
-    @can('for-applicants')
-    <div class="absolute mt-[-48px] ml-[550px]">
-        
-        <a href="#" class="w-10 h-7 pt-4 pl-12 text-black text-base font-medium font-inter underline leading-loose">Delete</a>
-    </div>
-    @endif
 
     <table class="w-[729px] bg-white shadow border-black border text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700">
         <thead class="h-7 text-sm text-gray-700 uppercase bg-slate-200 dark:bg-slate-200 dark:text-gray-700">

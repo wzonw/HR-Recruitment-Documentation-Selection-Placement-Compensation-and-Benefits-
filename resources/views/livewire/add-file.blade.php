@@ -1,5 +1,5 @@
 <!-- add file form -->
-<div class="w-[420px] min-h-max font-inter bg-white">
+<div class="w-[420px] min-h-max font-inter bg-white rounded border-gray-300 border shadow-md">
     <!--error messages-->
     @if ($errors->any())
     <div class="mx-3 alert alert-danger text-red-600 italic">
@@ -10,13 +10,17 @@
         </ul>
     </div>
     @endif
+
+    <!-- add file form -->
+    <h1 class="h-10 px-10 pt-2 text-indigo-800 text-xl font-inter shadow">Add File Here</h1>
     
+    <!-- success message -->
     @if(session('message'))
     <div class="min-w-max h-8 mx-3 text-blue-600 items-end italic">
         {{ session('message') }} 
     </div>
     @endif
-    <h1 class="h-9 px-10 pt-2 text-indigo-800 text-xl font-inter">Add File Here</h1>
+    
     <form action="{{route('add-file-success')}}" method="post" enctype="multipart/form-data">
         @csrf
         <div class="mt-4 mx-10 inline-flex justify-center items-center space-x-2">
