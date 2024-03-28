@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Applicant;
 
 use App\Http\Controllers\Controller;
+use App\Mail\SendOTP;
 use App\Models\Application;
 use App\Models\JobApplication;
 use App\Models\JobsAvailable;
@@ -10,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\Mail;
 
 class ApplicantController extends Controller
 {
@@ -162,6 +164,67 @@ class ApplicantController extends Controller
         }
 
         return redirect()->route('applicant.dashboard.index')->with('message', $message);
+    }
+
+    public function send_otp(Request $request){
+
+        $data = Application::where('id', $request->id)
+                    ->where('email', $request->email)
+                    ->where('job_id', $request->job_id)
+                    ->where('remarks', 'Requirements')
+                    ->first();
+        if($data != null){
+            $id = $data->id;
+
+            $otp = mt_rand(100000, 999999);
+            // send otp via email
+            Mail::to($data->email)->send(new SendOTP($data, $otp));
+
+            $data->otp = $otp;
+            $data->save();
+            return redirect()->route('upload-file', $id); 
+        }
+        else{
+            $message = 'Application not found.';
+            
+            return redirect()->route('verify')->with('message', $message);
+        }
+    }
+
+    public function upload_file(Request $request){
+        $request->validate([
+            'otp' => ['required', 'numeric', 'digits:6'],
+            'file.*'=> ['required', 'mimes:pdf', 'max:1024'], //only accept pdf w/ max size 1mb
+        ]);
+
+        $applicant = Application::where('id', $request->id)->first();
+        $applicant->file = json_decode($applicant->file); // convert string to array
+
+        $files = [];
+        if( $request -> has('file') && $request->otp == $applicant->otp){
+            foreach($applicant->file as $value)
+                {
+                    $files[] = $value; // insert old files in array files[]
+                }
+            foreach($request->file('file') as $f)
+                {
+                    $filename = Str::of($applicant->name)->remove(' ');
+                    $filename = $filename . '_' . $f->getClientOriginalName();
+                    $path = ('uploads/file');
+                    $f->move($path, $filename);
+                    $files[] = $filename; // insert new upload file in array files[]
+                }
+            
+            $upload = json_encode($files); // convert array to string
+            $applicant->file = $upload; // update table, column file...
+            $applicant->save();
+
+            $message = "Successfully added file(s)";
+        }
+        else{
+            $message = 'OTP is incorrect.';
+        }
+        return redirect()->route('verify')->with('message', $message);
     }
 
     /**

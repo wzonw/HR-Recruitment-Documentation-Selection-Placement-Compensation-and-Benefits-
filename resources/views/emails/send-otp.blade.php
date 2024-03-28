@@ -11,6 +11,14 @@
             font-size: 0.875rem/* 14px */;
             line-height: 1.25rem/* 20px */;
         }
+        .text-lg {
+            font-size: 1.125rem/* 18px */;
+            line-height: 1.75rem/* 28px */;
+        }
+        .text-base {
+            font-size: 1rem/* 16px */;
+            line-height: 1.5rem/* 24px */;
+        }
         .font-inter {
             font-family: Inter, sans-serif;
         }
@@ -19,16 +27,10 @@
 <body>
     <div>
         <div class="font-inter text-sm">
-            <h1>Dear {{$applicant->name}},</h1>
-            <p>Congratulations! We are pleased to tell you that your application and credentials have been passed to the hiring office.</p>
-            <p>Please, wait for the hiring office to contact you for your application status and futher instructions.</p>
-            <p>Here is your login credentials to <a href="http://127.0.0.1:8000/login">our website</a>, <br>
-            Email: {{$applicant->email}}<br>
-            Password: {{$password}}
-            </p>
-            <p>Thank you for applying and we wish you the best of luck.</p>
+            <p class="text-lg">Dear {{$applicant->name}},</p>
+            <p>This is your otp: <b class="text-base">{{$otp}}</b></p>
+            <p>Please be informed that <b>otp will expire once input incorrectly</b>.</p>
             <p>Regards,<br>Recruitment Team</p>
-            
             <img src="https://www.plm.edu.ph/images/ui/plm-logo--with-header.png" alt="plm-logo" width="350" height="75">
         </div>
 

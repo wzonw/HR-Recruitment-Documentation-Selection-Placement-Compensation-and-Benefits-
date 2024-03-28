@@ -35,6 +35,20 @@ Route::post('/plm/jobs/application/{id}/success', [\App\Http\Controllers\Applica
 Route::get('/plm/jobs/search', [\App\Http\Controllers\JobsAvailableController::class, 'search'])
 ->name('search');
 
+Route::get('/application/verify', function () {
+    return view('livewire.verify-application');
+})->name('verify');
+
+Route::post('/application/verify/otp', [\App\Http\Controllers\Applicant\ApplicantController::class, 'send_otp'])
+->name('send-otp');
+
+Route::get('/applicant/upload/file/{id}', function ($id) {
+    return view('livewire.upload-file-otp', ['id'=> $id]);
+})->name('upload-file');
+
+Route::post('/applicant/upload/file/{id}/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'upload_file'])
+->name('upload-file-success');
+
 
 Route::get('/create', function () {
     return view('form');

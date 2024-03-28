@@ -16,7 +16,8 @@
     
     <!-- success message -->
     @if(session('message'))
-    <div class="min-w-max h-8 mx-3 text-blue-600 items-end italic">
+    <div class="min-w-max h-8 mx-3 text-blue-600 items-end italic"
+         x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
         {{ session('message') }} 
     </div>
     @endif
