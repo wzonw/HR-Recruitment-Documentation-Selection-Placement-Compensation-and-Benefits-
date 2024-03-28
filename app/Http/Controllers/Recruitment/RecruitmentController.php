@@ -10,6 +10,7 @@ use App\Models\JobsAvailable;
 use App\Models\User;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Events\StatusChanged;
+use App\Mail\ProceedToOffice;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Notifications\NewStatus;
@@ -206,7 +207,7 @@ class RecruitmentController extends Controller
             }
             elseif($request->status == 'Proceed (Hiring Office)'){
                 //notif via mail
-                
+                Mail::to($applicant->email)->send(new ProceedToOffice($applicant, $password));
 
                 $message = 'This applicant passed the initial screening, and proceeded to Hiring Office.';
             }
