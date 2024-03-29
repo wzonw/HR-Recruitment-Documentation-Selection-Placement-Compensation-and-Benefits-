@@ -83,14 +83,14 @@
                             @if($overtime == null)
                                 <p></p>
                             @else
-                                - {{$overtime = number_format((float)$overtime * 0.0052, 3, '.', '')}}
+                                - {{$overtime = number_format((float)$overtime * 0.005209, 3, '.', '')}}
                             @endif
                         </td>
                         <td class="w-28 text-center border-r border-black">  
                             @if($undertime == null)
                                 <p></p>
                             @else
-                                - {{$undertime = number_format((float)$undertime * 0.0052, 3, '.', '')}}
+                                - {{$undertime = number_format((float)$undertime * 0.005209, 3, '.', '')}}
                             @endif
                             
                         </td>
@@ -98,13 +98,13 @@
                             @if($late == null)
                                 <p></p>
                             @else
-                                - {{$late = number_format((float)$late * 0.0052, 3, '.', '')}}
+                                - {{$late = number_format((float)$late * 0.005209, 3, '.', '')}}
                             @endif
                         </td>
                     </tr>
                     <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
-                        <td class="w-20 text-center border-r border-black text-black font-bold">
-                            {{15.0 - ($undertime + $late)}}
+                        <td class="w-20 text-center border-r border-black text-red-600 font-bold">
+                            {{$vl = 0.0 - number_format($undertime + $late, 3, '.', '')}}
                         </td>
                         <td class="w-20 text-center border-r border-black text-black font-bold">15.0</td>
                         <td class="w-20 text-center border-r border-black"></td>
@@ -115,10 +115,52 @@
                 </tbody>
             </table>
 
-            <h1 class="font-inter mt-3 font-semibold">Salary Deduction</h1>
-            <div class="font-inter pl-5">
+            <!-- LWOP or No enough VL -->
+            <h1 class="font-inter mt-3 font-semibold">Salary Deduction (LWOP)</h1>
+            <div class="font-inter pl-5 border-b">
+                <p> VL Credit: {{0.0}}</p>
+                <p> LC Deduction: {{$undertime + $late}}</p>
+                <p class="text-red-600"> Remaining Balance: {{abs($vl)}}</p>
+                <p>Equivalent Working Hours: 
+                        {{$eqwh = number_format(abs($vl)/0.005208, 2, '.', '')}}
+                </p>
+
+                <div class="absolute ml-[600px] mt-[-96px]">
+                    <p> Salary: {{$salary = 20000}}</p>
+                    <p>Hourly Wage = Salary / 176 Hours </p>
+                    <p>Hourly Wage = {{$hw = number_format($salary/176, 2, '.', ',')}}</p>
+                    
+                </div>
+
+                <div class="pt-2 pb-3 pl-72">
+                    <p>Deduction: hourly wage * EQWH</p>
+                    <p class="text-red-600">Deduction: {{number_format($deduction1 = $hw * $eqwh, 2, '.', ',')}}</p>
+                </div>
+            </div>
+
+            <h1 class="font-inter mt-3 font-semibold">Salary Deduction (Absent w/o Approved Leave)</h1>
+            <div class="font-inter pl-5 border-b">
                 <p> Salary: {{$salary = 20000}}</p>
-                <p> Absent: {{$absent}}</p>
+                <p> Absent: {{$absent}} day(s)</p>
+
+                <div class="pt-2 pb-3 pl-72 ">
+                    <p>Deduction = (Monthly Salary/Calendar days) * No. days of absences</p>
+                    <p>Deduction = ({{$salary}}/{{NOW()->month()->daysInMonth}}) * {{$absent}}</p>
+                    <p class="text-red-600">
+                        Deduction = {{number_format($deduction2 = ($salary/NOW()->month()->daysInMonth) * $absent, 2, '.', ',')}}
+                    </p>
+                </div>
+            </div>
+
+            <h1 class="font-inter mt-3 font-semibold">Salary After Deductions ({{date("F", mktime(0, 0, 0, NOW()->month))}})</h1>
+            <div class="font-inter pl-5 border-b">
+                <p> Monthly Salary = {{$salary = 20000}}</p>
+                <p> Days Worked: {{22-$absent}}</p>
+                <p class="text-red-600"> Total Salary Deduction: {{number_format($totalsd = $deduction1 + $deduction2, 2, '.', ',')}}</p>
+
+                <div class="pt-2 pb-3 pl-72 bg-slate-100">
+                    <p class="font-bold">Salary: {{number_format($salary - $totalsd, 2, '.', ',')}}</p>
+                </div>
             </div>
         </div>
     </div>

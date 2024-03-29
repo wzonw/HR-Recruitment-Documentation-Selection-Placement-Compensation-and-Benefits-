@@ -23,44 +23,14 @@
             </button>
         </div>
 
-        <!-- Manage btn -->
+        <!-- Add record btn -->
         <div class="flex justify-end">
-        <x-dropdown align="right" width="48" class="">
-                        <x-slot name="trigger">
-                            <span class="inline-flex rounded-md">
-                                <button type="button" class="inline-flex items-center px-3 py-2 border-0 text-sm leading-4 font-medium rounded-md text-gray-500">
-                                    Manage
-                                    <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                                    </svg>
-                                </button>
-                            </span>
-                        </x-slot>
-
-                        <x-slot name="content">
-                            <!-- DTR option -->
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Manage DTR') }}
-                            </div>
-
-                            <x-dropdown-link href="{{ route('absent') }}">
-                                {{ __('Absent') }}
-                            </x-dropdown-link>
-
-                            <x-dropdown-link href="#">
-                                {{ __('Undertime') }}
-                            </x-dropdown-link>
-
-                            <x-dropdown-link href="#">
-                                {{ __('Late') }}
-                            </x-dropdown-link>
-
-                            <x-dropdown-link href="#">
-                                {{ __('Overtime') }}
-                            </x-dropdown-link>
-
-                        </x-slot>
-                    </x-dropdown>
+            <a href="{{ route('add-dtr') }}" class="inline-flex items-center px-3 py-2 border-0 text-sm leading-4 font-medium rounded-md text-gray-500">
+                Add Record
+                <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
+                </svg>
+            </a>
         </div>
         
         @if(session('message'))

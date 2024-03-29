@@ -66,7 +66,9 @@
         <div class="w-[500px] h-[510px] bg-white shadow shadow-gray-400 border border-black">
             <p class="w-26 h-11 pt-2 text-indigo-800 text-2xl shadow text-center font-bold font-inter">Add Vacancies</p>
             @if(session('message'))
-            <div class="mx-5 min-w-max h-8 text-blue-600 flex items-end italic">
+            <div class="mx-5 min-w-max h-8 text-blue-600 flex items-end italic"
+                 x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
+                 x-init="setTimeout(() => show = false, 3000)">
                 {{ session('message') }} 
             </div>
             @endif

@@ -100,38 +100,48 @@ class CompensationController extends Controller
     public function dtr(){
 
         $month = Carbon::now()->month;
-        return view('hr.dtr-absent', [
+        return view('hr.dtr-add-record', [
             'month' => date("F", mktime(0, 0, 0, $month)),
         ]);
     }
 
-    public function leave_credit(){
-        $dtr = dtr::where('emp_id', request('ida'))->first();
-        if($dtr == null){
-            $job_id = Employee::where('id', request('ida'))->first();
+    public function add_record(Request $request){
+        $dtr = dtr::where('emp_id', $request->id)
+                ->whereMonth('date', Carbon::now()->month)
+                ->first();
+        
+        $employee = Employee::where('id', $request->id)->first();
+
+        if($dtr == null && $employee != null){
             dtr::create([
-                'emp_id' => request('ida'),
-                'job_id' => $job_id->job_id,
+                'emp_id' => $request->id,
+                'job_id' => $employee->job_id,
                 'date' => Carbon::now(),
-                'absent' => request('absent'),
-                'undertime' => request('undertime'),
-                'late' => request('late'),
-                'overtime' => request('overtime'),
+                'absent' => $request->absent,
+                'undertime' => $request->undertime,
+                'late' => $request->late,
+                'overtime' => $request->overtime,
             ]);
             
 
-            $message = 'Successfully added a record!';
+            $message = 'Successfully added a record.';
+        }
+        elseif($employee == null){
+            $message = 'Employee ID not found.';
+        }
+        elseif($dtr != null && $employee != null){
+            $dtr->absent = $request->absent;
+            $dtr->undertime = $request->undertime;
+            $dtr->late = $request->late;
+            $dtr->overtime = $request->overtime;
+            $dtr->save();
+            $message = 'Successfully updated a record.';
         }
         else{
-            $message = 'Warning: duplicate record!';
+            $message = 'There is an error.';
         }
 
-        return redirect()->route('time-keeping')->with('message', $message);
-    }
-
-    public function leave_credits(){
-
-        return view('hr.leave-credit');
+        return redirect()->route('add-dtr')->with('message', $message);
     }
 
     public function lc_computation(){
