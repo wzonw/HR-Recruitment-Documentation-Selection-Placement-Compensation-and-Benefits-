@@ -73,7 +73,7 @@
                 <tbody>
                     <!-- Rows -->
                     <tr class="h-10 border border-black text-red-500">
-                        <td class="w-20 text-center border-r border-black text-black">15.0</td>
+                        <td class="w-20 text-center border-r border-black text-black">0.0</td>
                         <td class="w-20 text-center border-r border-black text-black">15.0</td>
                         <td class="w-20 text-center border-r border-black">
                             
@@ -83,14 +83,14 @@
                             @if($overtime == null)
                                 <p></p>
                             @else
-                                - {{$overtime = number_format((float)$overtime * 0.005209, 3, '.', '')}}
+                                - {{number_format($overtime = (float)$overtime * 0.005209, 3, '.', '')}}
                             @endif
                         </td>
                         <td class="w-28 text-center border-r border-black">  
                             @if($undertime == null)
                                 <p></p>
                             @else
-                                - {{$undertime = number_format((float)$undertime * 0.005209, 3, '.', '')}}
+                                - {{number_format($undertime = (float)$undertime * 0.005209, 3, '.', '')}}
                             @endif
                             
                         </td>
@@ -98,13 +98,13 @@
                             @if($late == null)
                                 <p></p>
                             @else
-                                - {{$late = number_format((float)$late * 0.005209, 3, '.', '')}}
+                                - {{number_format($late = (float)$late * 0.005209, 3, '.', '')}}
                             @endif
                         </td>
                     </tr>
                     <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
                         <td class="w-20 text-center border-r border-black text-red-600 font-bold">
-                            {{$vl = 0.0 - number_format($undertime + $late, 3, '.', '')}}
+                            {{number_format($vl = 0.0 - ($undertime + $late), 3, '.', '')}}
                         </td>
                         <td class="w-20 text-center border-r border-black text-black font-bold">15.0</td>
                         <td class="w-20 text-center border-r border-black"></td>
@@ -119,8 +119,8 @@
             <h1 class="font-inter mt-3 font-semibold">Salary Deduction (LWOP)</h1>
             <div class="font-inter pl-5 border-b">
                 <p> VL Credit: {{0.0}}</p>
-                <p> LC Deduction: {{$undertime + $late}}</p>
-                <p class="text-red-600"> Remaining Balance: {{abs($vl)}}</p>
+                <p> LC Deduction: {{number_format($undertime + $late, 3, '.', '')}}</p>
+                <p class="text-red-600"> Remaining Balance: {{number_format(abs($vl), 3, '.', '')}}</p>
                 <p>Equivalent Working Hours: 
                         {{$eqwh = number_format(abs($vl)/0.005208, 2, '.', '')}}
                 </p>
