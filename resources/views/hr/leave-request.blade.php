@@ -29,7 +29,7 @@
                             <td class="w-9 text-center"><input type="checkbox" name="" id=""></td>
                             <td class="w-36 pl-3">{{ $leave->name }}</td>
                             <td class="w-24 pl-3">{{ $leave->status }}</td>
-                            <td class="w-36 pl-3">{{ $leave->dept }}</td>
+                            <td class="w-36 pl-3">{{ $leave->college }}</td>
                             <td class="w-28 pl-3">{{ $leave->start_date }}</td>
                             <td class="w-28 pl-3">{{ $leave->end_date }}</td>
                             <td class="w-28 pl-3">{{ $leave->type }}</td>

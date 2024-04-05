@@ -53,7 +53,7 @@ class CompensationController extends Controller
                                     'employee_leaves.remarks',
                                     'employees.name', 
                                     'jobs_availables.status',
-                                    'jobs_availables.dept',
+                                    'jobs_availables.college',
                                 ]);
 
         return view('hr.leave-request', compact('leaves'));
