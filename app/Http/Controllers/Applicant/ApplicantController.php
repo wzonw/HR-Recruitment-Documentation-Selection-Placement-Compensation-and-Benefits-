@@ -25,6 +25,7 @@ class ApplicantController extends Controller
         }
         $applicant = Application::where('id', Auth::user()->application_id)->first();
         $applicant->file = json_decode($applicant->file);
+        $applicant->file_remarks = json_decode($applicant->file_remarks);
         return view('applicant-dashboard', ['applicant'=>$applicant]);
     }
 

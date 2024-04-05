@@ -50,7 +50,7 @@
 
             @can('for-applicants')
             <div class="flex items-center relative start-[430px]">
-                <x-dropdown align="right" width="48">
+                <x-dropdown align="right" width="72">
                     <x-slot name="trigger">
                         <span class="inline-flex rounded-md">
                             <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
@@ -64,38 +64,79 @@
                             </button>
                         </span>
                     </x-slot>
+                    <x-slot name="contentClasses">bg-white w-80</x-slot>
                     <x-slot name="content">
                         <div class="block px-4 py-2 text-base font-bold text-gray-400">
                             {{ __('Notifications') }}
                         </div>
                         @forelse (Auth::user()->notifications as $notification)
-                        <p class="px-4 py-2 font-inter text-sm">
-                            Your status has been changed into: <span class="italic">{{$notification->data['remarks']}}</span> 
-                            <br>
-                            <!-- time difference -->
-                            @if( NOW()->diffInHours($notification->created_at) == 0)
-                                @if(NOW()->diffInMinutes($notification->created_at) >= 1)
-                                    <!-- mins -->
-                                    {{NOW()->diffInMinutes($notification->created_at)}} minutes ago
+                            <!-- For application status -->
+                            @if(isset($notification->data['remarks']))
+                            <p class="px-4 py-2 font-inter text-sm">
+                                Your status has been changed into: <span class="italic">{{$notification->data['remarks']}}</span> 
+                                <br>
+                                <!-- time difference -->
+                                @if( NOW()->diffInHours($notification->created_at) == 0)
+                                    @if(NOW()->diffInMinutes($notification->created_at) >= 1)
+                                        <!-- mins -->
+                                        {{NOW()->diffInMinutes($notification->created_at)}} minutes ago
+                                    @else
+                                        <!-- sec -->
+                                        A few seconds ago
+                                    @endif
+                                @elseif( NOW()->diffInHours($notification->created_at) == 1)
+                                    <!-- 1hr --> 
+                                    {{ NOW()->diffInHours($notification->created_at) }} hour ago
+                                @elseif( NOW()->diffInHours($notification->created_at) > 1 && NOW()->diffInHours($notification->created_at) < 24)
+                                    <!-- 1 to 23hrs -->
+                                    {{ NOW()->diffInHours($notification->created_at) }} hours ago
                                 @else
-                                    <!-- sec -->
-                                    A few seconds ago
+                                    <!-- day(s) -->
+                                    @if(NOW()->diffInDays($notification->created_at) == 1)
+                                        {{NOW()->diffInDays($notification->created_at)}} day ago
+                                    @else
+                                        {{NOW()->diffInDays($notification->created_at)}} days ago
+                                    @endif
                                 @endif
-                            @elseif( NOW()->diffInHours($notification->created_at) == 1)
-                                <!-- 1hr --> 
-                                {{ NOW()->diffInHours($notification->created_at) }} hour ago
-                            @elseif( NOW()->diffInHours($notification->created_at) > 1 && NOW()->diffInHours($notification->created_at) < 24)
-                                <!-- 1 to 23hrs -->
-                                {{ NOW()->diffInHours($notification->created_at) }} hours ago
-                            @else
-                                <!-- day(s) -->
-                                @if(NOW()->diffInDays($notification->created_at) == 1)
-                                    {{NOW()->diffInDays($notification->created_at)}} day ago
-                                @else
-                                    {{NOW()->diffInDays($notification->created_at)}} days ago
-                                @endif
+                            </p>
                             @endif
-                        </p>
+                            <!-- For file remarks/status -->
+                            @if(isset($notification->data['file_remark']))
+                            <p class="px-4 py-2 font-inter text-sm">
+                                @if($notification->data['file_remark'] == 'declined')
+                                    Your file: <span class="italic"> {{$notification->data['file']}} </span> is now 
+                                    <span class="font-bold">{{$notification->data['file_remark']}}</span>. Make sure to 
+                                    upload new file.
+                                @else
+                                    Your file: <span class="italic"> {{$notification->data['file']}} </span> is now 
+                                    <span class="font-bold">{{$notification->data['file_remark']}}</span> 
+                                @endif
+                                <br>
+                                <!-- time difference -->
+                                @if( NOW()->diffInHours($notification->created_at) == 0)
+                                    @if(NOW()->diffInMinutes($notification->created_at) >= 1)
+                                        <!-- mins -->
+                                        {{NOW()->diffInMinutes($notification->created_at)}} minutes ago
+                                    @else
+                                        <!-- sec -->
+                                        A few seconds ago
+                                    @endif
+                                @elseif( NOW()->diffInHours($notification->created_at) == 1)
+                                    <!-- 1hr --> 
+                                    {{ NOW()->diffInHours($notification->created_at) }} hour ago
+                                @elseif( NOW()->diffInHours($notification->created_at) > 1 && NOW()->diffInHours($notification->created_at) < 24)
+                                    <!-- 1 to 23hrs -->
+                                    {{ NOW()->diffInHours($notification->created_at) }} hours ago
+                                @else
+                                    <!-- day(s) -->
+                                    @if(NOW()->diffInDays($notification->created_at) == 1)
+                                        {{NOW()->diffInDays($notification->created_at)}} day ago
+                                    @else
+                                        {{NOW()->diffInDays($notification->created_at)}} days ago
+                                    @endif
+                                @endif
+                            </p>
+                            @endif
                         @empty
                         <p>
                             Sorry, empty

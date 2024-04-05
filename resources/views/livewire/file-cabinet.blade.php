@@ -16,9 +16,11 @@
                 <th scope="col" class="text-center py-2 w-6">
                     Remarks
                 </th>
+                @can('for-recruitment')
                 <th scope="col" class="">
                     
                 </th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -32,11 +34,11 @@
                 </td>
                 @if($applicant->file_remarks != null)
                     @if($applicant->file_remarks[$index] == 'declined')
-                        <td class="pl-2 py-3 text-red-600">
+                        <td class="py-3 text-center text-red-600">
                             {{ $applicant->file_remarks[$index] }}
                         </td>
                     @else
-                        <td class="pl-2 py-3 text-blue-600">
+                        <td class="py-3 text-center text-blue-600">
                             {{ $applicant->file_remarks[$index] }}
                         </td>
                     @endif
@@ -44,6 +46,7 @@
                     <td class="pl-2 py-3 text-blue-600">
                     </td>
                 @endif
+                @can('for-recruitment')
                 <td class="pl-2 py-3  w-10">
                     <div class="flex space-x-3">
                         <div class="bg-green-700 w-5 flex justify-center rounded">
@@ -62,6 +65,7 @@
                         </div>
                     </div>
                 </td>
+                @endif
             </tr>
             @empty
             <span>Sorry, empty!</span>
