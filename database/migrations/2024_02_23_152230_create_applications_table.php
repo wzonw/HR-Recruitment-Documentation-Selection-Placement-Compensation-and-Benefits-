@@ -18,6 +18,8 @@ return new class extends Migration
             $table->string('email');
             $table->string('contact_number');
             $table->text('file');
+            $table->text('file_remarks');
+            $table->integer('otp');
             $table->text('remarks');
             $table->timestamps();
         });

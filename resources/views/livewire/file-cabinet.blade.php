@@ -13,6 +13,9 @@
                 <th scope="col" class="px-6 py-2">
                     File Name
                 </th>
+                <th scope="col" class="px-6 py-2">
+                    Remarks
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -23,6 +26,9 @@
                 </th>       
                 <td class="px-6 py-3">
                     <a href="{{ route('view-file', ['file' => $value]) }}">{{ $value }} </a>
+                </td>
+                <td class="px-6 py-3 text-center text-blue-600">
+                    {{$applicant->file_remarks[$index]}}
                 </td>
             </tr>
             @empty

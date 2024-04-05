@@ -61,6 +61,7 @@ class RecruitmentController extends Controller
         $applicant = Application::where('id', $id)->first();
 
         $applicant->file = json_decode($applicant->file);
+        $applicant->file_remarks = json_decode($applicant->file_remarks);
 
         return view('hr.view-applicant-profile', [
             'applicant' => $applicant,
@@ -70,6 +71,24 @@ class RecruitmentController extends Controller
     public function view_file($file)
     {
         $data = $file;
+
+        $remarks = [];
+        $applicant = Application::where('file', 'LIKE', '%'.$file.'%')->first();
+        $index = array_search($file, json_decode($applicant->file));
+        if($applicant != null){
+            $files = json_decode($applicant->file);
+            foreach($files as $key => $value){
+                if($key == $index){
+                    $remarks[$index] = 'viewed';
+                }
+                else{
+                    $remarks[$key] = '';
+                }
+            }
+            
+            $applicant->file_remarks = json_encode($remarks);
+            $applicant->save();
+        }
 
         return view('livewire.view-file', compact('data'));
     }
