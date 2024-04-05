@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\FileRemarksChanged;
 use App\Events\StatusChanged;
 use App\Listeners\UpdateApplicantAboutStatus;
+use App\Listeners\UpdateFileRemarks;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -22,6 +24,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         StatusChanged::class => [
             UpdateApplicantAboutStatus::class,
+        ],
+        FileRemarksChanged::class => [
+            UpdateFileRemarks::class,
         ],
     ];
 

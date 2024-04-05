@@ -9,6 +9,7 @@ use App\Models\Application;
 use App\Models\JobsAvailable;
 use App\Models\User;
 use App\Actions\Fortify\PasswordValidationRules;
+use App\Events\FileRemarksChanged;
 use App\Events\StatusChanged;
 use App\Mail\ProceedToOffice;
 use App\Models\Employee;
@@ -131,6 +132,9 @@ class RecruitmentController extends Controller
             $applicant->save();
 
             $message = $files[$index] .' is approved.';
+            
+            //notif via db
+            event(new FileRemarksChanged($applicant, $index));
         }
         else{
             $message = 'Invalid..';  
@@ -161,6 +165,9 @@ class RecruitmentController extends Controller
             $applicant->save();
 
             $message = $files[$index] .' is declined.';
+
+            //notif via db
+            event(new FileRemarksChanged($applicant, $index));
         }
         else{
             $message = 'Invalid..';  
