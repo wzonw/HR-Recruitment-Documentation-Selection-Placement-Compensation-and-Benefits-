@@ -145,18 +145,23 @@ class CompensationController extends Controller
     }
 
     public function lc_computation(){
-        $emp = Employee::where('id', request('ida'))->first();
-        $data = dtr::where('emp_id', request('ida'))->first();
+        $emp = Employee::where('id', request('id'))->first();
+        $data = dtr::where('emp_id', request('id'))
+                    ->first();
         if($data == null){
             abort(404);
         }
 
         return view('hr.leave-credit-computation', [
             'emp' => $emp,
+            'vl' => $emp->vl_credit,
+            'sl' => $emp->sl_credit,
             'absent' => $data->absent,
             'late' => $data->late,
             'undertime' => $data->undertime,
             'overtime' => $data->overtime,
+            'cto' => $data->cto,
+            'remarks' => $data->remarks,
         ]);
     }
 }

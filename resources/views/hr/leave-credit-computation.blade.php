@@ -13,31 +13,16 @@
                     <tr class="h-10">
                         <th class="w-20 text-center border border-black">VL</th>
                         <th class="w-20 text-center border border-black">SL</th>
-                        <th class="w-20 text-center border border-black">Absent (days)</th>
-                        <th class="w-20 text-center border border-black">Overtime (hrs)</th>
                         <th class="w-20 text-center border border-black">Undertime (hrs)</th>
                         <th class="w-20 text-center border border-black">Late time (hrs)</th>
+                        <th class="w-20 text-center border border-black">Absent (days)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Rows -->
                     <tr class="h-10 border border-black text-black">
-                        <td class="w-20 text-center border-r border-black">15.0</td>
-                        <td class="w-20 text-center border-r border-black text-black">15.0</td>
-                        <td class="w-20 text-center border-r border-black">
-                            @if($absent == null)
-                                <p></p>
-                            @else
-                                {{$absent}}
-                            @endif
-                        </td>
-                        <td class="w-28 text-center border-r border-black">
-                            @if($overtime == null)
-                                <p></p>
-                            @else
-                                {{$overtime}}
-                            @endif
-                        </td>
+                        <td class="w-20 text-center border-r border-black text-black">{{$vl}}</td>
+                        <td class="w-20 text-center border-r border-black text-black">{{$sl}}</td>
                         <td class="w-28 text-center border-r border-black">
                             @if($undertime == null)
                                 <p></p>
@@ -52,40 +37,35 @@
                                 {{$late}}
                             @endif
                         </td>
+                        <td class="w-20 text-center border-r border-black">
+                            @if($absent == null)
+                                <p></p>
+                            @else
+                                {{$absent}}
+                            @endif
+                        </td>
                     </tr>
                 </tbody>
             </table>
 
+            <!-- LC Computation Table -->
             <h1 class="mt-3 font-semibold">Leave Credit Computation</h1>
-
             <table class="w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
                 <!-- Header  -->
                 <thead class="text-black">
                     <tr class="h-10">
                         <th class="w-20 text-center border border-black">VL</th>
                         <th class="w-20 text-center border border-black">SL</th>
-                        <th class="w-20 text-center border border-black">Absent (days)</th>
-                        <th class="w-20 text-center border border-black">Overtime (hrs)</th>
                         <th class="w-20 text-center border border-black">Undertime (hrs)</th>
                         <th class="w-20 text-center border border-black">Late time (hrs)</th>
+                        <th class="w-20 text-center border border-black">Absent (days)</th>
                     </tr>
                 </thead>
                 <tbody>
                     <!-- Rows -->
                     <tr class="h-10 border border-black text-red-500">
-                        <td class="w-20 text-center border-r border-black text-black">0.0</td>
-                        <td class="w-20 text-center border-r border-black text-black">15.0</td>
-                        <td class="w-20 text-center border-r border-black">
-                            
-                            
-                        </td>
-                        <td class="w-28 text-center border-r border-black">
-                            @if($overtime == null)
-                                <p></p>
-                            @else
-                                - {{number_format($overtime = (float)$overtime * 0.005209, 3, '.', '')}}
-                            @endif
-                        </td>
+                        <td class="w-20 text-center border-r border-black text-black">{{$vl}}</td>
+                        <td class="w-20 text-center border-r border-black text-black">{{$sl}}</td>
                         <td class="w-28 text-center border-r border-black">  
                             @if($undertime == null)
                                 <p></p>
@@ -101,15 +81,65 @@
                                 - {{number_format($late = (float)$late * 0.005209, 3, '.', '')}}
                             @endif
                         </td>
+                        <td class="w-20 text-center border-r border-black"></td>
                     </tr>
                     <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
                         <td class="w-20 text-center border-r border-black text-red-600 font-bold">
-                            {{number_format($vl = 0.0 - ($undertime + $late), 3, '.', '')}}
+                            {{number_format($vl += - ($undertime + $late), 3, '.', '')}}
                         </td>
-                        <td class="w-20 text-center border-r border-black text-black font-bold">15.0</td>
+                        <td class="w-20 text-center border-r border-black text-black font-bold">{{$sl}}</td>
                         <td class="w-20 text-center border-r border-black"></td>
                         <td class="w-28 text-center border-r border-black"></td>
                         <td class="w-28 text-center border-r border-black"></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- CTO Table -->
+            <h1 class="mt-3 font-semibold">Compensatory Time Off (Overtime)</h1>
+            <table class="w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
+                <!-- Header  -->
+                <thead class="text-black">
+                    <tr class="h-10">
+                        <th class="w-20 text-center border border-black">Remaining CTO</th>
+                        <th class="w-20 text-center border border-black">Overtime (hrs)</th>
+                        <th class="w-20 text-center border border-black">Equivalent CTO</th>
+                        <th class="w-20 text-center border border-black">Remarks</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Rows -->
+                    <tr class="h-10 border border-black text-black">
+                        <td class="w-20 text-center border-r border-black text-black">
+                            @if($cto == null)
+                                <p>0.0</p>
+                            @else
+                                {{$cto}}
+                            @endif
+                        </td>
+                        <td class="w-28 text-center border-r border-black">
+                            @if($overtime == null)
+                                <p></p>
+                            @else
+                                {{$overtime}}
+                            @endif
+                        </td>
+                        <td class="w-20 text-center border-r border-black text-black">
+                            @if(strtolower($remarks) == 'rest day')
+                                <p>{{$add_cto = $overtime*1.5}}</p>
+                            @else
+                                {{$add_cto = $overtime}}
+                            @endif
+                        </td>
+                        <td class="w-20 text-center border-r border-black text-black">{{$remarks}}</td>
+                    </tr>
+                    <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
+                        <td class="w-20 text-center border-r border-black text-black font-bold">
+                            {{number_format($cto += $add_cto, 2, '.', '')}}
+                        </td>
+                        <td class="w-20 text-center border-r border-black"></td>
+                        <td class="w-20 text-center border-r border-black"></td>
+                        
                         <td class="w-20 text-center border-r border-black"></td>
                     </tr>
                 </tbody>
@@ -117,27 +147,36 @@
 
             <!-- LWOP or No enough VL -->
             <h1 class="font-inter mt-3 font-semibold">Salary Deduction (LWOP)</h1>
-            <div class="font-inter pl-5 border-b">
-                <p> VL Credit: {{0.0}}</p>
-                <p> LC Deduction: {{number_format($undertime + $late, 3, '.', '')}}</p>
-                <p class="text-red-600"> Remaining Balance: {{number_format(abs($vl), 3, '.', '')}}</p>
-                <p>Equivalent Working Hours: 
-                        {{$eqwh = number_format(abs($vl)/0.005208, 2, '.', '')}}
-                </p>
+                <div class="font-inter pl-5 border-b">
+                @if($vl < 0)
+                    <p> VL Credit: {{number_format($vl, 3, '.', '')}}</p>
+                    <p> LC Deduction: {{number_format($undertime + $late, 3, '.', '')}}</p>
+                    <p class="text-red-600"> Remaining Balance: {{number_format($lc_deduc = abs($vl), 3, '.', '')}}</p>
+                    <p>Equivalent Working Hours: 
+                            {{$eqwh = number_format($lc_deduc/0.005208, 2, '.', '')}}
+                    </p>
 
-                <div class="absolute ml-[600px] mt-[-96px]">
-                    <p> Salary: {{$salary = 20000}}</p>
-                    <p>Hourly Wage = Salary / 176 Hours </p>
-                    <p>Hourly Wage = {{$hw = number_format($salary/176, 2, '.', ',')}}</p>
-                    
+                    <div class="absolute ml-[600px] mt-[-96px]">
+                        <p> Salary: {{$salary = 20000}}</p>
+                        <p>Hourly Wage = Salary / 176 Hours </p>
+                        <p>Hourly Wage = {{$hw = number_format($salary/176, 2, '.', ',')}}</p>
+                        
+                    </div>
+
+                    <div class="pt-2 pb-3 pl-72">
+                        <p>Deduction: hourly wage * EQWH</p>
+                        <p class="text-red-600">Deduction: {{number_format($deduction1 = $hw * $eqwh, 2, '.', ',')}}</p>
+                    </div>
+                @else
+                    <div class="pt-2 pb-3 pl-72">
+                        <p>Deduction: hourly wage * EQWH</p>
+                        <p class="text-red-600">Deduction: {{number_format($deduction1 = 0 * 0, 2, '.', ',')}}</p>
+                    </div>
+                @endif
                 </div>
+            
 
-                <div class="pt-2 pb-3 pl-72">
-                    <p>Deduction: hourly wage * EQWH</p>
-                    <p class="text-red-600">Deduction: {{number_format($deduction1 = $hw * $eqwh, 2, '.', ',')}}</p>
-                </div>
-            </div>
-
+            <!-- Absent no approved leave -->
             <h1 class="font-inter mt-3 font-semibold">Salary Deduction (Absent w/o Approved Leave)</h1>
             <div class="font-inter pl-5 border-b">
                 <p> Salary: {{$salary = 20000}}</p>
@@ -152,6 +191,7 @@
                 </div>
             </div>
 
+            <!-- Total Salary -->
             <h1 class="font-inter mt-3 font-semibold">Salary After Deductions ({{date("F", mktime(0, 0, 0, NOW()->month))}})</h1>
             <div class="font-inter pl-5 border-b">
                 <p> Monthly Salary = {{$salary = 20000}}</p>

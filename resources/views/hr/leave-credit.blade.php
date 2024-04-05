@@ -9,8 +9,8 @@
                 @csrf
                 <div class="flex justify-center">
                     <div class="mt-4 mx-12">
-                        <x-label class="w-24" for="ida" value="{{ __('Employee ID') }}" />
-                        <x-input id="ida" class="block mt-1 w-72 font-bold" type="text" name="ida" autofocus/>
+                        <x-label class="w-24" for="id" value="{{ __('Employee ID') }}" />
+                        <x-input id="id" class="block mt-1 w-72 font-bold" type="text" name="id" autofocus/>
                     </div>
                     <div class="mt-8 mx-12 min-h-max flex justify-center">
                         <x-button-gold class="w-28 mt-2">
