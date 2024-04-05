@@ -6,7 +6,9 @@
 
         
         @if(session('message'))
-        <div class="mt-10 min-w-max h-8 mx-3 text-blue-600 items-end italic">
+        <div class="mt-10 min-w-max h-8 mx-3 text-blue-600 items-end italic"
+             x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
+             x-init="setTimeout(() => show = false, 3000)">
             {{ session('message') }} 
         </div>
         @endif

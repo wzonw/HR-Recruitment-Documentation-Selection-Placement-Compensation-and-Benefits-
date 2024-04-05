@@ -75,17 +75,33 @@ class RecruitmentController extends Controller
         $remarks = [];
         $applicant = Application::where('file', 'LIKE', '%'.$file.'%')->first();
         $index = array_search($file, json_decode($applicant->file));
-        if($applicant != null){
-            $files = json_decode($applicant->file);
+        $files = json_decode($applicant->file);
+
+        if($applicant != null && $applicant->file_remarks == null){
             foreach($files as $key => $value){
                 if($key == $index){
-                    $remarks[$index] = 'viewed';
+                    $remarks[$index] = 'viewed';        // change the remarks of the viewed file
                 }
                 else{
-                    $remarks[$key] = '';
+                    $remarks[$key] = '';                // no remarks
                 }
             }
             
+            $applicant->file_remarks = json_encode($remarks);
+            $applicant->save();
+        }
+        elseif($applicant != null && $applicant->file_remarks != null){
+            $file_remarks = json_decode($applicant->file_remarks);
+
+            foreach($file_remarks as $value){
+                $remarks[] = $value;                    // insert old remarks in array files[]
+            }
+            foreach($files as $key => $value){
+                if($key == $index){
+                    $remarks[$index] = 'viewed';        // change the remarks of the viewed file
+                }
+            }
+
             $applicant->file_remarks = json_encode($remarks);
             $applicant->save();
         }
@@ -93,7 +109,67 @@ class RecruitmentController extends Controller
         return view('livewire.view-file', compact('data'));
     }
 
-    public function join_data(){
+    public function approved_file($file){
+        $remarks = [];
+        $applicant = Application::where('file', 'LIKE', '%'.$file.'%')->first();
+        $index = array_search($file, json_decode($applicant->file));
+        $files = json_decode($applicant->file);
+
+        if($applicant != null && $applicant->file_remarks != null){
+            $file_remarks = json_decode($applicant->file_remarks);
+
+            foreach($file_remarks as $value){
+                $remarks[] = $value;                    // insert old remarks in array files[]
+            }
+            foreach($files as $key => $value){
+                if($key == $index){
+                    $remarks[$index] = 'approved';        // change the remarks of the viewed file
+                }
+            }
+
+            $applicant->file_remarks = json_encode($remarks);
+            $applicant->save();
+
+            $message = $files[$index] .' is approved.';
+        }
+        else{
+            $message = 'Invalid..';  
+        }
+
+        return redirect()->route('view-applicant-profile', $applicant->id)->with('message', $message);
+    }
+
+    public function declined_file($file){
+        $remarks = [];
+        $applicant = Application::where('file', 'LIKE', '%'.$file.'%')->first();
+        $index = array_search($file, json_decode($applicant->file));
+        $files = json_decode($applicant->file);
+
+        if($applicant != null && $applicant->file_remarks != null){
+            $file_remarks = json_decode($applicant->file_remarks);
+
+            foreach($file_remarks as $value){
+                $remarks[] = $value;                    // insert old remarks in array files[]
+            }
+            foreach($files as $key => $value){
+                if($key == $index){
+                    $remarks[$index] = 'declined';        // change the remarks of the viewed file
+                }
+            }
+
+            $applicant->file_remarks = json_encode($remarks);
+            $applicant->save();
+
+            $message = $files[$index] .' is declined.';
+        }
+        else{
+            $message = 'Invalid..';  
+        }
+
+        return redirect()->route('view-applicant-profile', $applicant->id)->with('message', $message);
+    }
+
+    public function join_data(){            // retrieving of application and job details
         $data = Application::join('jobs_availables', 'jobs_availables.id', '=', 'applications.job_id')
                             ->where('applications.remarks', '!=', 'Inactive')
                             ->where('applications.remarks', '!=', 'Employee')

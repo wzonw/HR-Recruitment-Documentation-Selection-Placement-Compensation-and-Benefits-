@@ -145,6 +145,16 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     ->name('view-file');
 
     Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
+        Route::get('/view/applicant/profile/{file}/approved', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'approved_file'])
+        ->name('approved-file');
+    });
+
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
+        Route::get('/view/applicant/profile/{file}/declined', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'declined_file'])
+        ->name('declined-file');
+    });
+
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
         Route::get('/view/applicant/profile/{id}/reject', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'sendmail_rejected'])
         ->name('email-reject');
     });

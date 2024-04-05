@@ -34,7 +34,9 @@
         </div>
         
         @if(session('message'))
-        <div class="w-[1000px] h-8 flex justify-center italic">
+        <div class="w-[1000px] h-8 flex justify-center italic"
+             x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
+             x-init="setTimeout(() => show = false, 3000)">
             {{ session('message') }} 
         </div>
         @endif
