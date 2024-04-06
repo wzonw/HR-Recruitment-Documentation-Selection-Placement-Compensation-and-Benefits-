@@ -8,27 +8,27 @@
                 <a href="https://www.plm.edu.ph/" class="mt-[7px] text-yellow-600 text-sm font-normal font-inter underline">PLM Website</a>
             </div>
             <div class=" font-inter text-sm text-left flex flex-wrap overflow-auto h-[520px]">
-                @foreach($jobs as $job)
-                    @if($job->active == 'Y')
+                @foreach($jobs as $jobs)
+                    @if($jobs->active == 'Y')
                     <div class="w-60 min-h-max font-bold rounded shadow px-2 py-2 mt-2 mb-2 ml-5">
-                        <a href="{{route('job-update-id', $job->id)}}"> {{$job->college}} 
-                            <span class="font-normal"> -  {{$job->job_name}} </span>
+                        <a href="{{route('job-update-id', $jobs->id)}}"> {{$jobs->college}} 
+                            <span class="font-normal"> -  {{$jobs->job_name}} </span>
                         </a>
                         <div class="ml-5">
-                            <p>Status: <span class="font-normal"> {{$job->status}} </span></p>
-                            <p>Department: <span class="font-normal"> {{$job->dept}} </span></p>
-                            <p>Salary: <span class="font-normal"> Php {{number_format($job->salary, 0, '.', ',')}} </span></p>  
+                            <p>Status: <span class="font-normal"> {{$jobs->status}} </span></p>
+                            <p>Department: <span class="font-normal"> {{$jobs->dept}} </span></p>
+                            <p>Salary: <span class="font-normal"> Php {{number_format($jobs->salary, 0, '.', ',')}} </span></p>  
                         </div>
                     </div>
                     @else
                     <div class="bg-red-50 w-60 min-h-max font-bold rounded shadow px-2 py-2 mt-2 mb-2 ml-5">
-                        <a href="{{route('job-update-id', $job->id)}}"> {{$job->college}} 
-                            <span class="font-normal"> -  {{$job->job_name}} </span>
+                        <a href="{{route('job-update-id', $jobs->id)}}"> {{$jobs->college}} 
+                            <span class="font-normal"> -  {{$jobs->job_name}} </span>
                         </a>
                         <div class="ml-5">
-                            <p>Status: <span class="font-normal"> {{$job->status}} </span></p>
-                            <p>Department: <span class="font-normal"> {{$job->dept}} </span></p>
-                            <p>Salary: <span class="font-normal"> Php {{number_format($job->salary, 0, '.', ',')}} </span></p>  
+                            <p>Status: <span class="font-normal"> {{$jobs->status}} </span></p>
+                            <p>Department: <span class="font-normal"> {{$jobs->dept}} </span></p>
+                            <p>Salary: <span class="font-normal"> Php {{number_format($jobs->salary, 0, '.', ',')}} </span></p>  
                         </div>
                     </div>
                     @endif
@@ -39,7 +39,7 @@
         <div class="w-[500px] h-[300px] bg-white shadow shadow-gray-400 border border-black">
             <p class="w-26 h-11 pt-2 text-indigo-800 text-2xl shadow text-center font-bold font-inter">Update Job</p>
             @if(session('message'))
-            <div class="ml-5 min-w-max h-8 text-blue-600 flex items-end italic"
+            <div class="min-w-max h-8 text-blue-600 flex items-end italic"
                  x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
                  x-init="setTimeout(() => show = false, 3000)">
                 {{ session('message') }} 
@@ -49,12 +49,12 @@
                 @csrf
                 <div class="mt-2 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="job_id" value="{{ __('Job ID') }}" />
-                    <x-input id="job_id" class="block mt-1 w-72 h-9 text-gray-500" type="text" name="job_id" autofocus required/>
+                    <x-input id="job_id" class="block mt-1 w-72 h-9 text-gray-500" type="text" name="job_id" value="{{$job->id}}" readonly />
                 </div>
 
                 <div class="mt-2 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="position" value="{{ __('Position') }}" />
-                    <x-input id="position" class="block mt-1 w-72 h-9 text-gray-500" type="text" name="position" required/>
+                    <x-input id="position" class="block mt-1 w-72 h-9 text-gray-500" type="text" name="position" value="{{$job->job_name}}" readonly/>
                 </div>
 
                 <div class="mt-2 mx-12 inline-flex justify-center items-center space-x-2">

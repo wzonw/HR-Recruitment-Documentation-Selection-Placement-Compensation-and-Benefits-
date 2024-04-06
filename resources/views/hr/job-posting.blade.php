@@ -1,68 +1,26 @@
 <x-admin-layout>
     {{-- Success is as dangerous as failure. --}}
     <div class="flex justify-center w-full px-5 py-5 space-x-3">
-        <div class="w-[550px] h-[600px] pt-7 pl-7 bg-white shadow shadow-gray-400 border rounded-xl border-black">
-            <div class="min-w-max min-h-max inline-flex space-x-5">
+        <!-- Jobs Available -->
+        <div class="w-[550px] h-[600px] pt-7 bg-white shadow shadow-gray-400 border rounded-xl border-black">
+            <div class="ml-6 min-w-max min-h-max inline-flex space-x-5">
                 <h1 class="text-indigo-800 text-2xl font-bold font-inter">Available Careers</h1>
                 <a href="https://www.plm.edu.ph/" class="mt-[7px] text-yellow-600 text-sm font-normal font-inter underline">PLM Website</a>
             </div>
-            <div class="w-[500px] h-[490px]  overflow-auto mt-2 font-inter text-sm flex space-x-2 justify-center">
-                <table class="w-60 table-fixed text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700">
-                    <tbody>
-                        @foreach ($jobs_o as $job)
-                        <tr class=" ">
-                            <th scope="row" class="px-6 py-3 font-medium font-inter whitespace-normal ">
-                                <span class="font-bold">{{ $job->college }}</span>
-                                <span> - <a href="{{route('job-update', $job->id)}}">{{ $job->job_name }}</a></span><br>
-                                <div class="ml-3 wrap">
-                                    <span class="font-bold">Status: </span>
-                                    <span> {{ $job->status }} </span><br>
-                                    <span class="font-bold">Department: </span>
-                                    <span> {{ $job->dept }} </span><br>
-                                    <span class="font-bold">Salary: </span> 
-                                    @if ($job->salary[1] == '.')
-                                    @elseif ($job->salary[5] == '.')
-                                        <span> Php {{$job->salary[0]}}{{$job->salary[1]}},
-                                            {{$job->salary[2]}}{{$job->salary[3]}}{{$job->salary[4]}}</span>
-                                    @elseif($job->salary[6] == '.')
-                                        <span> Php {{$job->salary[0]}}{{$job->salary[1]}}{{$job->salary[2]}},
-                                            {{$job->salary[3]}}{{$job->salary[4]}}{{$job->salary[5]}}</span>
-                                    @endif
-                                </div> 
-                            </th>   
-                        </tr>
-                        @endforeach  
-                    </tbody>
-                </table>
-                <table class="w-60 table-fixed text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700">
-                    <tbody>
-                        @foreach ($jobs_e as $job)
-                        <tr class="">
-                            <th scope="row" class="px-6 py-3 font-medium font-inter whitespace-normal">
-                                <span class="font-bold">{{ $job->college }}</span>
-                                <span> - <a href="{{route('job-update', $job->id)}}">{{ $job->job_name }}</a></span><br>
-                                <div class="ml-3">
-                                    <span class="font-bold">Status: </span>
-                                    <span> {{ $job->status }} </span><br>
-                                    <span class="font-bold">Department: </span>
-                                    <span> {{ $job->dept }} </span><br>
-                                    <span class="font-bold">Salary: </span> 
-                                    @if ($job->salary[1] == '.')
-                                    @elseif ($job->salary[5] == '.')
-                                        <span> Php {{$job->salary[0]}}{{$job->salary[1]}},
-                                            {{$job->salary[2]}}{{$job->salary[3]}}{{$job->salary[4]}}</span>
-                                    @elseif($job->salary[6] == '.')
-                                        <span> Php {{$job->salary[0]}}{{$job->salary[1]}}{{$job->salary[2]}},
-                                            {{$job->salary[3]}}{{$job->salary[4]}}{{$job->salary[5]}}</span>
-                                    @endif
-                                </div> 
-                            </th>   
-                        </tr>
-                        @endforeach  
-                    </tbody>
-                </table>
+            <div class=" font-inter text-sm text-left flex flex-wrap overflow-auto h-[520px]">
+                @foreach($jobs as $job)
+                    <div class="w-60 min-h-max font-bold rounded shadow px-2 py-2 mt-2 mb-2 ml-5">
+                        <p> {{$job->college}} <span class="font-normal"> -  {{$job->job_name}} </span></p>
+                        <div class="ml-5">
+                            <p>Status: <span class="font-normal"> {{$job->status}} </span></p>
+                            <p>Department: <span class="font-normal"> {{$job->dept}} </span></p>
+                            <p>Salary: <span class="font-normal"> Php {{number_format($job->salary, 0, '.', ',')}} </span></p>  
+                        </div>
+                    </div>  
+                @endforeach 
             </div>
         </div>
+        <!-- Add Job Form-->
         <div class="w-[500px] h-[510px] bg-white shadow shadow-gray-400 border border-black">
             <p class="w-26 h-11 pt-2 text-indigo-800 text-2xl shadow text-center font-bold font-inter">Add Vacancies</p>
             @if(session('message'))
