@@ -73,7 +73,7 @@
         <div class="w-[545px] h-min ml-3 bg-white shadow py-5">
             <div class=" px-5 h-9 text-yellow-600 text-xl font-bold font-inter flex items-center">
                 <p>Job Applications</p>
-                <p class="text-zinc-500 text-sm font-light font-inter ml-64">View all</p>
+                <button class="text-zinc-500 text-sm font-light font-inter ml-64">View all</button>
             </div>
             <div class="flex flex-wrap overflow-auto">
                 @foreach($applications as $application)

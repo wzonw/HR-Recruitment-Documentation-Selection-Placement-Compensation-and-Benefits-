@@ -18,6 +18,7 @@ use App\Notifications\NewStatus;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Hash;
@@ -72,41 +73,43 @@ class RecruitmentController extends Controller
     public function view_file($file)
     {
         $data = $file;
+        
+        if(Auth::user()->role_id == 3){
+            $remarks = [];
+            $applicant = Application::where('file', 'LIKE', '%'.$file.'%')->first();
+            $index = array_search($file, json_decode($applicant->file));
+            $files = json_decode($applicant->file);
 
-        $remarks = [];
-        $applicant = Application::where('file', 'LIKE', '%'.$file.'%')->first();
-        $index = array_search($file, json_decode($applicant->file));
-        $files = json_decode($applicant->file);
-
-        if($applicant != null && $applicant->file_remarks == null){
-            foreach($files as $key => $value){
-                if($key == $index){
-                    $remarks[$index] = 'viewed';        // change the remarks of the viewed file
+            if($applicant != null && $applicant->file_remarks == null){
+                foreach($files as $key => $value){
+                    if($key == $index){
+                        $remarks[$index] = 'viewed';        // change the remarks of the viewed file
+                    }
+                    else{
+                        $remarks[$key] = '';                // no remarks
+                    }
                 }
-                else{
-                    $remarks[$key] = '';                // no remarks
-                }
+                
+                $applicant->file_remarks = json_encode($remarks);
+                $applicant->save();
             }
-            
-            $applicant->file_remarks = json_encode($remarks);
-            $applicant->save();
+            elseif($applicant != null && $applicant->file_remarks != null){
+                $file_remarks = json_decode($applicant->file_remarks);
+
+                foreach($file_remarks as $value){
+                    $remarks[] = $value;                    // insert old remarks in array files[]
+                }
+                foreach($files as $key => $value){
+                    if($key == $index){
+                        $remarks[$index] = 'viewed';        // change the remarks of the viewed file
+                    }
+                }
+
+                $applicant->file_remarks = json_encode($remarks);
+                $applicant->save();
+            }
+
         }
-        elseif($applicant != null && $applicant->file_remarks != null){
-            $file_remarks = json_decode($applicant->file_remarks);
-
-            foreach($file_remarks as $value){
-                $remarks[] = $value;                    // insert old remarks in array files[]
-            }
-            foreach($files as $key => $value){
-                if($key == $index){
-                    $remarks[$index] = 'viewed';        // change the remarks of the viewed file
-                }
-            }
-
-            $applicant->file_remarks = json_encode($remarks);
-            $applicant->save();
-        }
-
         return view('livewire.view-file', compact('data'));
     }
 

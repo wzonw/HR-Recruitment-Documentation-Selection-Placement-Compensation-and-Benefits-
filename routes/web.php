@@ -234,4 +234,40 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('/leave-credit/computation', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation'])
         ->name('lc-computation');
     });
+
+    // HR Chief
+    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
+        Route::get('/job/posting', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_posting'])
+        ->name('job-posting');
+    });
+
+    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
+        Route::post('/job/posting/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_post'])
+        ->name('job-post');
+    });
+
+    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
+        Route::get('/job/update', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update'])
+        ->name('job-update');
+    });
+
+    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
+        Route::get('/job/update/{job_id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update_id'])
+        ->name('job-update-id');
+    });
+
+    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
+        Route::post('/job/update/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update_success'])
+        ->name('job-update-id-success');
+    });
+
+    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
+        Route::get('/view/applicant/list', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'join_data'])
+        ->name('applicant-list');
+    });
+
+    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
+        Route::get('/view/applicant/profile/{id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'applicant_profile'])
+        ->name('view-applicant-profile');
+    });
 }); 

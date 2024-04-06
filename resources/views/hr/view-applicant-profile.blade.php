@@ -75,6 +75,9 @@
                 @endif
                 <livewire:FileCabinet :applicant="$applicant" />
             </div>
+
+            <!-- Application Status -->
+            @can('for-recruitment')
             <div class="mt-14">
                 <h1 class="text-indigo-800 text-2xl font-bold font-inter">Application Status</h1>
                 @if($applicant->remarks != 'Signing of Documents')
@@ -115,6 +118,7 @@
                 </div>
                 @endif
             </div>
+            @endif
         </div>
     </div>
 </x-admin-layout>
