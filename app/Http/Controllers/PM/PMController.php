@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\HR;
+namespace App\Http\Controllers\PM;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
@@ -14,14 +14,14 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Gate;
 
-class HRController extends Controller
+class PMController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        if(Gate::denies('for-admins')){
+        if(Gate::denies('for-pm')){
             abort(403);
         }
 

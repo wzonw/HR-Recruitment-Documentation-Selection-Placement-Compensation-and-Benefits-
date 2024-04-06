@@ -31,6 +31,10 @@ class CheckRole
             abort(403);
         }
 
+        if($role == 'hr chief' && auth()->user()->role_id != 5){
+            abort(403);
+        }
+
 
         return $next($request);
     }

@@ -28,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
             return $user->role_id == 1;
         });
 
-        Gate::define('for-admins', function (User $user) {
+        Gate::define('for-pm', function (User $user) {
             return $user->role_id == 2;
         });
 
@@ -38,6 +38,10 @@ class AuthServiceProvider extends ServiceProvider
 
         Gate::define('for-compensation', function (User $user) {
             return $user->role_id == 4;
+        });
+
+        Gate::define('for-chief', function (User $user) {
+            return $user->role_id == 5;
         });
     }
 }

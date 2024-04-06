@@ -82,8 +82,8 @@ Route::middleware([
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::group(['middleware' => 'role:personnel management', 'prefix' => 'admin', 'as' => 'hr.'], function(){
-        Route::resource('dashboard', \App\Http\Controllers\HR\HRController::class);
+    Route::group(['middleware' => 'role:personnel management', 'prefix' => 'pm', 'as' => 'pm.'], function(){
+        Route::resource('dashboard', \App\Http\Controllers\PM\PMController::class);
     });
 
     Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment', 'as' => 'r.'], function(){
@@ -92,6 +92,10 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation', 'as' => 'c.'], function(){
         Route::resource('dashboard', \App\Http\Controllers\Compensation\CompensationController::class);
+    });
+
+    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief', 'as' => 'chief.'], function(){
+        Route::resource('dashboard', \App\Http\Controllers\Chief\ChiefController::class);
     });
 
     Route::group(['middleware' => 'role:applicant', 'prefix' => 'applicant', 'as' => 'applicant.'], function(){
@@ -116,12 +120,12 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
 
     Route::group(['middleware' => 'role:personnel management', 'prefix' => 'pm'], function(){
-        Route::get('/view/employee/list', [\App\Http\Controllers\HR\HRController::class, 'emp_list'
+        Route::get('/view/employee/list', [\App\Http\Controllers\PM\PMController::class, 'emp_list'
         ])->name('view-employee-list');
     });
 
     Route::group(['middleware' => 'role:personnel management', 'prefix' => 'pm'], function(){
-        Route::get('/view/employee/profile/{id}', [\App\Http\Controllers\HR\HRController::class, 'emp_detail'])
+        Route::get('/view/employee/profile/{id}', [\App\Http\Controllers\PM\PMController::class, 'emp_detail'])
         ->name('view-employee-profile');
     });
 

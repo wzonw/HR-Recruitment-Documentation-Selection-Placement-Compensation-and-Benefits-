@@ -23,8 +23,8 @@
                     </x-nav-link>
                     @endif
 
-                    @can('for-admins')
-                    <x-nav-link href="{{ route('hr.dashboard.index') }}" :active="request()->routeIs('hr.dashboard.index')">
+                    @can('for-pm')
+                    <x-nav-link href="{{ route('pm.dashboard.index') }}" :active="request()->routeIs('hr.dashboard.index')">
                         {{ __('Admin') }}
                     </x-nav-link>
                     @endif
@@ -37,6 +37,12 @@
 
                     @can('for-compensation')
                     <x-nav-link href="{{ route('c.dashboard.index') }}" :active="request()->routeIs('hr.dashboard.index')">
+                        {{ __('Admin') }}
+                    </x-nav-link>
+                    @endif
+
+                    @can('for-chief')
+                    <x-nav-link href="{{ route('chief.dashboard.index') }}" :active="request()->routeIs('hr.dashboard.chief_index')">
                         {{ __('Admin') }}
                     </x-nav-link>
                     @endif
