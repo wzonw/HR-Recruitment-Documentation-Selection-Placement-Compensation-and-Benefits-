@@ -36,6 +36,7 @@ export default {
             colors: {
                 'gold': '#C9AE5D',
                 'gold-100': '#AB830F',
+                'gold-200': '#97740D',
                 'yellow-550': '#e3b10b',
                 'indigo-650': '#4F74BB',
                 'blue-850': '#2D349A',

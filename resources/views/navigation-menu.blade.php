@@ -42,7 +42,7 @@
                     @endif
 
                     @can('for-chief')
-                    <x-nav-link href="{{ route('chief.dashboard.index') }}" :active="request()->routeIs('hr.dashboard.chief_index')">
+                    <x-nav-link href="{{ route('chief.dashboard.index') }}" :active="request()->routeIs('hr.dashboard.chief-index')">
                         {{ __('Admin') }}
                     </x-nav-link>
                     @endif

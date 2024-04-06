@@ -50,6 +50,7 @@ Route::post('/applicant/upload/file/{id}/success', [\App\Http\Controllers\Applic
 ->name('upload-file-success');
 
 
+
 Route::get('/create', function () {
     return view('form');
 });
