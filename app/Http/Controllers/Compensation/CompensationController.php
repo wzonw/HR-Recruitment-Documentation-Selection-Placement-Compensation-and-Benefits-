@@ -46,6 +46,7 @@ class CompensationController extends Controller
         $leaves = EmployeeLeave::join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->get([
+                                    'employee_leaves.emp_id',
                                     'employee_leaves.start_date',
                                     'employee_leaves.end_date',
                                     'employee_leaves.type',
