@@ -28,7 +28,12 @@ class ChiefController extends Controller
                                     ->where('end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
 
-        $applications = Application::all();
+        $applications = Application::join('jobs_availables', 'jobs_availables.id', '=', 'applications.job_id')
+                                    ->get([
+                                        'applications.name',
+                                        'jobs_availables.college',
+                                        'jobs_availables.job_name',
+                                    ]);
 
         $leaves = EmployeeLeave::join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
                                 ->get([

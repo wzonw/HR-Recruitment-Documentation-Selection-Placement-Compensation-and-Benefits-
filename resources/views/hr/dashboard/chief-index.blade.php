@@ -9,7 +9,7 @@
                         <img class=" opacity-25 w-[218px] h-32" src="https://plm.edu.ph/images/news/press-releases/Pamantasa--ng-Lungsod-ng-Maynila-facade.jpg"/>
                     </div>
                     <div class="ml-4 mt-7">
-                        <div class="w-48 h-6 text-black text-2xl font-semibold font-inter">Jack Bisoy</div>
+                        <div class="w-48 h-6 text-black text-xl font-semibold font-inter">{{Auth::user()->name.Auth::user()->suffix}}</div>
                         <div class="w-36 h-4 text-neutral-950 text-opacity-50 text-base font-normal font-inter">HR CHIEF</div>
                     </div>
                 </div>
@@ -79,10 +79,10 @@
                 @foreach($applications as $application)
                     @if(strtolower($application->remarks) == 'inactive' || strtolower($application->remarks) == 'employee')
                     @else
-                        <div class="w-60 h-14 bg-neutral-100 rounded shadow text-sm mt-4 ml-5 px-2 py-2">
+                        <div class="w-60 min-h-max bg-neutral-100 rounded shadow text-sm mt-4 ml-5 px-2 py-2">
                             <p class="font-bold">{{$application->name}}</p>
                             <p class="text-neutral-400">Applied for 
-                                <span class="font-bold text-black">CISTM Faculty</span>
+                                <span class="font-bold text-black">{{$application->college}} {{$application->job_name}}</span>
                             </p>
                         </div>
                     @endif
