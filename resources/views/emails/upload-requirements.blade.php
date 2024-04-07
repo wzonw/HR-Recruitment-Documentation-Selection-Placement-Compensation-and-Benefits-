@@ -16,7 +16,7 @@
     <div class="font-inter text-sm">
         <h2>Dear {{$applicant}},</h2>
         <p> Congratulations! We would like to inform you that you passed the pre-screening for applicants. 
-            <span>However, you have an incomplete requirements.</span>
+            <span>However, you have incomplete requirements.</span>
         </p>
         <p>Please upload the following as soon as possible thru 
         <a href="http://127.0.0.1:8000/application/verify"> our website</a>:

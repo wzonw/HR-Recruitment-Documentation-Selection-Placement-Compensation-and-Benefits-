@@ -114,9 +114,6 @@
                     <a  onclick="return confirm('Are you sure?')" href="{{route('emp-accept', $applicant->id)}}" 
                         class="inline-flex mt-4 px-3 py-2 items-center justify-center bg-green-700 border border-transparent rounded-md 
                         font-semibold text-xs text-white text-center font-inter uppercase"> Accepted </a>
-                    <a  onclick="return confirm('Are you sure?')" href="#" 
-                        class="inline-flex mt-4 px-3 py-2 items-center justify-center bg-red-700 border border-transparent rounded-md 
-                        font-semibold text-xs text-white text-center font-inter uppercase"> Rejected </a>
                 </div>
                 @endif
             </div>

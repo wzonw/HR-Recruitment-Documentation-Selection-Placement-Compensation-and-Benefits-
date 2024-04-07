@@ -11,14 +11,14 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class ApplicantProceed extends Mailable
+class ApplicantSigning extends Mailable
 {
     use Queueable, SerializesModels;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(public Application $applicant, public $password,)
+    public function __construct(public Application $applicant, public $job)
     {
         //
     }
@@ -30,7 +30,7 @@ class ApplicantProceed extends Mailable
     {
         return new Envelope(
             from: new Address('hris_recruitment@laravel.com'),
-            subject: 'Application Proceed',
+            subject: 'Signing of Documents',
         );
     }
 
@@ -40,8 +40,7 @@ class ApplicantProceed extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.applicant-proceed',
-            //view: 'emails.upload-requirements', if no need applicant account
+            view: 'emails.signing-of-documents',
         );
     }
 

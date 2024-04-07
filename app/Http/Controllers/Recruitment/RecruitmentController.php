@@ -11,6 +11,7 @@ use App\Models\User;
 use App\Actions\Fortify\PasswordValidationRules;
 use App\Events\FileRemarksChanged;
 use App\Events\StatusChanged;
+use App\Mail\ApplicantSigning;
 use App\Mail\ProceedToOffice;
 use App\Models\DocuRequest;
 use App\Models\Employee;
@@ -283,7 +284,7 @@ class RecruitmentController extends Controller
         if ($status == null && $request->status != null){
             $password = Str::of($applicant->name)->remove(' ');
             $password = strtolower($password);
-            $pass = $password;
+
             if($account == null){
                 User::create([
                     'name' => $applicant->name,
@@ -300,13 +301,13 @@ class RecruitmentController extends Controller
                 //notif via mail
                 Mail::to($applicant->email)->send(new ApplicantProceed($applicant, $password));
 
-                $message = 'This applicant passed the initial screening, but has incomplete requirement.';
+                $message = 'This applicant status is updated to '.$request->status;
             }
             elseif($request->status == 'Proceed (Hiring Office)'){
                 //notif via mail
                 Mail::to($applicant->email)->send(new ProceedToOffice($applicant, $password));
 
-                $message = 'This applicant passed the initial screening, and proceeded to Hiring Office.';
+                $message = 'This applicant status is updated to '.$request->status;
             }
             else{
                 $message = 'Something wrong.';
@@ -320,7 +321,16 @@ class RecruitmentController extends Controller
             $message = 'This applicant status is updated to '.$request->status;
         }
         elseif($status != null && $request->status == 'Signing of Documents'){
+            $applicant->remarks = $request->status;
+            $applicant->save();
+
+            $job = JobsAvailable::where('id', $applicant->job_id);
+
+            //notif via db (system)
+            event(new StatusChanged($applicant));
+
             //notif via mail
+            Mail::to($applicant->email)->send(new ApplicantSigning($applicant, $job));
 
             $message = 'This applicant status is updated to '.$request->status;
         }
