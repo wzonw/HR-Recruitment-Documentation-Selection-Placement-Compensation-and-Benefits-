@@ -4,6 +4,7 @@ namespace App\Http\Controllers\PM;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\DocuRequest;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
@@ -54,6 +55,7 @@ class PMController extends Controller
                                 'employees.id',
                                 'employees.name',
                                 'jobs_availables.job_name', 
+                                'jobs_availables.college',  
                                 'jobs_availables.dept', 
                                 'jobs_availables.status', 
                                 'jobs_availables.salary'
@@ -68,9 +70,19 @@ class PMController extends Controller
 
         $job = JobsAvailable::where('id', $user->job_id)->first();
 
+        $leaves = EmployeeLeave::where('emp_id', $id)->get();
+
         return view('hr.view-employee-profile', [
             'user' => $user,
             'job' => $job,
+            'leaves' => $leaves,
+        ]);
+    }
+
+    public function document_request(){
+        $requests = DocuRequest::all();
+        return view('hr.view-request', [
+            'requests' => $requests,
         ]);
     }
 

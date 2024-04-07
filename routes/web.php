@@ -131,9 +131,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
 
     Route::group([['middleware' => 'role:personnel management', 'middleware' => 'role:hr chief'], 'prefix' => 'pm'], function(){
-        Route::get('/view/request', function () {
-            return view('hr.view-request');
-        })->name('view-request');
+        Route::get('/view/request', [\App\Http\Controllers\PM\PMController::class, 'document_request'])
+        ->name('view-request');
     });
 
     Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){

@@ -32,7 +32,11 @@
                     <div>
                         <div class="inline-flex">
                             <p class="min-w-max h-5 text-black text-base font-medium font-inter">
-                                {{ $job->dept }} Department
+                                @if($job->dept == null)
+                                    {{ $job->college }}
+                                @else
+                                    {{ $job->dept }} Department
+                                @endif
                             </p>
                         </div>
                     </div>
