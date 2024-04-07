@@ -135,6 +135,11 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         ->name('view-request');
     });
 
+    Route::group(['middleware' => 'role:personnel management', 'prefix' => 'pm'], function(){
+        Route::get('/view/request/notify/{id}', [\App\Http\Controllers\PM\PMController::class, 'notify_emp'])
+        ->name('notify-employee');
+    });
+
     Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
         Route::get('/view/applicant/list', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'join_data'])
         ->name('applicant-list');
@@ -173,22 +178,22 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         ->name('job-posting');
     });
 
-    Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
         Route::post('/job/posting/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_post'])
         ->name('job-post');
     });
 
-    Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
         Route::get('/job/update', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update'])
         ->name('job-update');
     });
 
-    Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
         Route::get('/job/update/{job_id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update_id'])
         ->name('job-update-id');
     });
 
-    Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
+    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
         Route::post('/job/update/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update_success'])
         ->name('job-update-id-success');
     });

@@ -12,6 +12,7 @@ use App\Actions\Fortify\PasswordValidationRules;
 use App\Events\FileRemarksChanged;
 use App\Events\StatusChanged;
 use App\Mail\ProceedToOffice;
+use App\Models\DocuRequest;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Notifications\NewStatus;
@@ -36,6 +37,9 @@ class RecruitmentController extends Controller
             abort(403);
         }
 
+        $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
+        $NumOfDocuReq = $NumOfDocuReq->count();
+
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
@@ -51,6 +55,7 @@ class RecruitmentController extends Controller
                 ->where('active', 'Y')
                 ->get();
         return view('hr.dashboard.index', [
+            "num_reqs" => $NumOfDocuReq,
             "num_applicants" => $NumOfApplicants,
             "num_onleave" => $NumOnLeave,
             "part_time" => $PTJobs,

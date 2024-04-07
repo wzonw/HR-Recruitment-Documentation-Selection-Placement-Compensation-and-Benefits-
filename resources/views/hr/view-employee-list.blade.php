@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class=" ml-10">
+    <div class="h-screen ml-10">
         <div class="flex">
             <div class="w-[700px] h-14 mt-5 bg-indigo-800 flex items-center">
                 <p class="ml-5 text-white text-3xl font-bold font-inter">Employee List</p>

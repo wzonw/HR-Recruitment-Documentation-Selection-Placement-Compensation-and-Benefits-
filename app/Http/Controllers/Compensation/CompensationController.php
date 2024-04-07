@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Compensation;
 
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\DocuRequest;
 use App\Models\dtr;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
@@ -20,6 +21,9 @@ class CompensationController extends Controller
             abort(403);
         }
 
+        $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
+        $NumOfDocuReq = $NumOfDocuReq->count();
+
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
@@ -35,6 +39,7 @@ class CompensationController extends Controller
                 ->where('active', 'Y')
                 ->get();
         return view('hr.dashboard.index', [
+            "num_reqs" => $NumOfDocuReq,
             "num_applicants" => $NumOfApplicants,
             "num_onleave" => $NumOnLeave,
             "part_time" => $PTJobs,

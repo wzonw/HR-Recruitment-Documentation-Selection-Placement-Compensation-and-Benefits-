@@ -31,7 +31,7 @@
                         <td scope="row" class="w-8 text-center">
                             {{$applicant->id}}
                         </td>
-                        <td class="w-28 pl-3 py-3 font-medium">
+                        <td class="w-28 pl-3 py-3 font-medium hover:text-gray-400">
                             <a href="{{ route('view-applicant-profile', $applicant->id) }}">{{$applicant->name}}</a>
                         </td>
                         <td class="w-32 pl-3 py-3">

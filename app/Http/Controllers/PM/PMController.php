@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\PM;
 
+use App\Events\DocumentRequestNotif;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\DocuRequest;
@@ -9,6 +10,7 @@ use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
 use App\Models\User;
+use App\Notifications\DocumentReqNotif;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -26,6 +28,9 @@ class PMController extends Controller
             abort(403);
         }
 
+        $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
+        $NumOfDocuReq = $NumOfDocuReq->count();
+
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
@@ -41,6 +46,7 @@ class PMController extends Controller
                 ->where('active', 'Y')
                 ->get();
         return view('hr.dashboard.index', [
+            "num_reqs" => $NumOfDocuReq,
             "num_applicants" => $NumOfApplicants,
             "num_onleave" => $NumOnLeave,
             "part_time" => $PTJobs,
@@ -80,10 +86,28 @@ class PMController extends Controller
     }
 
     public function document_request(){
-        $requests = DocuRequest::all();
+        $requests = DocuRequest::where('remarks', null)->get();
         return view('hr.view-request', [
             'requests' => $requests,
         ]);
+    }
+
+    public function notify_emp($id){
+        $employee = DocuRequest::where('emp_id', $id)
+                                ->where('remarks', null)
+                                ->first();  
+        if($employee != null){
+            $employee->remarks = 'done';
+            $employee->save();
+
+            //event(new DocumentRequestNotif($employee));
+            
+            $message = 'notified employee about request.';
+        }
+        else{
+            $message = 'employee request is not found.';
+        }
+        return redirect()->route('view-request')->with('message', $message);
     }
 
     /**

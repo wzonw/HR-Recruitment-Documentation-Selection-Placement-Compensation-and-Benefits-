@@ -8,7 +8,7 @@
             <img class=" opacity-20 " src="https://www.plm.edu.ph/images/banners/2020-PLM-facade.jpg"/>
         </div>
         <div class="ml-4">
-            <div class="min-w-max h-10 top-[200px] absolute text-black text-base font-semibold font-'Inter'"> {{ Auth::user()->name ." ".Auth::user()->suffix }} </div>
+            <div class="min-w-max h-10 top-[200px] absolute text-black text-base font-semibold font-'Inter'"> {{ Auth::user()->name }} </div>
             @if (Auth::user()->role_id==2)
                 <div class="w-[190px] h-6 top-64 absolute text-black text-sm font-semibold font-'Inter'">Section : Personnel Management</div>
             @else
@@ -30,7 +30,7 @@
         <div class="w-[308px] h-[102px] my-4 relative">
             <div class="w-[306px] h-[102px] left-0 top- absolute bg-yellow-600 rounded-[10px] shadow"></div>
             <div class="w-[94px] h-[63px] left-[214px] top-[17px] absolute bg-yellow-700 rounded-[10px] shadow-md "></div>
-            <div class="w-[94px] h-[31px] left-[214px] top-[35px] absolute text-center text-white text-2xl font-semibold font-'Inter'">10</div>
+            <div class="w-[94px] h-[31px] left-[214px] top-[35px] absolute text-center text-white text-2xl font-semibold font-'Inter'">{{ $num_reqs }}</div>
             <div class="w-[191px] h-[45px] left-[17px] top-[24px] absolute text-white text-lg font-bold font-['Inter'">Employee Document Requests</div>
         </div>
 

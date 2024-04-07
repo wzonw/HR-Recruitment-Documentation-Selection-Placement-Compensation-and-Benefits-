@@ -48,6 +48,7 @@
                 @endif
                 @can('for-recruitment')
                 <td class="pl-2 py-3  w-10">
+                    @if($applicant->status != null)
                     <div class="flex space-x-3">
                         <div class="bg-green-700 w-5 flex justify-center rounded">
                             <a href="{{route('approved-file', ['file' => $value])}}">
@@ -64,6 +65,7 @@
                             </a>
                         </div>
                     </div>
+                    @endif
                 </td>
                 @endif
             </tr>

@@ -2,9 +2,11 @@
 
 namespace App\Providers;
 
+use App\Events\DocumentRequestNotif;
 use App\Events\FileRemarksChanged;
 use App\Events\StatusChanged;
 use App\Listeners\UpdateApplicantAboutStatus;
+use App\Listeners\UpdateEmpDocuReq;
 use App\Listeners\UpdateFileRemarks;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
@@ -27,6 +29,9 @@ class EventServiceProvider extends ServiceProvider
         ],
         FileRemarksChanged::class => [
             UpdateFileRemarks::class,
+        ],
+        DocumentRequestNotif::class => [
+            UpdateEmpDocuReq::class,
         ],
     ];
 

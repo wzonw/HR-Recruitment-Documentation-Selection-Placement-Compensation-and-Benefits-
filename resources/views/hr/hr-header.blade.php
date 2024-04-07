@@ -17,7 +17,7 @@
 
             <!-- Notification -->
             <div class="flex items-center top-4 relative start-96">
-                <x-dropdown align="right" width="48">
+                <x-dropdown align="right" width="80">
                     <x-slot name="trigger">
                         <span class="inline-flex rounded-md">
                             <button type="button" class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none focus:bg-gray-50 active:bg-gray-50 transition ease-in-out duration-150">
@@ -32,13 +32,15 @@
                             </button>
                         </span>
                     </x-slot>
+                    <x-slot name="contentClasses">bg-white w-80</x-slot>
                     <x-slot name="content">
                         <div class="block px-4 py-2 text-base font-bold text-gray-400">
                             {{ __('Notifications') }}
                         </div>
                         @forelse (Auth::user()->notifications as $notification)
                         <p class="px-4 py-2 font-inter text-sm">
-                            Your status has been changed into: <span class="italic">{{$notification->data['remarks']}}</span> 
+                            Your requested document: <span class="font-semibold">{{$notification->data['document']}}</span> 
+                            is now ready.
                             <br>
                             <!-- time difference -->
                             @if( NOW()->diffInHours($notification->created_at) == 0)
@@ -87,9 +89,9 @@
                                     <button type="button" class="inline-flex items-center px-3 py- mt-6 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white focus:outline-none transition ease-in-out duration-150">
                                         <img class="h-8 w-8 mt-3 rounded-full object-cover" src="{{ Auth::user()->profile_photo_url }}" alt="{{ Auth::user()->name }}" />
                                         <div class="ml-2 text-black font-bold">
-                                            {{ Auth::user()->name ." ". Auth::user()->surname }}               
+                                            {{ Auth::user()->name }}               
                                         </div>
-                                        @if(Auth::user()->role_id != 2)
+                                        @if(Auth::user()->role_id != 1)
                                         <p class="ml-10 absolute mt-9">Administrator</p>
                                         @endif
                                         <svg class="ms-2 -me-0.5 h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">

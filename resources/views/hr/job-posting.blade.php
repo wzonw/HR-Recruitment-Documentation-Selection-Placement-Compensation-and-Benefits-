@@ -20,6 +20,8 @@
                 @endforeach 
             </div>
         </div>
+
+        @can('for-recruitment')
         <!-- Add Job Form-->
         <div class="w-[500px] h-[510px] bg-white shadow shadow-gray-400 border border-black">
             <p class="w-26 h-11 pt-2 text-indigo-800 text-2xl shadow text-center font-bold font-inter">Add Vacancies</p>
@@ -75,5 +77,6 @@
                 </div>
             </form>
         </div>
+        @endif
     </div>
 </x-admin-layout>

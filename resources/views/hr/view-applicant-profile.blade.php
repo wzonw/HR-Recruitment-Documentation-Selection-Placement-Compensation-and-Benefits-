@@ -1,7 +1,7 @@
 <x-admin-layout>
-    <div class="pt-2 space-y-10">
+    <div class="pt-2 space-y-10 h-screen">
         <!--Profile-->
-        <div class="w-screen inline-flex">
+        <div class="w-[1119px] inline-flex">
             <div class="relative opacity-30">
                 <img class="relative h-36 w-screen object-cover object-top" src="https://plm.edu.ph/images/banners/hero-banner-facade.jpg" />
             </div>
