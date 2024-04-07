@@ -100,7 +100,7 @@ class PMController extends Controller
             $employee->remarks = 'done';
             $employee->save();
 
-            //event(new DocumentRequestNotif($employee));
+            event(new DocumentRequestNotif($employee));
             
             $message = 'notified employee about request.';
         }

@@ -87,11 +87,13 @@
                         <option value="none" selected disabled>Applicant Status</option>
                         <option value="Requirements">Requirements</option>
                         <option value="Proceed (Hiring Office)">Proceed to Hiring Office</option>
+                        
                         @if($applicant->remarks != null)
                         <option value="Initial Interview">Initial Interview (Recruitment)</option>
                         <option value="PSB">PSB</option>
                         <option value="FSB">FSB</option>
                         @endif
+                        
                         @if($applicant->remarks == 'PSB' || $applicant->remarks == 'FSB')
                         <option value="Signing of Documents">Signing of Documents</option>
                         @endif
