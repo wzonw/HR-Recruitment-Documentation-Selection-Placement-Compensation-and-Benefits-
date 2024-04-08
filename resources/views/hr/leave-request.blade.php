@@ -31,9 +31,13 @@
                         <!-- Rows -->
                         @foreach ($leaves as $leave)
                         <tr class="h-10 shadow-sm text-black">
+                            @if(Auth::user()->role_id == 5)
                             <td class="w-36 pl-3 hover:text-gray-400">
                                 <a href="{{route('leave-request-id', $leave->emp_id)}}">{{ $leave->name }}</a>
                             </td>
+                            @else
+                            <td class="w-36 pl-3">{{ $leave->name }}</td>
+                            @endif
                             <td class="w-24 pl-3">{{ $leave->status }}</td>
                             <td class="w-36 pl-3">{{ $leave->college }}</td>
                             <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->start_date)) }}</td>

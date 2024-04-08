@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Chief;
 
+use App\Events\LeaveReqApproval;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\Employee;
@@ -82,11 +83,15 @@ class ChiefController extends Controller
     public function approve_leave_request(Request $request){
         $req = EmployeeLeave::where('emp_id', $request->id)
                             ->whereMonth('start_date', 3)
+                            ->whereNotIn('remarks', ['approved', 'denied'])
                             ->first();
         if($req != null){
             $req->remarks = $request->remarks;
             $req->save();
             $message = 'successfully saved.';
+
+            //notif via db
+            event(new LeaveReqApproval($req));
         }
         else{
             $message = 'Employee ID not found.';

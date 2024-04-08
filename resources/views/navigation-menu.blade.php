@@ -82,28 +82,30 @@
                                 Your status has been changed into: <span class="italic">{{$notification->data['remarks']}}</span> 
                                 <br>
                                 <!-- time difference -->
-                                @if( NOW()->diffInHours($notification->created_at) == 0)
-                                    @if(NOW()->diffInMinutes($notification->created_at) >= 1)
-                                        <!-- mins -->
-                                        {{NOW()->diffInMinutes($notification->created_at)}} minutes ago
+                                <span class="text-xs">
+                                    @if( NOW()->diffInHours($notification->created_at) == 0)
+                                        @if(NOW()->diffInMinutes($notification->created_at) >= 1)
+                                            <!-- mins -->
+                                            {{NOW()->diffInMinutes($notification->created_at)}} minutes ago
+                                        @else
+                                            <!-- sec -->
+                                            A few seconds ago
+                                        @endif
+                                    @elseif( NOW()->diffInHours($notification->created_at) == 1)
+                                        <!-- 1hr --> 
+                                        {{ NOW()->diffInHours($notification->created_at) }} hour ago
+                                    @elseif( NOW()->diffInHours($notification->created_at) > 1 && NOW()->diffInHours($notification->created_at) < 24)
+                                        <!-- 1 to 23hrs -->
+                                        {{ NOW()->diffInHours($notification->created_at) }} hours ago
                                     @else
-                                        <!-- sec -->
-                                        A few seconds ago
+                                        <!-- day(s) -->
+                                        @if(NOW()->diffInDays($notification->created_at) == 1)
+                                            {{NOW()->diffInDays($notification->created_at)}} day ago
+                                        @else
+                                            {{NOW()->diffInDays($notification->created_at)}} days ago
+                                        @endif
                                     @endif
-                                @elseif( NOW()->diffInHours($notification->created_at) == 1)
-                                    <!-- 1hr --> 
-                                    {{ NOW()->diffInHours($notification->created_at) }} hour ago
-                                @elseif( NOW()->diffInHours($notification->created_at) > 1 && NOW()->diffInHours($notification->created_at) < 24)
-                                    <!-- 1 to 23hrs -->
-                                    {{ NOW()->diffInHours($notification->created_at) }} hours ago
-                                @else
-                                    <!-- day(s) -->
-                                    @if(NOW()->diffInDays($notification->created_at) == 1)
-                                        {{NOW()->diffInDays($notification->created_at)}} day ago
-                                    @else
-                                        {{NOW()->diffInDays($notification->created_at)}} days ago
-                                    @endif
-                                @endif
+                                </span>
                             </p>
                             @endif
                             <!-- For file remarks/status -->
