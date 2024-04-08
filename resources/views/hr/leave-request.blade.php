@@ -33,7 +33,7 @@
                         <tr class="h-10 shadow-sm text-black">
                             @if(Auth::user()->role_id == 5)
                             <td class="w-36 pl-3 hover:text-gray-400">
-                                <a href="{{route('leave-request-id', $leave->emp_id)}}">{{ $leave->name }}</a>
+                                <a href="{{route('leave-request-id', [$leave->emp_id, $leave->type])}}">{{ $leave->name }}</a>
                             </td>
                             @else
                             <td class="w-36 pl-3">{{ $leave->name }}</td>

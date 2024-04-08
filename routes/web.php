@@ -209,7 +209,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
 
     Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
-        Route::get('/leave/request/{id}', [\App\Http\Controllers\Chief\ChiefController::class, 'leave_request_id'])
+        Route::get('/leave/request/{id}/{type}', [\App\Http\Controllers\Chief\ChiefController::class, 'leave_request_id'])
         ->name('leave-request-id');
     });
 

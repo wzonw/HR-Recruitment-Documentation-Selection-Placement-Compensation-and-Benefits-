@@ -58,9 +58,10 @@ class ChiefController extends Controller
         ]);
     }
 
-    public function leave_request_id($id){
+    public function leave_request_id($id, $type){
         $req = EmployeeLeave::where('emp_id', $id)
                             ->whereMonth('start_date', Carbon::now()->month)
+                            ->where('type', $type)
                             ->first();
 
         $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
@@ -87,6 +88,7 @@ class ChiefController extends Controller
     public function approve_leave_request(Request $request){
         $req = EmployeeLeave::where('emp_id', $request->id)
                             ->whereMonth('start_date', Carbon::now()->month)
+                            ->where('type', $request->type)
                             ->whereNull('remarks')
                             ->first();
         if($req != null){
@@ -95,7 +97,7 @@ class ChiefController extends Controller
             $message = 'successfully saved.';
 
             //notif via db
-            //event(new LeaveReqApproval($req));
+            event(new LeaveReqApproval($req));
         }
         else{
             $message = 'Employee ID not found.';

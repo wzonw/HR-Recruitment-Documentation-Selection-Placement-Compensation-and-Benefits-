@@ -13,6 +13,10 @@
                             <x-label class="w-24" for="id" value="{{ __('Employee ID') }}" />
                             <x-input id="id" class="block mt-1 w-24 h-8 text-gray-500" type="text" name="id" value="{{$req->emp_id}}" readonly />
                         </div>
+                        <div class="justify-center items-center space-x-2 mr-5 hidden">
+                            <x-label class="w-24" for="type" value="{{ __('Type') }}" />
+                            <x-input id="type" class="block mt-1 w-24 h-8 text-gray-500" type="text" name="type" value="{{$req->type}}" readonly />
+                        </div>
                         <x-button-gold class="w-28" onclick="return confirm('Are you sure?')">
                             Save
                         </x-button-gold>    
@@ -37,7 +41,7 @@
                             @foreach ($leaves as $leave)
                             <tr class="h-10 shadow-sm text-black">
                                 <td class="w-36 pl-3 hover:text-gray-400">
-                                    <a href="{{route('leave-request-id', $leave->emp_id)}}">{{ $leave->name }}</a>
+                                    <a href="{{route('leave-request-id', [$leave->emp_id, $leave->type])}}">{{ $leave->name }}</a>
                                 </td>
                                 <td class="w-24 pl-3">{{ $leave->status }}</td>
                                 <td class="w-36 pl-3">{{ $leave->college }}</td>
@@ -48,7 +52,7 @@
                                     <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                                 </td>
                                 <td class="text-center uppercase">
-                                    @if($leave->remarks == null && $req->emp_id == $leave->emp_id)
+                                    @if($leave->remarks == null && $req->emp_id == $leave->emp_id && $req->type == $leave->type)
                                     <select name="remarks" id="remarks" class="uppercase text-sm border-none" autofocus>
                                         <option value="approved" class="text-green-600">approved</option>
                                         <option value="denied" class="text-red-600">denied</option>
