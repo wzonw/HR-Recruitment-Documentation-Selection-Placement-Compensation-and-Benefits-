@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class="bg-gray-100 w-[1119px]">
+    <div class="bg-gray-100 w-[1119px] h-screen">
         <div class="ml-3 mt-5">
             <div class="w-[1100px] h-14 bg-white rounded-lg shadow-md flex items-center">
                 <p class="ml-5 text-cyan-700 text-2xl font-extrabold font-inter">Leave Requests</p>

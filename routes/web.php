@@ -228,23 +228,23 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         ->name('time-keeping');
     });
 
-    Route::group([['middleware' => 'role:compensation', 'middleware' => 'role:hr chief'], 'prefix' => 'compensation'], function(){
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
         Route::get('/time-keeping/manage', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr'])
         ->name('add-dtr');
     });
 
-    Route::group([['middleware' => 'role:compensation', 'middleware' => 'role:hr chief'], 'prefix' => 'compensation'], function(){
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
         Route::post('/time-keeping/manage/success', [\App\Http\Controllers\Compensation\CompensationController::class, 'add_record'])
         ->name('add-dtr-success');
     });
 
-    Route::group([['middleware' => 'role:compensation', 'middleware' => 'role:hr chief'], 'prefix' => 'compensation'], function(){
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
         Route::get('/leave-credit', function () {
             return view('hr.leave-credit');
         })->name('leave-credit');
     });
 
-    Route::group([['middleware' => 'role:compensation', 'middleware' => 'role:hr chief'], 'prefix' => 'compensation'], function(){
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
         Route::post('/leave-credit/computation', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation'])
         ->name('lc-computation');
     });

@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Chief;
 use App\Events\LeaveReqApproval;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+use App\Models\dtr;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
+use DateTime;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
@@ -93,11 +95,41 @@ class ChiefController extends Controller
                             ->first();
         if($req != null){
             $req->remarks = $request->remarks;
+
+            // input equivalent leave credit in table
+            if(strtolower($req->type) == 'vacation'){
+                $lc_per_day = 0.005209*8;
+                $start = Carbon::parse($req->start_date);
+                $end = Carbon::parse($req->end_date);
+                $days_on_leave = $start->diffInDays($end) + 1;
+                $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
+
+                $dtr = dtr::where('emp_id', $req->emp_id)
+                            ->whereMonth('date', Carbon::now()->month)
+                            ->first();
+                
+                $emp_record = Employee::where('id', $req->emp_id)->first();
+
+                if($dtr == null){
+                    dtr::create([
+                        'emp_id' => $req->emp_id,
+                        'job_id' => $emp_record->job_id,
+                        'date' => Carbon::now()->toDateString(),
+                        'vl_used' => $equivalent_lc,
+                    ]);
+                }
+                elseif($dtr != null){
+                    $dtr->vl_used = $equivalent_lc;
+                    $dtr->date = Carbon::now()->toDateString();
+                    $dtr->save();
+                }
+            }
+            
             $req->save();
             $message = 'successfully saved.';
 
             //notif via db
-            event(new LeaveReqApproval($req));
+            //event(new LeaveReqApproval($req));
         }
         else{
             $message = 'Employee ID not found.';
