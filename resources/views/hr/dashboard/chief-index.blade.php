@@ -9,7 +9,7 @@
                         <img class=" opacity-25 w-[218px] h-32" src="https://plm.edu.ph/images/news/press-releases/Pamantasa--ng-Lungsod-ng-Maynila-facade.jpg"/>
                     </div>
                     <div class="ml-4 mt-7">
-                        <div class="w-48 h-6 text-black text-xl font-semibold font-inter">{{Auth::user()->name.Auth::user()->suffix}}</div>
+                        <div class="w-48 h-6 text-black text-xl font-semibold font-inter">{{Auth::user()->name}}</div>
                         <div class="w-36 h-4 text-neutral-950 text-opacity-50 text-base font-normal font-inter">HR CHIEF</div>
                     </div>
                 </div>

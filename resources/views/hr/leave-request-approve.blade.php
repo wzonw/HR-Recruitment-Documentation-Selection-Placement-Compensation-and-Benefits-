@@ -35,8 +35,10 @@
                         <tbody>
                             <!-- Rows -->
                             @foreach ($leaves as $leave)
-                            <tr class="h-10 shadow-sm">
-                                <td class="w-36 pl-3"><a href="{{route('leave-request-id', $leave->emp_id)}}">{{ $leave->name }}</a></td>
+                            <tr class="h-10 shadow-sm text-black">
+                                <td class="w-36 pl-3 hover:text-gray-400">
+                                    <a href="{{route('leave-request-id', $leave->emp_id)}}">{{ $leave->name }}</a>
+                                </td>
                                 <td class="w-24 pl-3">{{ $leave->status }}</td>
                                 <td class="w-36 pl-3">{{ $leave->college }}</td>
                                 <td class="w-28 pl-3">{{ $leave->start_date }}</td>
@@ -45,9 +47,13 @@
                                 <td class="w-32 text-center border-l border-r border-black">
                                     <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                                 </td>
-                                <td class="text-center text-red-600 uppercase">
+                                <td class="text-center uppercase">
                                     @if($leave->remarks == null && $req->emp_id == $leave->emp_id)
-                                    <x-input name="remarks" type="text" class="w-32 h-8 text-black border-none" autofocus required></x-input>
+                                    <select name="remarks" id="remarks" class="uppercase text-sm border-none" autofocus>
+                                        <option value="approved" class="text-green-600">approved</option>
+                                        <option value="onhold" class="text-blue-600">on-hold</option>
+                                        <option value="denied" class="text-red-600">denied</option>
+                                    </select>
                                     @else
                                         @if(strtolower($leave->remarks) == 'approved')
                                             <p class="text-green-600">{{ $leave->remarks }}</p>

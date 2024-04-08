@@ -5,7 +5,7 @@
                 <p class="ml-5 text-cyan-700 text-2xl font-extrabold font-inter">Leave Requests</p>
             </div>
             @if(session('message'))
-            <div class="min-w-max h-8 text-blue-600 flex items-end italic"
+            <div class="pl-5 min-w-max h-8 text-blue-600 flex items-end italic"
                 x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
                 x-init="setTimeout(() => show = false, 3000)">
                 {{ session('message') }} 
@@ -30,21 +30,25 @@
                     <tbody>
                         <!-- Rows -->
                         @foreach ($leaves as $leave)
-                        <tr class="h-10 shadow-sm">
-                            <td class="w-36 pl-3"><a href="{{route('leave-request-id', $leave->emp_id)}}">{{ $leave->name }}</a></td>
+                        <tr class="h-10 shadow-sm text-black">
+                            <td class="w-36 pl-3 hover:text-gray-400">
+                                <a href="{{route('leave-request-id', $leave->emp_id)}}">{{ $leave->name }}</a>
+                            </td>
                             <td class="w-24 pl-3">{{ $leave->status }}</td>
                             <td class="w-36 pl-3">{{ $leave->college }}</td>
-                            <td class="w-28 pl-3">{{ $leave->start_date }}</td>
-                            <td class="w-28 pl-3">{{ $leave->end_date }}</td>
+                            <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->start_date)) }}</td>
+                            <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->end_date)) }}</td>
                             <td class="w-28 pl-3">{{ $leave->type }}</td>
                             <td class="w-32 text-center border-l border-r border-black">
                                 <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                             </td>
-                            <td class="text-center text-red-600 uppercase">
+                            <td class="text-center uppercase">
                                 @if(strtolower($leave->remarks) == 'approved')
                                     <p class="text-green-600">{{ $leave->remarks }}</p>
+                                @elseif(strtolower($leave->remarks) == 'onhold')
+                                    <p class="text-blue-600">on-hold</p>
                                 @else
-                                    {{ $leave->remarks }}
+                                    <p class="text-red-600">{{ $leave->remarks }}</p>
                                 @endif
                             </td>
                         </tr>
