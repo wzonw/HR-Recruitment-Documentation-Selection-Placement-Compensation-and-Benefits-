@@ -36,7 +36,9 @@ class ChiefController extends Controller
                                         'jobs_availables.job_name',
                                     ]);
 
-        $leaves = EmployeeLeave::join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
+                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->get([
                                     'employee_leaves.start_date',
                                     'employee_leaves.end_date',
@@ -58,11 +60,13 @@ class ChiefController extends Controller
 
     public function leave_request_id($id){
         $req = EmployeeLeave::where('emp_id', $id)
-                            ->whereMonth('start_date', 3)
+                            ->whereMonth('start_date', Carbon::now()->month)
                             ->first();
 
-        $leaves = EmployeeLeave::join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
+                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->get([
                                     'employee_leaves.emp_id',
                                     'employee_leaves.start_date',
@@ -82,8 +86,8 @@ class ChiefController extends Controller
 
     public function approve_leave_request(Request $request){
         $req = EmployeeLeave::where('emp_id', $request->id)
-                            ->whereMonth('start_date', 3)
-                            ->whereNotIn('remarks', ['approved', 'denied'])
+                            ->whereMonth('start_date', Carbon::now()->month)
+                            ->whereNull('remarks')
                             ->first();
         if($req != null){
             $req->remarks = $request->remarks;
@@ -91,7 +95,7 @@ class ChiefController extends Controller
             $message = 'successfully saved.';
 
             //notif via db
-            event(new LeaveReqApproval($req));
+            //event(new LeaveReqApproval($req));
         }
         else{
             $message = 'Employee ID not found.';

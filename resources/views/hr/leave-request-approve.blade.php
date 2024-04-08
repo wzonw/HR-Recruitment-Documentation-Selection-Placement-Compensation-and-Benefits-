@@ -48,10 +48,9 @@
                                     <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                                 </td>
                                 <td class="text-center uppercase">
-                                    @if(($leave->remarks == null || $leave->remarks == 'onhold') && $req->emp_id == $leave->emp_id)
+                                    @if($leave->remarks == null && $req->emp_id == $leave->emp_id)
                                     <select name="remarks" id="remarks" class="uppercase text-sm border-none" autofocus>
                                         <option value="approved" class="text-green-600">approved</option>
-                                        <option value="onhold" class="text-blue-600">on-hold</option>
                                         <option value="denied" class="text-red-600">denied</option>
                                     </select>
                                     @else

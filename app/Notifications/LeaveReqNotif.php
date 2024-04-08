@@ -55,6 +55,7 @@ class LeaveReqNotif extends Notification
             'start_date' => $this->user->start_date,
             'end_date' => $this->user->end_date,
             'remarks' => $this->user->remarks,
+            'type' => $this->user->type,
         ];
     }
 }

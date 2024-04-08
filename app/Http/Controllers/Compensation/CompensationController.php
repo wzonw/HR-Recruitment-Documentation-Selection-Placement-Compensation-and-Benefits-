@@ -48,8 +48,10 @@ class CompensationController extends Controller
     }
 
     public function leave_request(){
-        $leaves = EmployeeLeave::join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
+                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->get([
                                     'employee_leaves.emp_id',
                                     'employee_leaves.start_date',
