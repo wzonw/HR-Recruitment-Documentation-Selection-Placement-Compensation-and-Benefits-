@@ -144,7 +144,7 @@ class ChiefController extends Controller
             $message = 'successfully saved.';
 
             //notif via db
-            //event(new LeaveReqApproval($req));
+            event(new LeaveReqApproval($req));
         }
         else{
             $message = 'Employee ID not found.';
