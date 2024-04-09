@@ -18,5 +18,7 @@ class dtr extends Model
         'late',
         'overtime',
         'vl_used',
+        'sl_used',
+        'remarks',
     ];
 }

@@ -245,7 +245,24 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
 
     Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
+        Route::get('/leave-credit/computation/complete-attendance', [
+            \App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation_complete_attendance'
+            ])->name('lc-complete-attendance');
+    });
+
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
+        Route::post('/leave-credit/computation/complete-attendance/success', [
+            \App\Http\Controllers\Compensation\CompensationController::class, 'save_new_leave_credit'
+            ])->name('lc-complete-attendance-success');
+    });
+
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
         Route::post('/leave-credit/computation', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation'])
         ->name('lc-computation');
+    });
+
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
+        Route::post('/leave-credit/computation/save', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation_save'])
+        ->name('leave-computation-save');
     });
 }); 

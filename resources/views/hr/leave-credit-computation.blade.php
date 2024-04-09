@@ -5,146 +5,161 @@
         </div>
 
         <div class="mt-5">
-            <h1>Employee ID: {{$emp->id}}</h1>
-            <h1>Name: {{$emp->name}}</h1>
-            <table class="mt-1 w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
-                <!-- Header  -->
-                <thead class="text-black">
-                    <tr class="h-10">
-                        <th class="w-20 text-center border border-black">VL</th>
-                        <th class="w-20 text-center border border-black">SL</th>
-                        <th class="w-20 text-center border border-black">Undertime (hrs)</th>
-                        <th class="w-20 text-center border border-black">Late time (hrs)</th>
-                        <th class="w-20 text-center border border-black">Absent (days)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows -->
-                    <tr class="h-10 border border-black text-black">
-                        <td class="w-20 text-center border-r border-black text-black">{{$vl}}</td>
-                        <td class="w-20 text-center border-r border-black text-black">{{$sl}}</td>
-                        <td class="w-28 text-center border-r border-black">
-                            @if($undertime == null)
-                                <p></p>
-                            @else
-                                {{$undertime}}
-                            @endif
-                        </td>
-                        <td class="w-20 text-center border-r border-black">
-                            @if($late == null)
-                                <p></p>
-                            @else
-                                {{$late}}
-                            @endif
-                        </td>
-                        <td class="w-20 text-center border-r border-black">
-                            @if($absent == null)
-                                <p></p>
-                            @else
-                                {{$absent}}
-                            @endif
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+            <form action="{{route('leave-computation-save')}}" method="post">
+                @csrf
+                <input name="id" type="number" value="{{$emp->id}}" readonly hidden>
+                <div class="flex items-center">
+                    <div class="w-[850px]">
+                        <h1>Employee ID: {{$emp->id}}</h1>
+                        <h1>Name: {{$emp->name}}</h1>
+                    </div>
+                    <x-button-gold class="w-28 h-8" onclick="return confirm('Are you sure?')">
+                        Save
+                    </x-button-gold>
+                </div>
+                <table class="mt-1 w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
+                    <!-- Header  -->
+                    <thead class="text-black">
+                        <tr class="h-10">
+                            <th class="w-20 text-center border border-black">VL</th>
+                            <th class="w-20 text-center border border-black">SL</th>
+                            <th class="w-20 text-center border border-black">Undertime (hrs)</th>
+                            <th class="w-20 text-center border border-black">Late time (hrs)</th>
+                            <th class="w-20 text-center border border-black">Absent (days)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows -->
+                        <tr class="h-10 border border-black text-black">
+                            <td class="w-20 text-center border-r border-black text-black">{{$vl}}</td>
+                            <td class="w-20 text-center border-r border-black text-black">{{$sl}}</td>
+                            <td class="w-28 text-center border-r border-black">
+                                @if($undertime == null)
+                                    <p></p>
+                                @else
+                                    {{$undertime}}
+                                @endif
+                            </td>
+                            <td class="w-20 text-center border-r border-black">
+                                @if($late == null)
+                                    <p></p>
+                                @else
+                                    {{$late}}
+                                @endif
+                            </td>
+                            <td class="w-20 text-center border-r border-black">
+                                @if($absent == null)
+                                    <p></p>
+                                @else
+                                    {{$absent}}
+                                @endif
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
 
-            <!-- LC Computation Table -->
-            <h1 class="mt-3 font-semibold">Leave Credit Computation</h1>
-            <table class="w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
-                <!-- Header  -->
-                <thead class="text-black">
-                    <tr class="h-10">
-                        <th class="w-20 text-center border border-black">VL</th>
-                        <th class="w-20 text-center border border-black">SL</th>
-                        <th class="w-20 text-center border border-black">Undertime (hrs)</th>
-                        <th class="w-20 text-center border border-black">Late time (hrs)</th>
-                        <th class="w-20 text-center border border-black">Absent (days)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows -->
-                    <tr class="h-10 border border-black text-red-500">
-                        <td class="w-20 text-center border-r border-black text-black">{{$vl}}</td>
-                        <td class="w-20 text-center border-r border-black text-black">{{$sl}}</td>
-                        <td class="w-28 text-center border-r border-black">  
-                            @if($undertime == null)
-                                <p></p>
-                            @else
-                                - {{number_format($undertime = (float)$undertime * 0.005209, 3, '.', '')}}
-                            @endif
+            
+                <!-- LC Computation Table -->
+                <h1 class="mt-3 font-semibold">Leave Credit Computation</h1>
+                <table class="w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
+                    <!-- Header  -->
+                    <thead class="text-black">
+                        <tr class="h-10">
+                            <th class="w-20 text-center border border-black">VL</th>
+                            <th class="w-20 text-center border border-black">SL</th>
+                            <th class="w-20 text-center border border-black">Undertime (hrs)</th>
+                            <th class="w-20 text-center border border-black">Late time (hrs)</th>
+                            <th class="w-20 text-center border border-black">Absent (days)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows -->
+                        <tr class="h-10 border border-black text-red-500">
+                            <td class="w-20 text-center border-r border-black text-black">{{$vl}}</td>
+                            <td class="w-20 text-center border-r border-black text-black">{{$sl}}</td>
+                            <td class="w-28 text-center border-r border-black">  
+                                @if($undertime == null)
+                                    <p></p>
+                                @else
+                                    - {{number_format($undertime = (float)$undertime * 0.005209, 3, '.', '')}}
+                                @endif
+                                
+                            </td>
+                            <td class="w-20 text-center border-r border-black">
+                                @if($late == null)
+                                    <p></p>
+                                @else
+                                    - {{number_format($late = (float)$late * 0.005209, 3, '.', '')}}
+                                @endif
+                            </td>
+                            <td class="w-20 text-center border-r border-black"></td>
+                        </tr>
+                        <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
+                            <td class="w-20 text-center border-r border-black text-red-600 font-bold">
+                                <input name="new_vl" type="number" readonly
+                                    value="{{number_format($vl += - ($undertime + $late), 3, '.', '')}}"
+                                    class="w-28 h-8 ml-3 text-center text-sm bg-green-50 border-none">
+                            </td>
+                            <td class="w-20 text-center border-r border-black text-black font-bold">{{$sl}}</td>
+                            <td class="w-20 text-center border-r border-black"></td>
+                            <td class="w-28 text-center border-r border-black"></td>
+                            <td class="w-28 text-center border-r border-black"></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <!-- CTO Table -->
+                <h1 class="mt-3 font-semibold">Compensatory Time Off (Overtime)</h1>
+                <table class="w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
+                    <!-- Header  -->
+                    <thead class="text-black">
+                        <tr class="h-10">
+                            <th class="w-20 text-center border border-black">Remaining CTO</th>
+                            <th class="w-20 text-center border border-black">Overtime (hrs)</th>
+                            <th class="w-20 text-center border border-black">Equivalent CTO</th>
+                            <th class="w-20 text-center border border-black">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Rows -->
+                        <tr class="h-10 border border-black text-black">
+                            <td class="w-20 text-center border-r border-black text-black">
+                                @if($cto == null)
+                                    <p>0.0</p>
+                                @else
+                                    {{$cto}}
+                                @endif
+                            </td>
+                            <td class="w-28 text-center border-r border-black">
+                                @if($overtime == null)
+                                    <p></p>
+                                @else
+                                    {{$overtime}}
+                                @endif
+                            </td>
+                            <td class="w-20 text-center border-r border-black text-black">
+                                @if(strtolower($remarks) == 'rest day')
+                                    <p>{{$add_cto = $overtime*1.5}}</p>
+                                @else
+                                    {{$add_cto = $overtime}}
+                                @endif
+                            </td>
+                            <td class="w-20 text-center border-r border-black text-black">{{$remarks}}</td>
+                        </tr>
+                        <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
+                            <td class="w-20 text-center border-r border-black text-black font-bold">
+                                <input name="new_cto" type="number" readonly
+                                    value="{{number_format($cto += $add_cto, 2, '.', '')}}"
+                                    class="w-28 h-8 ml-4 text-center text-sm bg-green-50 border-none">
+                            </td>
+                            <td class="w-20 text-center border-r border-black"></td>
+                            <td class="w-20 text-center border-r border-black"></td>
                             
-                        </td>
-                        <td class="w-20 text-center border-r border-black">
-                            @if($late == null)
-                                <p></p>
-                            @else
-                                - {{number_format($late = (float)$late * 0.005209, 3, '.', '')}}
-                            @endif
-                        </td>
-                        <td class="w-20 text-center border-r border-black"></td>
-                    </tr>
-                    <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
-                        <td class="w-20 text-center border-r border-black text-red-600 font-bold">
-                            {{number_format($vl += - ($undertime + $late), 3, '.', '')}}
-                        </td>
-                        <td class="w-20 text-center border-r border-black text-black font-bold">{{$sl}}</td>
-                        <td class="w-20 text-center border-r border-black"></td>
-                        <td class="w-28 text-center border-r border-black"></td>
-                        <td class="w-28 text-center border-r border-black"></td>
-                    </tr>
-                </tbody>
-            </table>
-
-            <!-- CTO Table -->
-            <h1 class="mt-3 font-semibold">Compensatory Time Off (Overtime)</h1>
-            <table class="w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
-                <!-- Header  -->
-                <thead class="text-black">
-                    <tr class="h-10">
-                        <th class="w-20 text-center border border-black">Remaining CTO</th>
-                        <th class="w-20 text-center border border-black">Overtime (hrs)</th>
-                        <th class="w-20 text-center border border-black">Equivalent CTO</th>
-                        <th class="w-20 text-center border border-black">Remarks</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <!-- Rows -->
-                    <tr class="h-10 border border-black text-black">
-                        <td class="w-20 text-center border-r border-black text-black">
-                            @if($cto == null)
-                                <p>0.0</p>
-                            @else
-                                {{$cto}}
-                            @endif
-                        </td>
-                        <td class="w-28 text-center border-r border-black">
-                            @if($overtime == null)
-                                <p></p>
-                            @else
-                                {{$overtime}}
-                            @endif
-                        </td>
-                        <td class="w-20 text-center border-r border-black text-black">
-                            @if(strtolower($remarks) == 'rest day')
-                                <p>{{$add_cto = $overtime*1.5}}</p>
-                            @else
-                                {{$add_cto = $overtime}}
-                            @endif
-                        </td>
-                        <td class="w-20 text-center border-r border-black text-black">{{$remarks}}</td>
-                    </tr>
-                    <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
-                        <td class="w-20 text-center border-r border-black text-black font-bold">
-                            {{number_format($cto += $add_cto, 2, '.', '')}}
-                        </td>
-                        <td class="w-20 text-center border-r border-black"></td>
-                        <td class="w-20 text-center border-r border-black"></td>
-                        
-                        <td class="w-20 text-center border-r border-black"></td>
-                    </tr>
-                </tbody>
-            </table>
-
+                            <td class="w-20 text-center border-r border-black"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
             <!-- LWOP or No enough VL -->
             <h1 class="font-inter mt-3 font-semibold">Salary Deduction (LWOP)</h1>
                 <div class="font-inter pl-5 border-b">

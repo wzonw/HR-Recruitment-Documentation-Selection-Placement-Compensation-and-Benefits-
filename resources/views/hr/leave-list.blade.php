@@ -24,9 +24,15 @@
                 <tr class="h-10 shadow-sm">
                     <td class="w-36 pl-3">{{ $leave->name }}</td>
                     <td class="w-24 pl-3">{{ $leave->status }}</td>
-                    <td class="w-36 pl-3">{{ $leave->dept }}</td>
-                    <td class="w-28 pl-3">{{ $leave->start_date }}</td>
-                    <td class="w-28 pl-3">{{ $leave->end_date }}</td>
+                    <td class="w-36 pl-3">
+                        @if($leave->dept == null)
+                            {{ $leave->college }}
+                        @else
+                            {{ $leave->dept }}
+                        @endif
+                    </td>
+                    <td class="w-28 pl-3">{{ date('d F y', strtotime($leave->start_date)) }}</td>
+                    <td class="w-28 pl-3">{{ date('d F y', strtotime($leave->end_date))}}</td>
                     <td class="w-28 pl-3">{{ $leave->type }}</td>
                     <td class="w-32 text-center border-l border-r border-black">
                         <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>

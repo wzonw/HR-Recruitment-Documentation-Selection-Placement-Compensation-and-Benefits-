@@ -81,6 +81,7 @@ class CompensationController extends Controller
                                     'employee_leaves.remarks',
                                     'employees.name', 
                                     'jobs_availables.status',
+                                    'jobs_availables.college',
                                     'jobs_availables.dept',
                                 ]);
 
@@ -116,6 +117,7 @@ class CompensationController extends Controller
     public function add_record(Request $request){
         $dtr = dtr::where('emp_id', $request->id)
                 ->whereMonth('date', Carbon::now()->month)
+                ->whereYear('date', Carbon::now()->year)
                 ->first();
         
         $employee = Employee::where('id', $request->id)->first();
@@ -129,6 +131,7 @@ class CompensationController extends Controller
                 'undertime' => $request->undertime,
                 'late' => $request->late,
                 'overtime' => $request->overtime,
+                'remarks' => $request->remarks,
             ]);
             
 
@@ -142,6 +145,7 @@ class CompensationController extends Controller
             $dtr->undertime = $request->undertime;
             $dtr->late = $request->late;
             $dtr->overtime = $request->overtime;
+            $dtr->remarks = $request->remarks;
             $dtr->save();
             $message = 'Successfully updated a record.';
         }
@@ -155,21 +159,94 @@ class CompensationController extends Controller
     public function lc_computation(){
         $emp = Employee::where('id', request('id'))->first();
         $data = dtr::where('emp_id', request('id'))
+                    ->whereMonth('date', Carbon::now()->month)
+                    ->whereYear('date', Carbon::now()->year)
                     ->first();
-        if($data == null){
-            abort(404);
+        if($data == null && $emp != null){
+            $message = "Employee ID: ".$emp->id." has no daily time record for the month of ".
+                        date('F', strtotime(Carbon::now()));
+            return redirect()->route('leave-credit')->with('message', $message);
+        }
+        elseif($emp == null){
+            $message = "Employee ID not found.";
+            return redirect()->route('leave-credit')->with('message', $message);
+        }
+        else{
+            return view('hr.leave-credit-computation', [
+                'emp' => $emp,
+                'vl' => $emp->vl_credit,
+                'sl' => $emp->sl_credit,
+                'absent' => $data->absent,
+                'late' => $data->late,
+                'undertime' => $data->undertime,
+                'overtime' => $data->overtime,
+                'cto' => $data->cto,
+                'remarks' => $data->remarks,
+            ]);
+        }
+    }
+    
+    public function lc_computation_save(){
+        $emp = Employee::where('id', request('id'))->first();
+        
+        if($emp != null){
+            $emp->vl_credit = request('new_vl');
+            $emp->cto = request('new_cto');
+            $emp->save();
+
+            $emp = array($emp);
+            return view('hr.leave-credit-list', [
+                'employees' => $emp,
+            ]);
+        }
+        else{
+            $message = "Employee ID not found.";
+            return redirect()->route('leave-credit')->with('message', $message);
+        }
+    }
+
+    public function lc_computation_complete_attendance(){
+        $employee_dtr = dtr::whereMonth('date', Carbon::now()->month)
+                            ->whereYear('date', Carbon::now()->year)
+                            ->get();
+        $employees = Employee::where('active', 'Y')->get();
+        
+        foreach($employee_dtr as $dtr){
+            foreach($employees as $employee){ 
+                if($dtr->emp_id == $employee->id){
+                    unset($employees[$employee->id-1]);
+                }
+            }
         }
 
-        return view('hr.leave-credit-computation', [
-            'emp' => $emp,
-            'vl' => $emp->vl_credit,
-            'sl' => $emp->sl_credit,
-            'absent' => $data->absent,
-            'late' => $data->late,
-            'undertime' => $data->undertime,
-            'overtime' => $data->overtime,
-            'cto' => $data->cto,
-            'remarks' => $data->remarks,
+        return view('hr.leave-credit-complete-attendance', [
+            'employees' => $employees,
+        ]);
+    }
+
+    public function save_new_leave_credit(Request $request){
+        $employee_dtr = dtr::whereMonth('date', Carbon::now()->month)
+                            ->whereYear('date', Carbon::now()->year)
+                            ->get();
+        $employees = Employee::where('active', 'Y')->get();
+        $employee_records = Employee::where('active', 'Y')->get();;
+
+        foreach($employee_dtr as $dtr){
+            foreach($employees as $employee){ 
+                if($dtr->emp_id == $employee->id){
+                    unset($employees[$employee->id-1]);
+                }
+            }
+        }
+
+        foreach($employees as $employee){
+            $employee->vl_credit = request('new_vl_'.$employee->id);
+            $employee->sl_credit = request('new_sl_'.$employee->id);
+            $employee->save();
+        }
+
+        return view('hr.leave-credit-list', [
+            'employees' => $employee_records,
         ]);
     }
 }
