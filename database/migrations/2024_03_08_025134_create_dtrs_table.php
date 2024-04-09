@@ -13,14 +13,18 @@ return new class extends Migration
     {
         Schema::create('dtrs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('emp_id')->constrained()->onDelete('cascade');
-            $table->foreignId('job_id')->constrained()->onDelete('cascade');
+            $table->foreignId('emp_id')->constrained(table: 'employees')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('job_id')->constrained(table: 'jobs_availables')->onDelete('cascade')->onUpdate('cascade');
             $table->date('date');
             $table->int('absent');
             $table->decimal('undertime');
-            $table->integer('vl_used');
-            $table->integer('sl_used');
+            $table->decimal('late');
+            $table->decimal('overtime');
+            $table->decimal('cto');
+            $table->decimal('vl_used');
+            $table->decimal('sl_used');
             $table->integer('lwop');
+            $table->text('remarks');
             $table->timestamps();
         });
     }

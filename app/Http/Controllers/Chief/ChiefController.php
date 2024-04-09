@@ -96,20 +96,20 @@ class ChiefController extends Controller
         if($req != null){
             $req->remarks = $request->remarks;
 
+            $lc_per_day = 0.005209*8;
+            $start = Carbon::parse($req->start_date);
+            $end = Carbon::parse($req->end_date);
+            $days_on_leave = $start->diffInDays($end) + 1;
+            $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
+
+            $dtr = dtr::where('emp_id', $req->emp_id)
+                        ->whereMonth('date', Carbon::now()->month)
+                        ->first();
+            
+            $emp_record = Employee::where('id', $req->emp_id)->first();
+
             // input equivalent leave credit in table
-            if(strtolower($req->type) == 'vacation'){
-                $lc_per_day = 0.005209*8;
-                $start = Carbon::parse($req->start_date);
-                $end = Carbon::parse($req->end_date);
-                $days_on_leave = $start->diffInDays($end) + 1;
-                $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
-
-                $dtr = dtr::where('emp_id', $req->emp_id)
-                            ->whereMonth('date', Carbon::now()->month)
-                            ->first();
-                
-                $emp_record = Employee::where('id', $req->emp_id)->first();
-
+            if(strtolower($req->type) == 'vacation' && $req->remarks == 'approved'){
                 if($dtr == null){
                     dtr::create([
                         'emp_id' => $req->emp_id,
@@ -120,6 +120,21 @@ class ChiefController extends Controller
                 }
                 elseif($dtr != null){
                     $dtr->vl_used = $equivalent_lc;
+                    $dtr->date = Carbon::now()->toDateString();
+                    $dtr->save();
+                }
+            }
+            elseif(strtolower($req->type) == 'sick' && $req->remarks == 'approved'){
+                if($dtr == null){
+                    dtr::create([
+                        'emp_id' => $req->emp_id,
+                        'job_id' => $emp_record->job_id,
+                        'date' => Carbon::now()->toDateString(),
+                        'sl_used' => $equivalent_lc,
+                    ]);
+                }
+                elseif($dtr != null){
+                    $dtr->sl_used = $equivalent_lc;
                     $dtr->date = Carbon::now()->toDateString();
                     $dtr->save();
                 }

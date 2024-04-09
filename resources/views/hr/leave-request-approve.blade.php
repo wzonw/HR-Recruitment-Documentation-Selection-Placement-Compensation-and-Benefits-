@@ -47,7 +47,7 @@
                                 <td class="w-36 pl-3">{{ $leave->college }}</td>
                                 <td class="w-28 pl-3">{{ $leave->start_date }}</td>
                                 <td class="w-28 pl-3">{{ $leave->end_date }}</td>
-                                <td class="w-28 pl-3">{{ $leave->type }}</td>
+                                <td class="w-28 pl-3 uppercase">{{ $leave->type }}</td>
                                 <td class="w-32 text-center border-l border-r border-black">
                                     <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                                 </td>
