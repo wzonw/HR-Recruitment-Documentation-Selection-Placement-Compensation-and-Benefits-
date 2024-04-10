@@ -1,10 +1,11 @@
 <x-admin-layout>
     <div class=" ml-10">
-        <div class="w-[1014px] h-14 mt-5 bg-indigo-800 flex items-center">
+        <div class="w-[1014px] h-14 mt-5 mb-5 bg-indigo-800 flex items-center">
             <p class="ml-5 text-white text-3xl font-bold font-inter">Applicant List</p>
         </div>
 
-        
+        <p class="w-[120px] pl-3 text-indigo-800 text-sm font-semibold font-inter"> Search </p>
+
         @if(session('message'))
         <div class="mt-10 min-w-max h-8 mx-3 text-blue-600 items-end italic"
              x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
@@ -12,14 +13,14 @@
             {{ session('message') }} 
         </div>
         @endif
-
+        
         <div class="mt-10 w-[1014px] ml-1 inline-flex items-center">
             <p class="w-[58px] text-indigo-800 text-sm text-center font-semibold font-inter">ID</p>
             <p class="w-[215px] pl-3 text-indigo-800 text-sm font-semibold font-inter">Name</p>
             <p class="w-[245px] pl-3  text-indigo-800 text-sm font-semibold font-inter">Position</p>
             <p class="w-[245px] pl-3 text-indigo-800 text-sm font-semibold font-inter">Place of Assignment</p>
             <p class="w-[125px] pl-3 text-indigo-800 text-sm font-semibold font-inter">Status</p>
-            <p class="w-[120px] pl-3 text-indigo-800 text-sm font-semibold font-inter"></p>
+
         </div>
 
         <!-- Applicant Table -->
