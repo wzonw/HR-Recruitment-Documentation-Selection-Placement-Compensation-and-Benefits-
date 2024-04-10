@@ -1,6 +1,6 @@
 <x-admin-layout>
     <div class="ml-3 mt-5 h-screen">
-        <div class="w-[1100px] h-20 rounded-lg shadow-md flex items-center justify-center space-x-96">
+        <div class="w-[1100px] h-20 flex items-center justify-center space-x-96 rounded-lg border shadow-md">
             <p class=" text-indigo-800 text-2xl font-extrabold font-inter">Employee Document Requests</p>
             <div class=" ">
                 <img class="w-10 h-8 absolute" src="https://icon-library.com/images/black-search-icon-png/black-search-icon-png-12.jpg">
@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        <div class="mt-5 w-[1100px] min-h-max pb-3 rounded-lg shadow-md">
+        <div class="mt-5 w-[1100px] min-h-max pb-3 rounded-lg border shadow-lg">
             @if(session('message'))
             <div class="min-w-max h-8 ml-10 text-blue-600 flex items-end italic"
                  x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 

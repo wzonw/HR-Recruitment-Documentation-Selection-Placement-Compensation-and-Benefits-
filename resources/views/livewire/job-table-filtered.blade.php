@@ -4,12 +4,12 @@
         <div class="inline-flex items-center justify-center space-x-16">
             <div class="w-[729px] h-[400px]">
                 <div class="inline-flex space-x-64">
-                    <p class="w-56 h-8 text-indigo-800 text-2xl text-left font-bold font-inter">
+                    <p class=" w-100 h-8 text-indigo-800 text-3xl text-left font-bold font-inter">
                         Careers Available
                     </p>
                 </div>
                 <div>
-                    <table class="w-[729px] table-fixed shadow border-black border text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700">
+                    <table class="mt-5 w-[729px] table-fixed shadow border-black border text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700">
                         <tbody>
                             @foreach ($jobs as $job)
                             <tr class="odd:bg-white odd:dark:bg-white even:bg-gray-50 even:dark:bg-slate-100 dark:border-black border">

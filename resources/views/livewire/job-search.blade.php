@@ -6,7 +6,7 @@
             <!--svg class=" h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
                 <path d="https://pics.freeicons.io/uploads/icons/png/13416400251535694869-512.png" />
             </svg-->
-            <p class="mt-6 text-black text-xl text-center font-semibold font-inter">Search for Available Positions</p>
+            <p class="mt-6 text-indigo-800 text-xl text-center font-semibold font-inter">Search for Available Positions</p>
         </div>
         <div class="mx-6 my-6 space-y-5">
             <div>
@@ -28,9 +28,9 @@
             </button>
         </div>
     </div>
-    <div class="mt-5">
-        <a href="{{ route('landing-page') }}">
-            Go Back to Landing Page
+    <div class="mt-3 text-indigo-800 hover:text-indigo-700 hover:underline">
+        <a href="{{ route('landing-page') }}" ">
+            <i>Go Back to Landing Page</i>
         </a>
     </div>
     </form>

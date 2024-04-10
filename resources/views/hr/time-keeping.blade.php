@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class="ml-10 mt-5 h-screen">
+    <div class="ml-10 mt-0 h-screen">
         <div class="w-[1000px] h-14 mt-5 bg-indigo-800 flex items-center">
             <p class="ml-5 text-white text-2xl font-bold font-inter">Daily Time Record</p>
         </div>
@@ -7,7 +7,7 @@
         <!-- Date Filter -->
         <div class="w-[1000px] inline-flex mt-5 space-x-3 font-inter justify-center">
             <p>Date:</p>
-            <x-input class="block w-40 h-6 uppercase" type="date" />
+            <x-input name="date" class="block w-40 h-6 uppercase" type="date" />
             <button type="text" class="w-20 h-6 bg-blue-600 rounded flex justify-center items-center">
                     <p class="text-white pl-1 text-xs font font-inter">filter</p>
                     <svg viewBox="-3 -3 32 32" fill="#ffffff" stroke="#ffffff">

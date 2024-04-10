@@ -1,8 +1,8 @@
 <x-admin-layout>
-    <div class="bg-gray-100 w-[1119px] h-screen">
-        <div class="ml-3 mt-5">
-            <div class="w-[1100px] h-14 bg-white rounded-lg shadow-md flex items-center">
-                <p class="ml-5 text-cyan-700 text-2xl font-extrabold font-inter">Leave Requests</p>
+    <div class="h-screen">
+        <div class="ml-10 mt-5">
+            <div class="w-[1000px] h-14 mt-5 bg-indigo-800 flex items-center">
+                <p class="ml-5 text-white text-2xl font-bold font-inter">Leave Requests</p>
             </div>
             @if(session('message'))
             <div class="pl-5 min-w-max h-8 text-blue-600 flex items-end italic"
@@ -11,9 +11,8 @@
                 {{ session('message') }} 
             </div>
             @endif
-            <div class="mt-5 w-[1100px] min-h-max py-5 bg-white rounded-lg shadow-md flex justify-center">
                 <!-- Employee Leave Request Table -->
-                <table class="w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
+                <table class="w-[1000px] mt-5 table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
                     <!-- Header  -->
                     <thead class="bg-slate-100 text-gray-400">
                         <tr class="h-10">
@@ -59,7 +58,6 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
         </div>
     </div>
     
