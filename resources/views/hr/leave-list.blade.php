@@ -1,8 +1,16 @@
 <x-admin-layout>
     <div class="ml-10 mt-0 h-screen">
-        <div class="w-[1000px] h-14 mt-5 bg-indigo-800 flex items-center">
+        <div class="w-[1000px] h-14 mt-5 mb-5 bg-indigo-800 flex items-center">
             <p class="ml-5 text-white text-2xl font-bold font-inter">List of Employees on Leave</p>
         </div>
+        <form type="get" action=" {{ url('/compensation/leave/list/leave_search') }} ">
+            <div class="w-56 h-9 bg-white rounded border border-gray-400 shadow-md flex justify-center items-center">
+                <button type="submit" class="flex justify-center items-center w-10 h-8 border-none rounded">
+                    <img src="https://icon-library.com/images/black-search-icon-png/black-search-icon-png-12.jpg" class="w-10 h-8">
+                </button>
+                <input type="search" name="query" placeholder="Search Employee" class="w-44 h-8 ml-1 border-none rounded" >
+            </div>               
+        </form>
 
         <!-- Employee Leave Request Table -->
         <table class="w-[1000px] mt-5 table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">

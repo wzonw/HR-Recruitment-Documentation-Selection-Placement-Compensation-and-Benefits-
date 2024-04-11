@@ -253,4 +253,49 @@ class CompensationController extends Controller
             'employees' => $employee_records,
         ]);
     }
+    public function leave_search(Request $request)
+    {
+        $leave_search = $request->input ('query');
+
+        $leaves = EmployeeLeave::join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+        ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+        ->where('employees.name','LIKE', '%' . $leave_search . '%')
+        ->orWhere('jobs_availables.status','LIKE', '%' . $leave_search . '%')
+                            ->get();
+
+        return view('hr.leave-list', compact('leaves')); 
+    }
+
+    public function lr_search(Request $request)
+    {
+        $lr_search = $request ->input('query');
+
+        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
+                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
+                                ->where('employees.name','LIKE', '%' . $lr_search . '%')
+                                ->orWhere('jobs_availables.status','LIKE', '%' . $lr_search . '%')
+                                ->orWhere('jobs_availables.','LIKE', '%' . $lr_search . '%')
+                                ->get();
+
+        return view('hr.leave-request', compact('leaves'));
+    }
+
+    public function tk_filter(Request $request)
+    {
+        $query = dtr::join('employees', 'employees.id', '=', 'dtrs.emp_id');
+    
+        if ($request->filled('date')) {
+            $query->whereDate('dtrs.date', $request->input('date'));
+        } else {
+            $query->whereMonth('dtrs.date', Carbon::now()->month)
+                  ->whereYear('dtrs.date', Carbon::now()->year);
+        }
+    
+        $data = $query->get();
+    
+        return view('hr.time-keeping', compact('data'));
+    }
+    
 }

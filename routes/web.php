@@ -271,4 +271,14 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('/leave-credit/computation/save', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation_save'])
         ->name('leave-computation-save');
     });
+
+    Route::get('/compensation/leave/list/leave_search', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_search'])
+    ->name('leave_search');
+
+    Route::get('/compensation/leave/request/lr_search', [\App\Http\Controllers\Compensation\CompensationController::class, 'lr_search'])
+    ->name('lr_search');
+
+    Route::get('/compensation/time-keeping/filter', [\App\Http\Controllers\Compensation\CompensationController::class, 'tk_filter'])
+    ->name('time-keeping');
+
 }); 
