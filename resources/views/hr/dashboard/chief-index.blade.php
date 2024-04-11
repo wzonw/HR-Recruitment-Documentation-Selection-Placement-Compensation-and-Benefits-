@@ -2,7 +2,7 @@
     <div class="h-screen w-[1111px] pl-2 pt-3 flex flex-wrap">
         <div class="w-[545px]">
             <!-- name, num of emp, num of emp on leave -->
-            <div class="w-[545px] h-[246px] bg-white shadow flex">
+            <div class="w-[545px] h-[246px] shadow flex">
                 <!-- card name -->
                 <div class="w-[218px] h-[246px]">
                     <div class="w-[218px] h-32 bg-gradient-to-b from-yellow-600 to-black">
@@ -91,7 +91,7 @@
         </div>
         
         <!-- Quicklinks -->
-        <div class="w-[1100px] h-[90px] bg-whie shadow pl-5">
+        <div class="w-[1100px] mb-20 h-[100px] bg-whie shadow pl-5">
             <p class="text-yellow-600 text-base font-bold font-inter">
                 Quicklinks
             </p>

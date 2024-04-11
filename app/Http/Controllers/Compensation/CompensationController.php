@@ -276,7 +276,6 @@ class CompensationController extends Controller
                                 ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->where('employees.name','LIKE', '%' . $lr_search . '%')
                                 ->orWhere('jobs_availables.status','LIKE', '%' . $lr_search . '%')
-                                ->orWhere('jobs_availables.','LIKE', '%' . $lr_search . '%')
                                 ->get();
 
         return view('hr.leave-request', compact('leaves'));
