@@ -4,12 +4,14 @@
             <div class="w-[700px] h-14 mt-5 bg-indigo-800 flex items-center">
                 <p class="ml-5 text-white text-3xl font-bold font-inter">Employee List</p>
             </div>
-            <div class="w-[315px] h-14 mt-5 flex items-center justify-center">
+            <form type="get" action=" {{ url('/view/employee/list/emp_search') }} " class="w-[315px] h-14 mt-5 flex items-center justify-center">
                 <div class="w-56 h-9 bg-white rounded border border-gray-400 shadow-md flex justify-center items-center">
-                    <img class="w-10 h-8" src="https://icon-library.com/images/black-search-icon-png/black-search-icon-png-12.jpg">
-                    <input type="text" class="w-44 h-8 ml-1 border-none rounded" placeholder="Search">
+                    <button type="submit" class="flex justify-center items-center w-10 h-8 border-none rounded">
+                        <img src="https://icon-library.com/images/black-search-icon-png/black-search-icon-png-12.jpg" class="w-10 h-8">
+                    </button>
+                    <input type="search" name="query" placeholder="Search Employee" class="w-44 h-8 ml-1 border-none rounded" >
                 </div>
-            </div>
+            </form>
         </div>
 
         <div class="mt-10 w-[1014px] inline-flex items-center">

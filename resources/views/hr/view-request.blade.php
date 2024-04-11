@@ -2,10 +2,14 @@
     <div class="ml-3 mt-5 h-screen">
         <div class="w-[1100px] h-20 flex items-center justify-center space-x-96 rounded-lg border shadow-md">
             <p class=" text-indigo-800 text-2xl font-extrabold font-inter">Employee Document Requests</p>
-            <div class=" ">
-                <img class="w-10 h-8 absolute" src="https://icon-library.com/images/black-search-icon-png/black-search-icon-png-12.jpg">
-                <input class="w-60 h-8 text-center bg-gray-100 rounded border-transparent shadow-md" placeholder="Search" >
-            </div>
+            <form type="get" action=" {{ url('/view/request/emp_search') }} ">
+                <div class="w-56 h-9 bg-white rounded border border-gray-400 shadow-md flex justify-center items-center">
+                    <button type="submit" class="flex justify-center items-center w-10 h-8 border-none rounded">
+                        <img src="https://icon-library.com/images/black-search-icon-png/black-search-icon-png-12.jpg" class="w-10 h-8">
+                    </button>
+                    <input type="search" name="query" placeholder="Search Employee" class="w-44 h-8 ml-1 border-none rounded" >
+                </div>               
+            </form>
         </div>
 
         <div class="mt-5 w-[1100px] min-h-max pb-3 rounded-lg border shadow-lg">

@@ -135,6 +135,12 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         ->name('view-request');
     });
 
+    Route::get('/view/employee/list/emp_search', [\App\Http\Controllers\PM\PMController::class, 'emp_search'])
+    ->name('search_employee');
+
+    Route::get('/view/request/emp_search', [\App\Http\Controllers\PM\PMController::class, 'req_search'])
+    ->name('req_search');
+
     Route::group(['middleware' => 'role:personnel management', 'prefix' => 'pm'], function(){
         Route::get('/view/request/notify/{id}', [\App\Http\Controllers\PM\PMController::class, 'notify_emp'])
         ->name('notify-employee');

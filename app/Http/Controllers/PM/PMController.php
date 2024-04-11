@@ -110,6 +110,42 @@ class PMController extends Controller
         return redirect()->route('view-request')->with('message', $message);
     }
 
+    public function emp_search(Request $request)
+    {
+        $emp_search = $request->input('query');
+    
+        $employees = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            ->where('employees.name', 'LIKE', '%' . $emp_search . '%')
+            ->orWhere('jobs_availables.job_name', 'LIKE', '%' . $emp_search . '%')
+            ->orWhere('jobs_availables.status', 'LIKE', '%' . $emp_search . '%')
+            ->orWhere('jobs_availables.dept', 'LIKE', '%' . $emp_search . '%')
+            ->get([
+                'employees.id',
+                'employees.name',
+                'jobs_availables.job_name', 
+                'jobs_availables.college',  
+                'jobs_availables.dept', 
+                'jobs_availables.status', 
+                'jobs_availables.salary'
+            ]);
+    
+        return view('hr.view-employee-list', compact('employees'));
+    }
+
+    public function req_search (Request $request)
+    {
+        $req_search = $request->input('query');
+
+        $requests = DocuRequest::where('name','LIKE', '%' . $req_search . '%')
+        ->orWhere('documents','LIKE', '%' . $req_search . '%')
+        ->get();
+
+        return view('hr.view-request', [
+            'requests' => $requests,
+        ]);
+
+    }
+
     /**
      * Show the form for creating a new resource.
      */
