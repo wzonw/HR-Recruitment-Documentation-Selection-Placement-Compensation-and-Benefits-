@@ -21,8 +21,8 @@
                     <!-- Header  -->
                     <thead class="text-black">
                         <tr class="h-10">
-                            <th class="w-20 text-center border border-black">VL</th>
-                            <th class="w-20 text-center border border-black">SL</th>
+                            <th class="w-20 text-center border border-black">VL Credit Used</th>
+                            <th class="w-20 text-center border border-black">SL Credit Used</th>
                             <th class="w-20 text-center border border-black">Undertime (hrs)</th>
                             <th class="w-20 text-center border border-black">Late time (hrs)</th>
                             <th class="w-20 text-center border border-black">Absent (days)</th>
@@ -31,8 +31,8 @@
                     <tbody>
                         <!-- Rows -->
                         <tr class="h-10 border border-black text-black">
-                            <td class="w-20 text-center border-r border-black text-black">{{$vl}}</td>
-                            <td class="w-20 text-center border-r border-black text-black">{{$sl}}</td>
+                            <td class="w-20 text-center border-r border-black text-red-600">{{$vl_used}}</td>
+                            <td class="w-20 text-center border-r border-black text-red-600">{{$sl_used}}</td>
                             <td class="w-28 text-center border-r border-black">
                                 @if($undertime == null)
                                     <p></p>
@@ -95,12 +95,16 @@
                             <td class="w-20 text-center border-r border-black"></td>
                         </tr>
                         <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
-                            <td class="w-20 text-center border-r border-black text-red-600 font-bold">
+                            <td class="w-20 text-center border-r border-black text-black font-bold">
                                 <input name="new_vl" type="number" readonly
-                                    value="{{number_format($vl += - ($undertime + $late), 3, '.', '')}}"
+                                    value="{{number_format($vl += - ($undertime + $late + $vl_used), 3, '.', '')}}"
                                     class="w-28 h-8 ml-3 text-center text-sm bg-green-50 border-none">
                             </td>
-                            <td class="w-20 text-center border-r border-black text-black font-bold">{{$sl}}</td>
+                            <td class="w-20 text-center border-r border-black text-black font-bold">
+                                <input name="new_sl" type="number" readonly
+                                    value="{{number_format($sl += - $sl_used, 3, '.', '')}}"
+                                    class="w-28 h-8 ml-3 text-center text-sm bg-green-50 border-none">
+                            </td>
                             <td class="w-20 text-center border-r border-black"></td>
                             <td class="w-28 text-center border-r border-black"></td>
                             <td class="w-28 text-center border-r border-black"></td>

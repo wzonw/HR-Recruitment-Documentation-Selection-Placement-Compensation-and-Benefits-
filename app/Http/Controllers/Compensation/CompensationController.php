@@ -176,6 +176,8 @@ class CompensationController extends Controller
                 'emp' => $emp,
                 'vl' => $emp->vl_credit,
                 'sl' => $emp->sl_credit,
+                'vl_used' => $data->vl_used,
+                'sl_used' => $data->sl_used,
                 'absent' => $data->absent,
                 'late' => $data->late,
                 'undertime' => $data->undertime,
@@ -191,6 +193,7 @@ class CompensationController extends Controller
         
         if($emp != null){
             $emp->vl_credit = request('new_vl');
+            $emp->sl_credit = request('new_sl');
             $emp->cto = request('new_cto');
             $emp->save();
 
@@ -229,7 +232,6 @@ class CompensationController extends Controller
                             ->whereYear('date', Carbon::now()->year)
                             ->get();
         $employees = Employee::where('active', 'Y')->get();
-        $employee_records = Employee::where('active', 'Y')->get();;
 
         foreach($employee_dtr as $dtr){
             foreach($employees as $employee){ 
@@ -244,6 +246,8 @@ class CompensationController extends Controller
             $employee->sl_credit = request('new_sl_'.$employee->id);
             $employee->save();
         }
+        
+        $employee_records = Employee::where('active', 'Y')->get();
 
         return view('hr.leave-credit-list', [
             'employees' => $employee_records,
