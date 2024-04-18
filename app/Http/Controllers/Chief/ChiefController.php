@@ -19,9 +19,9 @@ class ChiefController extends Controller
 {
     public function index()
     {
-        if(Gate::denies('for-chief')){
+        /*if(Gate::denies('for-chief')){
             abort(403);
-        }
+        }*/
 
         $NumOfEmployees = Employee::all();
         $NumOfEmployees = $NumOfEmployees->count();

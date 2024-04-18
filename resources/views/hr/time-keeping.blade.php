@@ -5,7 +5,7 @@
         </div>
 
         <!-- Date Filter -->
-        <form type="get" action=" {{ url('/compensation/time-keeping/filter') }} " class="w-[1000px] inline-flex mt-5 space-x-3 font-inter justify-center">
+        <form type="get" action=" {{ route('time-keeping-filter') }} " class="w-[1000px] inline-flex mt-5 space-x-3 font-inter justify-center">
             <p>Date:</p>
             <x-input name="date" class="block w-40 h-6 uppercase" type="date" />
             <button type="submit" class="w-20 h-6 bg-blue-600 rounded flex justify-center items-center">

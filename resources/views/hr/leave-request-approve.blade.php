@@ -69,7 +69,7 @@
                                         @if(strtolower($leave->remarks) == 'approved')
                                             <p class="text-green-600">{{ $leave->remarks }}</p>
                                         @else
-                                            {{ $leave->remarks }}
+                                            <p class="text-red-600">{{ $leave->remarks }}</p>
                                         @endif
                                     @endif
                                 </td>

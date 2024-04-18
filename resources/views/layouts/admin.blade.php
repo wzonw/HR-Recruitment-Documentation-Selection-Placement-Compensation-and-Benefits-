@@ -29,7 +29,7 @@
 
             <!-- Page Content -->
             <main class="inline-flex">
-                <div class="h-screen overflow-auto">
+                <div class="h-screen overflow-auto overflow-x-hidden">
                     <livewire:hr-navigation-menu />
                 </div>
                 {{ $slot }}

@@ -22,6 +22,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', [\App\Http\Controllers\PM\PMController::class, 'index'])
 ->name('dashboard-1');
 
+Route::get('/chief/dashboard', [\App\Http\Controllers\Chief\ChiefController::class, 'index'])
+->name('dashboard-2');
+
 // for pm & chief
 Route::get('/view/employee/list', [\App\Http\Controllers\PM\PMController::class, 'emp_list'])
 ->name('view-employee-list');
@@ -49,6 +52,88 @@ Route::get('/view/applicant/list', [\App\Http\Controllers\Recruitment\Recruitmen
 Route::get('/view/applicant/profile/{id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'applicant_profile'])
 ->name('view-applicant-profile');
 
+Route::get('/view/applicant/profile/{file}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'view_file'])
+->name('view-file');
+
+Route::get('/job/posting', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_posting'])
+->name('job-posting');
+
+// for recruitment
+Route::get('/view/applicant/profile/{file}/approved', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'approved_file'])
+->name('approved-file');
+
+Route::get('/view/applicant/profile/{file}/declined', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'declined_file'])
+->name('declined-file');
+
+Route::get('/view/applicant/profile/{id}/reject', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'sendmail_rejected'])
+->name('email-reject');
+
+Route::get('/view/applicant/profile/{id}/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'sendmail_proceed'])
+->name('email-proceed');
+
+Route::post('/job/posting/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_post'])
+->name('job-post');
+
+Route::get('/job/update', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update'])
+->name('job-update');
+
+Route::get('/job/update/{job_id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update_id'])
+->name('job-update-id');
+
+Route::post('/job/update/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update_success'])
+->name('job-update-id-success');
+
+Route::get('/view/applicant/profile/{id}/signed', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'become_employee'])
+->name('emp-accept');
+
+// for compensation n chief
+Route::get('/leave/request', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_request'])
+->name('leave-request');
+
+Route::get('/leave/list', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_list'])
+->name('leave-list');
+
+Route::get('/time-keeping', [\App\Http\Controllers\Compensation\CompensationController::class, 'time_keeping'])
+->name('time-keeping');
+
+Route::get('/time-keeping/manage', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr'])
+->name('add-dtr');
+
+Route::post('/time-keeping/manage/success', [\App\Http\Controllers\Compensation\CompensationController::class, 'add_record'])
+->name('add-dtr-success');
+
+Route::get('/leave-credit', function () {return view('hr.leave-credit');})
+->name('leave-credit');
+
+Route::get('/leave-credit/computation/complete-attendance', [
+    \App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation_complete_attendance'
+])->name('lc-complete-attendance');
+
+Route::post('/leave-credit/computation/complete-attendance/success', [
+    \App\Http\Controllers\Compensation\CompensationController::class, 'save_new_leave_credit'
+])->name('lc-complete-attendance-success');
+
+Route::post('/leave-credit/computation', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation'])
+->name('lc-computation');
+
+Route::post('/leave-credit/computation/save', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation_save'])
+->name('leave-computation-save');
+
+Route::get('/compensation/leave/list/leave_search', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_search'])
+->name('leave_search');
+
+Route::get('/compensation/leave/request/lr_search', [\App\Http\Controllers\Compensation\CompensationController::class, 'lr_search'])
+->name('lr_search');
+
+Route::get('/compensation/time-keeping/filter', [\App\Http\Controllers\Compensation\CompensationController::class, 'tk_filter'])
+->name('time-keeping-filter');
+
+// for chief
+Route::get('/leave/request/{id}/{type}', [\App\Http\Controllers\Chief\ChiefController::class, 'leave_request_id'])
+->name('leave-request-id');
+
+Route::post('/leave/request/{id}/success', [\App\Http\Controllers\Chief\ChiefController::class, 'approve_leave_request'])
+->name('leave-request-success');
 
 Route::get('/plm/jobs', [\App\Http\Controllers\JobsAvailableController::class, 'index'])->name('guest-jobs');
 
@@ -115,7 +200,7 @@ Route::middleware([
 Route::group(['middleware' => 'auth:sanctum'], function() {
 
     Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief', 'as' => 'chief.'], function(){
-        Route::resource('dashboard', \App\Http\Controllers\Chief\ChiefController::class);
+        
     });
 
     Route::group(['middleware' => 'role:applicant', 'prefix' => 'applicant', 'as' => 'applicant.'], function(){
@@ -139,137 +224,34 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         ->name('applicant.apply');
     });
 
-    Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
         
     });
 
-    Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
         
     });
 
-    Route::get('/view/applicant/profile/{file}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'view_file'])
-    ->name('view-file');
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::get('/view/applicant/profile/{file}/approved', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'approved_file'])
-        ->name('approved-file');
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::get('/view/applicant/profile/{file}/declined', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'declined_file'])
-        ->name('declined-file');
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::get('/view/applicant/profile/{id}/reject', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'sendmail_rejected'])
-        ->name('email-reject');
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::get('/view/applicant/profile/{id}/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'sendmail_proceed'])
-        ->name('email-proceed');
-    });
-
-    Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
-        Route::get('/job/posting', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_posting'])
-        ->name('job-posting');
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::post('/job/posting/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_post'])
-        ->name('job-post');
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::get('/job/update', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update'])
-        ->name('job-update');
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::get('/job/update/{job_id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update_id'])
-        ->name('job-update-id');
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::post('/job/update/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_update_success'])
-        ->name('job-update-id-success');
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment'], function(){
-        Route::get('/view/applicant/profile/{id}/signed', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'become_employee'])
-        ->name('emp-accept');
-    });
-
-    Route::group([['middleware' => 'role:compensation', 'middleware' => 'role:hr chief'], 'prefix' => 'compensation'], function(){
-        Route::get('/leave/request', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_request'])
-        ->name('leave-request');
-    });
-
-    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
-        Route::get('/leave/request/{id}/{type}', [\App\Http\Controllers\Chief\ChiefController::class, 'leave_request_id'])
-        ->name('leave-request-id');
-    });
-
-    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief'], function(){
-        Route::post('/leave/request/{id}/success', [\App\Http\Controllers\Chief\ChiefController::class, 'approve_leave_request'])
-        ->name('leave-request-success');
-    });
-
-    Route::group([['middleware' => 'role:compensation', 'middleware' => 'role:hr chief'], 'prefix' => 'compensation'], function(){
-        Route::get('/leave/list', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_list'])
-        ->name('leave-list');
-    });
-
-    Route::group([['middleware' => 'role:compensation', 'middleware' => 'role:hr chief'], 'prefix' => 'compensation'], function(){
-        Route::get('/time-keeping', [\App\Http\Controllers\Compensation\CompensationController::class, 'time_keeping'])
-        ->name('time-keeping');
+    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
+        
     });
 
     Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        Route::get('/time-keeping/manage', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr'])
-        ->name('add-dtr');
+        
     });
 
     Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        Route::post('/time-keeping/manage/success', [\App\Http\Controllers\Compensation\CompensationController::class, 'add_record'])
-        ->name('add-dtr-success');
+        
     });
 
     Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        Route::get('/leave-credit', function () {
-            return view('hr.leave-credit');
-        })->name('leave-credit');
+        
     });
 
     Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        Route::get('/leave-credit/computation/complete-attendance', [
-            \App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation_complete_attendance'
-            ])->name('lc-complete-attendance');
+        
     });
 
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        Route::post('/leave-credit/computation/complete-attendance/success', [
-            \App\Http\Controllers\Compensation\CompensationController::class, 'save_new_leave_credit'
-            ])->name('lc-complete-attendance-success');
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        Route::post('/leave-credit/computation', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation'])
-        ->name('lc-computation');
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        Route::post('/leave-credit/computation/save', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation_save'])
-        ->name('leave-computation-save');
-    });
-
-    Route::get('/compensation/leave/list/leave_search', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_search'])
-    ->name('leave_search');
-
-    Route::get('/compensation/leave/request/lr_search', [\App\Http\Controllers\Compensation\CompensationController::class, 'lr_search'])
-    ->name('lr_search');
-
-    Route::get('/compensation/time-keeping/filter', [\App\Http\Controllers\Compensation\CompensationController::class, 'tk_filter'])
-    ->name('time-keeping');
+    
 
 }); 
