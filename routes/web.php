@@ -15,9 +15,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
+/*Route::get('/', function () {
     return view('livewire.landing-page');
-})->name('landing-page');
+})->name('landing-page');*/
+
+Route::get('/', [\App\Http\Controllers\PM\PMController::class, 'index'])
+->name('dashboard-1');
+
+// for pm & chief
+Route::get('/view/employee/list', [\App\Http\Controllers\PM\PMController::class, 'emp_list'])
+->name('view-employee-list');
+
+Route::get('/view/employee/profile/{id}', [\App\Http\Controllers\PM\PMController::class, 'emp_detail'])
+->name('view-employee-profile');
+
+Route::get('/view/request', [\App\Http\Controllers\PM\PMController::class, 'document_request'])
+->name('view-request');
+
+Route::get('/view/employee/list/emp_search', [\App\Http\Controllers\PM\PMController::class, 'emp_search'])
+->name('search_employee');
+
+Route::get('/view/request/emp_search', [\App\Http\Controllers\PM\PMController::class, 'req_search'])
+->name('req_search');
+
+// for pm
+Route::get('/view/request/notify/{id}', [\App\Http\Controllers\PM\PMController::class, 'notify_emp'])
+->name('notify-employee');
+
+// for recruitment
+Route::get('/view/applicant/list', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'join_data'])
+->name('applicant-list');
 
 
 Route::get('/plm/jobs', [\App\Http\Controllers\JobsAvailableController::class, 'index'])->name('guest-jobs');
@@ -83,17 +110,6 @@ Route::middleware([
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::group(['middleware' => 'role:personnel management', 'prefix' => 'pm', 'as' => 'pm.'], function(){
-        Route::resource('dashboard', \App\Http\Controllers\PM\PMController::class);
-    });
-
-    Route::group(['middleware' => 'role:recruitment', 'prefix' => 'recruitment', 'as' => 'r.'], function(){
-        Route::resource('dashboard', \App\Http\Controllers\Recruitment\RecruitmentController::class);
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation', 'as' => 'c.'], function(){
-        Route::resource('dashboard', \App\Http\Controllers\Compensation\CompensationController::class);
-    });
 
     Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief', 'as' => 'chief.'], function(){
         Route::resource('dashboard', \App\Http\Controllers\Chief\ChiefController::class);
@@ -120,35 +136,8 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         ->name('applicant.apply');
     });
 
-    Route::group([['middleware' => 'role:personnel management', 'middleware' => 'role:hr chief'], 'prefix' => 'pm'], function(){
-        Route::get('/view/employee/list', [\App\Http\Controllers\PM\PMController::class, 'emp_list'
-        ])->name('view-employee-list');
-    });
-
-    Route::group([['middleware' => 'role:personnel management', 'middleware' => 'role:hr chief'], 'prefix' => 'pm'], function(){
-        Route::get('/view/employee/profile/{id}', [\App\Http\Controllers\PM\PMController::class, 'emp_detail'])
-        ->name('view-employee-profile');
-    });
-
-    Route::group([['middleware' => 'role:personnel management', 'middleware' => 'role:hr chief'], 'prefix' => 'pm'], function(){
-        Route::get('/view/request', [\App\Http\Controllers\PM\PMController::class, 'document_request'])
-        ->name('view-request');
-    });
-
-    Route::get('/view/employee/list/emp_search', [\App\Http\Controllers\PM\PMController::class, 'emp_search'])
-    ->name('search_employee');
-
-    Route::get('/view/request/emp_search', [\App\Http\Controllers\PM\PMController::class, 'req_search'])
-    ->name('req_search');
-
-    Route::group(['middleware' => 'role:personnel management', 'prefix' => 'pm'], function(){
-        Route::get('/view/request/notify/{id}', [\App\Http\Controllers\PM\PMController::class, 'notify_emp'])
-        ->name('notify-employee');
-    });
-
     Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
-        Route::get('/view/applicant/list', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'join_data'])
-        ->name('applicant-list');
+        
     });
 
     Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){

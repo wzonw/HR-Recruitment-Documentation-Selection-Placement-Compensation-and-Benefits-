@@ -24,20 +24,14 @@
         <x-banner />
 
         <div class="min-h-screen bg-white">
-            <livewire:hr-header />
-
-            <!-- Page Heading -->
-            @if (isset($header))
-                <header class="bg-white shadow">
-                    <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        {{ $header }}
-                    </div>
-                </header>
-            @endif
+            
+            <!--livewire:hr-header -->
 
             <!-- Page Content -->
             <main class="inline-flex">
-            <livewire:hr-navigation-menu />
+                <div class="h-screen overflow-auto">
+                    <livewire:hr-navigation-menu />
+                </div>
                 {{ $slot }}
             </main>
         </div>

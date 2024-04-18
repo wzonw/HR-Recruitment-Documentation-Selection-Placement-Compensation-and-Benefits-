@@ -8,17 +8,11 @@
             <img class=" opacity-20 " src="https://www.plm.edu.ph/images/banners/2020-PLM-facade.jpg"/>
         </div>
         <div class="ml-4">
-            <div class="min-w-max h-10 top-[200px] absolute text-black text-base font-semibold font-'Inter'"> {{ Auth::user()->name }} </div>
-            @if (Auth::user()->role_id==2)
-                <div class="w-[190px] h-6 top-64 absolute text-black text-sm font-semibold font-'Inter'">Section : Personnel Management</div>
-            @else
-                @if (Auth::user()->role_id==3)
-                    <div class="w-[190px] h-6 top-[249px] absolute text-black text-[13px] font-semibold font-'Inter'">Section : Recruitment</div>
-                @else
-                    <div class="w-[190px] h-6 top-[249px] absolute text-black text-[13px] font-semibold font-'Inter'">Section : Compensation & Benefits</div>
-                @endif
-            @endif
-                <div class="w-[115px] h-[21px] top-[230px] absolute text-neutral-950 text-opacity-50 text-[13px] font-normal font-'Inter'">Administrator</div>
+            <!-- user's name -->
+            <div class="min-w-max h-10 top-[200px] absolute text-black text-base font-semibold font-'Inter'"> NAME </div>
+            <!-- user's section -->
+            <div class="w-[190px] h-6 top-64 absolute text-black text-sm font-semibold font-'Inter'">Section : HR Section</div>
+            <div class="w-[115px] h-[21px] top-[230px] absolute text-neutral-950 text-opacity-50 text-[13px] font-normal font-'Inter'">Administrator</div>
         </div>
         <div class="w-[125px] h-[125px] left-[36px] top-[54px] absolute bg-zinc-300 rounded-full"></div>
         <div class="w-[93px] h-[95px] left-[52px] top-[69px] absolute">

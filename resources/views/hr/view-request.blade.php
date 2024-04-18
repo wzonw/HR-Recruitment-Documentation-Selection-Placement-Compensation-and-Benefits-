@@ -33,7 +33,7 @@
                         <p class="w-48 min-h-max px-3">{{$req->name}}</p>
                         <p class="w-60 min-h-max px-1">{{$req->documents}}</p>
                         <p class="w-56 min-h-max px-1">{{$req->purpose}}</p>
-                        @can('for-pm')
+                        <!-- for pm -->
                         <div class="w-32 ml-3 flex justify-end">
                             <a href="{{route('notify-employee', $req->emp_id)}}" class="w-10 h-6 mr-3 bg-green-600 border border-gray-500 rounded flex justify-center items-center">
                                 <svg class="ms-0 -me-0 h-4 w-4" fill="#000000" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 611.999 611.999" stroke-width="1.5" stroke="currentColor">
@@ -46,7 +46,6 @@
                                 </svg>
                             </button>    
                         </div>
-                        @endif
                     </div>
                 @endforeach
             </div>

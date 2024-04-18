@@ -24,9 +24,9 @@ class PMController extends Controller
      */
     public function index()
     {
-        if(Gate::denies('for-pm')){
+        /*if(Gate::denies('for-pm')){
             abort(403);
-        }
+        }*/
 
         $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
         $NumOfDocuReq = $NumOfDocuReq->count();
