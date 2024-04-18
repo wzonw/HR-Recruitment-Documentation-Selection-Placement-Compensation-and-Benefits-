@@ -135,6 +135,8 @@ Route::get('/leave/request/{id}/{type}', [\App\Http\Controllers\Chief\ChiefContr
 Route::post('/leave/request/{id}/success', [\App\Http\Controllers\Chief\ChiefController::class, 'approve_leave_request'])
 ->name('leave-request-success');
 
+
+// applicants
 Route::get('/plm/jobs', [\App\Http\Controllers\JobsAvailableController::class, 'index'])->name('guest-jobs');
 
 
@@ -164,17 +166,6 @@ Route::get('/applicant/upload/file/{id}', function ($id) {
 Route::post('/applicant/upload/file/{id}/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'upload_file'])
 ->name('upload-file-success');
 
-
-
-Route::get('/create', function () {
-    return view('form');
-});
-
-Route::post('/create', function () {
-    Application::create([
-        'name' => request('name'),
-    ]);
-});
 
 Route::middleware([
     'auth:sanctum',
