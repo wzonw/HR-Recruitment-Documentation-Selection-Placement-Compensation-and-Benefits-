@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('dept');
             $table->decimal('salary');
             $table->date('deadline');
+            $table->string('active', 1)->default('Y');
             $table->timestamps();
         });
     }
