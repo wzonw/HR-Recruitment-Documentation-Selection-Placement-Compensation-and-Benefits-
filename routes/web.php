@@ -135,10 +135,18 @@ Route::get('/leave/request/{id}/{type}', [\App\Http\Controllers\Chief\ChiefContr
 Route::post('/leave/request/{id}/success', [\App\Http\Controllers\Chief\ChiefController::class, 'approve_leave_request'])
 ->name('leave-request-success');
 
+// applicant account
+Route::get('/applicant/dashboard', [\App\Http\Controllers\Applicant\ApplicantController::class, 'index'])
+->name('applicant-dashboard');
 
-// applicants
+Route::get('/applicant/jobs/application', [\App\Http\Controllers\Applicant\ApplicantController::class, 'application'])
+->name('application-section');
+
+Route::post('/applicant/file/upload/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'add_file'])
+->name('add-file-success');
+
+// guest applicants
 Route::get('/plm/jobs', [\App\Http\Controllers\JobsAvailableController::class, 'index'])->name('guest-jobs');
-
 
 Route::post('/plm/jobs/application/{id}', [\App\Http\Controllers\Applicant\ApplicantController::class, 'guest_application'])
 ->name('guest-application');
@@ -165,48 +173,3 @@ Route::get('/applicant/upload/file/{id}', function ($id) {
 
 Route::post('/applicant/upload/file/{id}/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'upload_file'])
 ->name('upload-file-success');
-
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
-});
-
-
-Route::middleware([
-    'auth:sanctum',
-    config('jetstream.auth_session'),
-    'verified',
-])->group(function () {
-    Route::get('/applicant/user/info/personal', function () {
-        return view('livewire.user-personal-info');
-    })->name('user-personal-info');
-});
-
-Route::group(['middleware' => 'auth:sanctum'], function() {
-    Route::group(['middleware' => 'role:applicant', 'prefix' => 'applicant', 'as' => 'applicant.'], function(){
-        Route::resource('dashboard', \App\Http\Controllers\Applicant\ApplicantController::class);
-    });
-
-    // application section
-    Route::group(['middleware' => 'role:applicant'], function(){
-        Route::get('/applicant/jobs/application', [\App\Http\Controllers\Applicant\ApplicantController::class, 'application'])
-        ->name('application-section');
-    });
-
-    // add file
-    Route::group(['middleware' => 'role:applicant'], function(){
-        Route::post('/applicant/file/upload/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'add_file'])
-        ->name('add-file-success');
-    });
-
-    Route::group(['middleware' => 'role:applicant'], function(){
-        Route::post('/applicant/jobs/detail/{id}', [\App\Http\Controllers\Applicant\ApplicantController::class, 'store'])
-        ->name('applicant.apply');
-    });
-}); 

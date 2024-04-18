@@ -20,9 +20,9 @@ class ApplicantController extends Controller
      */
     public function index()
     {
-        if(Gate::denies('for-applicants')){
+        /*if(Gate::denies('for-applicants')){
             abort(403);
-        }
+        }*/
         $applicant = Application::where('id', Auth::user()->application_id)->first();
         $applicant->file = json_decode($applicant->file);
         $applicant->file_remarks = json_decode($applicant->file_remarks);

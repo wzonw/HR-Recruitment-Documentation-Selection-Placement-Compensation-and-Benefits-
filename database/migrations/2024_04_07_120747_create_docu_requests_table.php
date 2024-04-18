@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('documents')->nullable();
             $table->text('purpose')->nullable();
             $table->text('req_form')->nullable();
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }
