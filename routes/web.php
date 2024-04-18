@@ -198,11 +198,6 @@ Route::middleware([
 });
 
 Route::group(['middleware' => 'auth:sanctum'], function() {
-
-    Route::group(['middleware' => 'role:hr chief', 'prefix' => 'chief', 'as' => 'chief.'], function(){
-        
-    });
-
     Route::group(['middleware' => 'role:applicant', 'prefix' => 'applicant', 'as' => 'applicant.'], function(){
         Route::resource('dashboard', \App\Http\Controllers\Applicant\ApplicantController::class);
     });
@@ -223,35 +218,4 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
         Route::post('/applicant/jobs/detail/{id}', [\App\Http\Controllers\Applicant\ApplicantController::class, 'store'])
         ->name('applicant.apply');
     });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        
-    });
-
-    Route::group(['middleware' => 'role:compensation', 'prefix' => 'compensation'], function(){
-        
-    });
-
-    
-
 }); 
