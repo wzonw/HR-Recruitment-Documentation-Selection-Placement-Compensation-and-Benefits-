@@ -11,13 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->string('emp_type');
-            $table->string('position');
-            $table->string('dept');
-            $table->timestamps();
+        Schema::table('docu_requests', function (Blueprint $table) {
+            $table->text('remarks')->nullable()->after('req_form');
         });
     }
 
@@ -26,6 +21,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('employee');
+        //
     }
 };

@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('job_id')->constrained()->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
+            $table->string('active', 1)->default('Y');
             $table->decimal('vl_credit');
             $table->decimal('sl_credit');
+            $table->decimal('cto')->nullable();
             $table->timestamps();
         });
     }
