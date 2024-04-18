@@ -42,9 +42,12 @@ Route::get('/view/request/emp_search', [\App\Http\Controllers\PM\PMController::c
 Route::get('/view/request/notify/{id}', [\App\Http\Controllers\PM\PMController::class, 'notify_emp'])
 ->name('notify-employee');
 
-// for recruitment
+// for recruitment and chief
 Route::get('/view/applicant/list', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'join_data'])
 ->name('applicant-list');
+
+Route::get('/view/applicant/profile/{id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'applicant_profile'])
+->name('view-applicant-profile');
 
 
 Route::get('/plm/jobs', [\App\Http\Controllers\JobsAvailableController::class, 'index'])->name('guest-jobs');
@@ -141,8 +144,7 @@ Route::group(['middleware' => 'auth:sanctum'], function() {
     });
 
     Route::group([['middleware' => 'role:recruitment', 'middleware' => 'role:hr chief'], 'prefix' => 'recruitment'], function(){
-        Route::get('/view/applicant/profile/{id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'applicant_profile'])
-        ->name('view-applicant-profile');
+        
     });
 
     Route::get('/view/applicant/profile/{file}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'view_file'])
