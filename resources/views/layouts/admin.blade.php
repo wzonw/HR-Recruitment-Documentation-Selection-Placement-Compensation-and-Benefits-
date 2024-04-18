@@ -23,7 +23,7 @@
     <body class="font-sans antialiased">
         <x-banner />
 
-        <div class="min-h-screen bg-white">
+        <div class="h-screen bg-white">
             
             <!--livewire:hr-header -->
 

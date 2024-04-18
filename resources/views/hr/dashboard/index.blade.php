@@ -1,5 +1,5 @@
 <x-admin-layout>
-<div class="flex relative">
+<div class="flex w-screen relative">
 <div>
 <div class="flex">
     <div class="w-[209px] h-[332px] my-4 mx-4 relative">
