@@ -25,9 +25,9 @@
         <!-- Add Job Form-->
         <div class="w-[500px] min-h-max bg-white shadow shadow-gray-400 border border-black">
             <div class="flex justify-end items-center shadow">
-                <p class="w-80 h-11 mr-1 pt-2 text-indigo-800 text-2xl text-center font-bold font-inter">Add Vacancies</p>
-                <a href="{{route('job-posting-2')}}" class="px-2 py-1 h-7 mr-2 text-sm opacity-50 border-b-2 text-indigo-800 focus:ring-2 focus:rounded-md">
-                    Others
+                <p class="w-[284px] h-11 pt-2 text-indigo-800 text-2xl text-center font-bold font-inter">Add Vacancies</p>
+                <a href="{{route('job-posting-1')}}" class="px-2 py-1 h-7 mr-2 text-sm opacity-50 border-b-2 text-indigo-800 focus:ring-2 focus:rounded-md">
+                    Dropdown
                 </a>
             </div>
             @if(session('message'))
@@ -42,77 +42,12 @@
                 @csrf
                 <div class="mt-2 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="position" value="{{ __('Position') }}" />
-                    <!-- dropdown option -->
-                    <select name="position" id="position" autofocus required
-                            class="block mt-1 w-72 h-9 text-sm uppercase border-gray-300 rounded-md">
-                        <option></option>
-                        <option value="Accountant">Accountant</option>
-                        <option value="Administrative Assistant">Administrative Assistant</option>
-                        <option value="Administrator">Administrator</option>
-                        <option value="Assistant Department Head">Assistant Department Head</option>
-                        <option value="Business Manager">Business Manager</option>
-                        <option value="Dentist">Dentist</option>
-                        <option value="Department Head">Department Head</option>
-                        <option value="Registrar">Registrar</option>
-                        <option value="Security Officer">Security Officer</option>
-                        <option disabled></option>
-                        <option class="font-bold text-blue-700" disabled>Teaching</option>
-                        <option value="Assistant Professor">Assistant Professor</option>
-                        <option value="Faculty">Faculty</option>
-                        <option value="Instructor">Instructor</option>
-                        <option value="Professor">Professor</option>
-                    </select>
-                </div>
-
-                <div class="mt-2 mx-12 inline-flex justify-center items-center space-x-2">
-                    <x-label class="w-24 text-neutral-300 italic" for="position_num" value="{{ __('(optional)') }}" />
-                    {{-- 
-                        <x-input id="position_num" class="block mt-1 w-72 h-9" type="text" 
-                        name="position_num" :value="old('position')" required />
-                    --}}
-                    <!-- dropdown option -->
-                    <select name="position_num" id="position_num"
-                            class="block mt-1 w-72 h-9 uppercase text-sm border-gray-300 rounded-md">
-                        <option></option>
-                        <option value="I">I</option>
-                        <option value="II">II</option>
-                        <option value="III">III</option>
-                        <option value="IV">IV</option>
-                        <option value="V">V</option>
-                    </select>
+                    <x-input id="position" class="block mt-1 w-72 h-9" type="text" name="position" :value="old('position')" required />
                 </div>
 
                 <div class="mt-2 mx-12 inline-flex justify-center items-center space-x-2">
                     <x-label class="w-24" for="college" value="{{ __('Place of Assignment') }}" />
-                    {{--<x-input id="college" class="block mt-1 w-72 h-9" type="text" name="college" :value="old('college')" required />--}}
-                    <!-- dropdown option -->
-                    <select name="college" id="college" required
-                            class="block mt-1 w-72 h-9 text-sm border-gray-300 rounded-md font-inter">
-                        <option></option>
-                        <option class="uppercase" value="Accounting Office">Accounting Office</option>
-                        <option class="uppercase" value="Human Resources">Human Resources</option>
-                        <option class="uppercase" value="University Health Services">University Health Services</option>
-                        <option class="uppercase" value="University Security Office">University Security Office</option>
-                        <option disabled></option>
-                        <option class="font-bold text-blue-700 uppercase" disabled>Colleges</option>
-                        <option value="College of Architecture and Urban Planning">
-                            CAUP
-                        </option>
-                        <option value="College of Education">CEd</option>
-                        <option value="College of Engineering">CEng</option>
-                        <option value="College of Humanities, Arts and Social Sciences">
-                            CHASS
-                        </option>
-                        <option value="College of Information Technology and System Management">
-                            CISTM
-                        </option>
-                        <option value="College of Medicine">CM</option>
-                        <option value="College of Nursing">CN</option>
-                        <option value="College of Physical Therapy">CPT</option>
-                        <option value="College of Science">CS</option>
-                        <option value="PLM Business School">PLMBS</option>
-                        <option value="College of Law">College of Law</option>
-                    </select>
+                    <x-input id="college" class="block mt-1 w-72 h-9" type="text" name="college" :value="old('college')" required />
                 </div>
 
                 <div class="mt-2 mx-12 inline-flex justify-center items-center space-x-2">

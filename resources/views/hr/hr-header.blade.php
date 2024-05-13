@@ -16,7 +16,7 @@
             </div>
 
             <!-- Notification -->
-            <div class="flex items-center top-4 relative start-96">
+            <div class="flex items-center top-4 relative start-[350px]">
                 <x-dropdown align="right" width="80">
                     <x-slot name="trigger">
                         <span class="inline-flex rounded-md">
@@ -119,14 +119,6 @@
                             <div class="block px-4 py-2 text-base font-bold text-indigo-800 leading-loose">
                                 {{ Auth::user()->name . " " . Auth::user()->surname }}
                             </div>
-                            
-                            <div class="block px-4 py-2 text-xs text-gray-400">
-                                {{ __('Employee Portal') }}
-                            </div>
-
-                            <x-dropdown-link href="{{ route('dashboard') }}">
-                                {{ __('Go To Employee Portal') }}
-                            </x-dropdown-link>
 
                             @if (Laravel\Jetstream\Jetstream::hasApiFeatures())
                                 <x-dropdown-link href="{{ route('api-tokens.index') }}">

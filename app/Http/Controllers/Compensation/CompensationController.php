@@ -9,6 +9,7 @@ use App\Models\dtr;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Gate;
@@ -17,9 +18,9 @@ class CompensationController extends Controller
 {
     public function index()
     {
-        if(Gate::denies('for-compensation')){
+        /*if(Gate::denies('for-compensation')){
             abort(403);
-        }
+        }*/
 
         $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
         $NumOfDocuReq = $NumOfDocuReq->count();
@@ -156,9 +157,9 @@ class CompensationController extends Controller
         return redirect()->route('add-dtr')->with('message', $message);
     }
 
-    public function lc_computation(){
-        $emp = Employee::where('id', request('id'))->first();
-        $data = dtr::where('emp_id', request('id'))
+    public function lc_computation(Request $request){
+        $emp = Employee::where('id', $request->id)->first();
+        $data = dtr::where('emp_id', $request->id)
                     ->whereMonth('date', Carbon::now()->month)
                     ->whereYear('date', Carbon::now()->year)
                     ->first();
@@ -253,6 +254,106 @@ class CompensationController extends Controller
             'employees' => $employee_records,
         ]);
     }
+
+    public function lc_resignation(Request $request){
+        $emp = Employee::where('id', $request->id)
+                        ->where('name', 'LIKE', '%'.$request->name.'%')
+                        ->where('active', 'Y')
+                        ->first();
+        if($emp == null){
+            $message = 'Employee not found.';
+            return redirect()->route('leave-credit')->with('message', $message);
+        }
+        else{
+            return view('hr.leave-credit-resignation', [
+                'emp' => $emp,
+            ]);
+        }
+    }
+
+    public function monetize_lc_resignation($id){
+        $emp = Employee::where('id', $id)
+                        ->where('active', 'Y')
+                        ->first();
+        
+        if($emp == null){
+            $message = 'Employee not found.';
+            return redirect()->route('leave-credit')->with('message', $message);
+        }
+        else{
+            $job = JobsAvailable::where('id', $emp->job_id)->first();
+            return view('hr.leave-credit-retirement', [
+                'emp' => $emp,
+                'job' => $job,
+            ]);
+        }
+    }
+
+    public function transfer_lc_resignation($id){
+        $emp = Employee::where('id', $id)
+                        ->where('active', 'Y')
+                        ->first();
+        
+        if($emp == null){
+            $message = 'Employee not found.';
+            return redirect()->route('leave-credit')->with('message', $message);
+        }
+        else{
+            $job = JobsAvailable::where('id', $emp->job_id)->first();
+            return view('hr.leave-credit-resignation-transfer', [
+                'emp' => $emp,
+                'job' => $job,
+            ]);
+        }
+    }
+
+    public function monetize_lc_retirement(Request $request){
+        $emp = Employee::where('id', $request->id)
+                        ->where('name', 'LIKE', '%'.$request->name.'%')
+                        ->where('active', 'Y')
+                        ->first();
+        
+        if($emp == null){
+            $message = 'Employee not found.';
+            return redirect()->route('leave-credit')->with('message', $message);
+        }
+        else{
+            $job = JobsAvailable::where('id', $emp->job_id)->first();
+            return view('hr.leave-credit-retirement', [
+                'emp' => $emp,
+                'job' => $job,
+            ]);
+        }
+    }
+
+    public function download_file($id){
+        $emp = Employee::where('id', $id)
+                        ->where('active', 'Y')
+                        ->first();
+        $job = JobsAvailable::where('id', $emp->job_id)->first();
+
+        $pdf = Pdf::loadView('hr.pdf.lc-monetization-retirement', [
+            'emp' => $emp,
+            'job' => $job,
+        ]);
+
+        return $pdf->stream();
+    }
+
+    public function download_file_transfer($id){
+        $emp = Employee::where('id', $id)
+                        ->where('active', 'Y')
+                        ->first();
+        $job = JobsAvailable::where('id', $emp->job_id)->first();
+
+        $pdf = Pdf::loadView('hr.pdf.lc-transfer-resignation', [
+            'emp' => $emp,
+            'job' => $job,
+        ]);
+
+        return $pdf->stream();
+    }
+    
     public function leave_search(Request $request)
     {
         $leave_search = $request->input ('query');

@@ -16,9 +16,11 @@
                 <th scope="col" class="text-center py-2 w-6">
                     Remarks
                 </th>
+                @can('for-recruitment')
                 <th scope="col" class="">
                     
                 </th>
+                @endif
             </tr>
         </thead>
         <tbody>
@@ -44,9 +46,8 @@
                     <td class="pl-2 py-3 text-blue-600">
                     </td>
                 @endif
-                <!-- for recruitment -->
+                @can('for-recruitment')
                 <td class="pl-2 py-3  w-10">
-                    <!-- if($applicant->status != null) -->
                     <div class="flex space-x-3">
                         <div class="bg-green-700 w-5 flex justify-center rounded">
                             <a href="{{route('approved-file', ['file' => $value])}}">
@@ -64,6 +65,7 @@
                         </div>
                     </div>
                 </td>
+                @endif
             </tr>
             @empty
             <span>Sorry, empty!</span>

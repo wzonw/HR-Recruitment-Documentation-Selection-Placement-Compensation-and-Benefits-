@@ -11,6 +11,7 @@ use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
 use App\Models\User;
 use App\Notifications\DocumentReqNotif;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -24,12 +25,25 @@ class PMController extends Controller
      */
     public function index()
     {
-        /*if(Gate::denies('for-pm')){
-            abort(403);
-        }*/
+        /*
+        if(Auth::user()->id == 4){
+            return redirect()->route('dashboard-chief');
+        }
+        elseif(Auth::user()->id > 4){
+            $applicant = Application::orderBy('created_at', 'desc')
+                                    ->where('email', Auth::user()->email)
+                                    ->first();
+            if($applicant->remarks != 'Employee'){
+                return redirect()->route('dashboard-applicant');
+            }
+        }
+        */
 
         $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
         $NumOfDocuReq = $NumOfDocuReq->count();
+
+        $NumOfEmp = Employee::where('active', 'Y')->get();
+        $NumOfEmp = $NumOfEmp->count();
 
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
@@ -51,6 +65,51 @@ class PMController extends Controller
             "num_onleave" => $NumOnLeave,
             "part_time" => $PTJobs,
             "full_time" => $FTJobs,
+            "selected_college" => '',
+            "num_employees" => $NumOfEmp,
+        ]);
+    }
+
+    public function update_index(Request $request)
+    {
+        $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
+        $NumOfDocuReq = $NumOfDocuReq->count();
+
+        if($request->college == 'null'){
+            return redirect()->route('dashboard');
+        }
+        else{
+            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+                                ->where('employees.active', 'Y')
+                                ->where('jobs_availables.college', $request->college)
+                                ->get([
+                                    'jobs_availables.college',
+                                ]);
+            $NumOfEmp = $NumOfEmp->count();
+        }
+
+        $NumOfApplicants = Application::all();
+        $NumOfApplicants = $NumOfApplicants->count();
+
+        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
+                                    ->where('start_date', '<=' ,Carbon::today())
+                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = $NumOnLeave->count();
+
+        $PTJobs = JobsAvailable::where('status', 'COS/JO')
+                ->where('active', 'Y')
+                ->get();
+        $FTJobs = JobsAvailable::where('status', 'Plantilla')
+                ->where('active', 'Y')
+                ->get();
+        return view('hr.dashboard.index', [
+            "num_reqs" => $NumOfDocuReq,
+            "num_applicants" => $NumOfApplicants,
+            "num_onleave" => $NumOnLeave,
+            "part_time" => $PTJobs,
+            "full_time" => $FTJobs,
+            "selected_college" => $request->college,
+            "num_employees" => $NumOfEmp,
         ]);
     }
 
@@ -108,6 +167,66 @@ class PMController extends Controller
             $message = 'employee request is not found.';
         }
         return redirect()->route('view-request')->with('message', $message);
+    }
+
+    public function export_document_1($id){
+        $data = Employee::where('id', $id)
+                        ->where('active', 'Y')
+                        ->first();
+        $job = JobsAvailable::where('id', $data->job_id)->first();
+
+        $day = date('j', strtotime(NOW()));
+        
+        if($day == 1){
+            $day = $day.'st';
+        }
+        elseif($day == 2){
+            $day = $day.'nd';
+        }
+        elseif($day == 3){
+            $day = $day.'rd';
+        }
+        else{
+            $day = $day.'th';
+        }
+
+        $pdf = Pdf::loadView('hr.pdf.cert-of-employment', [
+            'data' => $data,
+            'job' => $job,
+            'day' => $day,
+        ]);
+ 
+        return $pdf->stream();
+    }
+
+    public function export_document_2($id){
+        $data = Employee::where('id', $id)
+                        ->where('active', 'Y')
+                        ->first();
+        $job = JobsAvailable::where('id', $data->job_id)->first();
+
+        $day = date('j', strtotime(NOW()));
+        
+        if($day == 1){
+            $day = $day.'st';
+        }
+        elseif($day == 2){
+            $day = $day.'nd';
+        }
+        elseif($day == 3){
+            $day = $day.'rd';
+        }
+        else{
+            $day = $day.'th';
+        }
+
+        $pdf = Pdf::loadView('hr.pdf.cert-of-employment-w-compensation', [
+            'data' => $data,
+            'job' => $job,
+            'day' => $day,
+        ]);
+ 
+        return $pdf->stream();
     }
 
     public function emp_search(Request $request)

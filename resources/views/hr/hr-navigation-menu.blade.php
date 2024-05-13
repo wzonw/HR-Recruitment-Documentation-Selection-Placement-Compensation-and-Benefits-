@@ -41,7 +41,7 @@
         Talent Acquisition
     </p>
 
-    <a class="mt-5 w-56 h-14 flex hover:bg-indigo-650" href="{{ route('job-posting') }}" :active="request()->routeIs('dashboard')">
+    <a class="mt-5 w-56 h-14 flex hover:bg-indigo-650" href="{{ route('job-posting-1') }}" :active="request()->routeIs('dashboard')">
         <svg viewBox="-5 -4 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
             <path d="M3 10L5.5 7.5L3 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M3 19L5.5 16.5L3 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -159,7 +159,7 @@
         Talent Acquisition
     </p>
 
-    <a class="mt-3 w-56 h-14 flex hover:bg-indigo-650" href="{{ route('job-posting') }}" :active="request()->routeIs('dashboard')">
+    <a class="mt-3 w-56 h-14 flex hover:bg-indigo-650" href="{{ route('job-posting-1') }}" :active="request()->routeIs('dashboard')">
         <svg viewBox="-5 -4 34 34" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">
             <path d="M3 10L5.5 7.5L3 5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
             <path d="M3 19L5.5 16.5L3 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -219,4 +219,3 @@
     </a>
     --}}
 </div>
-

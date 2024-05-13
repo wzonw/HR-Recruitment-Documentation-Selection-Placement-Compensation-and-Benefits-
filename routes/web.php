@@ -19,11 +19,18 @@ use Illuminate\Support\Facades\Route;
     return view('livewire.landing-page');
 })->name('landing-page');*/
 
+// hr
 Route::get('/', [\App\Http\Controllers\PM\PMController::class, 'index'])
 ->name('dashboard-1');
 
+Route::get('/dashboard/update', [\App\Http\Controllers\PM\PMController::class, 'update_index'])
+->name('update-dashboard');
+
 Route::get('/chief/dashboard', [\App\Http\Controllers\Chief\ChiefController::class, 'index'])
 ->name('dashboard-2');
+
+Route::get('/chief/dashboard/update', [\App\Http\Controllers\Chief\ChiefController::class, 'update_index'])
+->name('update-dashboard-chief');
 
 // for pm & chief
 Route::get('/view/employee/list', [\App\Http\Controllers\PM\PMController::class, 'emp_list'])
@@ -45,6 +52,12 @@ Route::get('/view/request/emp_search', [\App\Http\Controllers\PM\PMController::c
 Route::get('/view/request/notify/{id}', [\App\Http\Controllers\PM\PMController::class, 'notify_emp'])
 ->name('notify-employee');
 
+Route::get('/view/request/document-1/export/{id}', [\App\Http\Controllers\PM\PMController::class, 'export_document_1'])
+->name('export-document');
+
+Route::get('/view/request/document-2/export/{id}', [\App\Http\Controllers\PM\PMController::class, 'export_document_2'])
+->name('export-document-w-compensation');
+
 // for recruitment and chief
 Route::get('/view/applicant/list', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'join_data'])
 ->name('applicant-list');
@@ -55,8 +68,8 @@ Route::get('/view/applicant/profile/{id}', [\App\Http\Controllers\Recruitment\Re
 Route::get('/view/applicant/profile/{file}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'view_file'])
 ->name('view-file');
 
-Route::get('/job/posting', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_posting'])
-->name('job-posting');
+Route::get('/job/posting', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_posting_dropdown'])
+->name('job-posting-1');
 
 // for recruitment
 Route::get('/view/applicant/profile/{file}/approved', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'approved_file'])
@@ -70,6 +83,9 @@ Route::get('/view/applicant/profile/{id}/reject', [\App\Http\Controllers\Recruit
 
 Route::get('/view/applicant/profile/{id}/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'sendmail_proceed'])
 ->name('email-proceed');
+
+Route::get('/job/posting/input', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_posting_input'])
+->name('job-posting-2');
 
 Route::post('/job/posting/success', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_post'])
 ->name('job-post');
@@ -119,6 +135,24 @@ Route::post('/leave-credit/computation', [\App\Http\Controllers\Compensation\Com
 Route::post('/leave-credit/computation/save', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_computation_save'])
 ->name('leave-computation-save');
 
+Route::post('/leave-credit/computation/resignation', [\App\Http\Controllers\Compensation\CompensationController::class, 'lc_resignation'])
+->name('lc-resignation');
+
+Route::get('/leave-credit/computation/resignation/monetization/{id}', [\App\Http\Controllers\Compensation\CompensationController::class, 'monetize_lc_resignation'])
+->name('lc-resignation-monetization');
+
+Route::get('/leave-credit/computation/resignation/transfer/{id}', [\App\Http\Controllers\Compensation\CompensationController::class, 'transfer_lc_resignation'])
+->name('lc-resignation-transfer');
+
+Route::get('/leave-credit/computation/retirement', [\App\Http\Controllers\Compensation\CompensationController::class, 'monetize_lc_retirement'])
+->name('lc-retirement');
+
+Route::get('/leave-credit/computation/retirement/{id}/download', [\App\Http\Controllers\Compensation\CompensationController::class, 'download_file'])
+->name('download-lc');
+
+Route::get('/leave-credit/computation/resignation/{id}/download', [\App\Http\Controllers\Compensation\CompensationController::class, 'download_file_transfer'])
+->name('download-lc-transfer');
+
 Route::get('/compensation/leave/list/leave_search', [\App\Http\Controllers\Compensation\CompensationController::class, 'leave_search'])
 ->name('leave_search');
 
@@ -134,6 +168,12 @@ Route::get('/leave/request/{id}/{type}', [\App\Http\Controllers\Chief\ChiefContr
 
 Route::post('/leave/request/{id}/success', [\App\Http\Controllers\Chief\ChiefController::class, 'approve_leave_request'])
 ->name('leave-request-success');
+
+Route::get('/leave/req/outside/hr', [\App\Http\Controllers\Chief\ChiefController::class, 'leave_request_not_hr'])
+->name('leave-request-not-hr');
+
+Route::post('/leave/req/outside/hr/success', [\App\Http\Controllers\Chief\ChiefController::class, 'approve_leave_request_not_hr'])
+->name('leave-request-not-hr-success');
 
 // applicant account
 Route::get('/applicant/dashboard', [\App\Http\Controllers\Applicant\ApplicantController::class, 'index'])

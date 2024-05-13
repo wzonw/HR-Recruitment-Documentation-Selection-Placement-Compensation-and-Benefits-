@@ -43,7 +43,9 @@
         <div class="w-[500px] h-full bg-slate-100 rounded-xl py-3 items-center">
            <!--error messages-->
             @if ($errors->any())
-            <div class="mx-3 alert alert-danger text-red-600 italic">
+            <div class="mx-3 alert alert-danger text-red-600 italic"
+                x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
+                x-init="setTimeout(() => show = false, 3000)">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -53,13 +55,15 @@
             @endif
             <!--Success message-->
             @if(session('message') == 'Successfully Applied!')
-            <div class="min-w-max h-8 mx-3 text-green-600 items-end italic"
-                 x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+            <div class="w-full h-8 mx-3 text-green-600 items-end italic"
+                x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
+                x-init="setTimeout(() => show = false, 1500)">
                 {{ session('message') }} 
             </div>
             @else <!--ongoing application message-->
-            <div class="min-w-max h-8 mx-3 text-red-500 items-end italic"
-                 x-data="{ show: true }" x-show="show" x-init="setTimeout(() => show = false, 3000)">
+            <div class="w-full min-h-max mx-3 text-red-500 items-end italic"
+                x-data="{ show: true }" x-show="show" x-transition.opacity.out.duration.1500ms 
+                x-init="setTimeout(() => show = false, 3000)">
                 {{ session('message') }}
             </div>
             @endif

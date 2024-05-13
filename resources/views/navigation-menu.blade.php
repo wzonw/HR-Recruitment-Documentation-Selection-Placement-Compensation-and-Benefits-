@@ -12,7 +12,7 @@
                     </x-nav-link>
 
                     @can('for-applicants')
-                    <x-nav-link href="{{ route('applicant.dashboard.index') }}" :active="request()->routeIs('applicant.dashboard.index')">
+                    <x-nav-link href="{{ route('dashboard-applicant') }}" :active="request()->routeIs('dashboard-applicant')">
                         {{ __('Profile') }}
                     </x-nav-link>
                     @endif

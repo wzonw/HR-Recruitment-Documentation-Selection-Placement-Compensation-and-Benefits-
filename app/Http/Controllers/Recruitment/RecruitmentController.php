@@ -34,9 +34,9 @@ class RecruitmentController extends Controller
 
     public function index()
     {
-        if(Gate::denies('for-recruitment')){
+        /*if(Gate::denies('for-recruitment')){
             abort(403);
-        }
+        }*/
 
         $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
         $NumOfDocuReq = $NumOfDocuReq->count();
@@ -204,10 +204,18 @@ class RecruitmentController extends Controller
 
     }
 
-    public function job_posting(){
+    public function job_posting_dropdown(){
         
         $jobs = JobsAvailable::where('active', 'Y')->get();
         return view('hr.job-posting', [
+            "jobs" => $jobs,
+        ]);
+    }
+
+    public function job_posting_input(){
+        
+        $jobs = JobsAvailable::where('active', 'Y')->get();
+        return view('hr.job-posting-input', [
             "jobs" => $jobs,
         ]);
     }
@@ -240,7 +248,7 @@ class RecruitmentController extends Controller
 
     public function job_post(){
         JobsAvailable::create([
-            'job_name' => request('position'),
+            'job_name' => request('position').' '.request('position_num'),
             'job_desc' => request('description'),
             'status' => request('status'),
             'college' => request('college'),
@@ -252,7 +260,7 @@ class RecruitmentController extends Controller
         
         $message = 'Successfully added a Job!';
 
-        return redirect()->route('job-posting')->with('message', $message);
+        return redirect()->route('job-posting-1')->with('message', $message);
     }
 
     public function sendmail_rejected($id): RedirectResponse
@@ -279,7 +287,9 @@ class RecruitmentController extends Controller
         $applicant = Application::where('id', $request->id)->first();
         $status = $applicant->remarks;
 
-        $account = User::where('application_id', $request->id)->first();
+        $account = User::where('application_id', $request->id)
+                        ->orWhere('email', $applicant->email)
+                        ->first();    
 
         if ($status == null && $request->status != null){
             $password = Str::of($applicant->name)->remove(' ');
@@ -292,6 +302,10 @@ class RecruitmentController extends Controller
                     'password' => Hash::make($password),
                     'application_id' => $request->id,
                 ]); 
+            }
+            elseif($account != null){
+                $account->application_id = $applicant->id;
+                $account->save();
             }
 
             $applicant->remarks = $request->status;
@@ -344,7 +358,12 @@ class RecruitmentController extends Controller
     public function become_employee($id){
         $applicant = Application::where('id', $id)->first();
 
-        $emp_acc = Employee::where('job_id', $applicant->job_id)
+        $emp_w_job = Employee::where('job_id', $applicant->job_id)
+                            ->where('active', 'Y')
+                            ->count();
+        
+        $emp_acc = Employee::where('name', $applicant->name)
+                            ->where('email', $applicant->email)
                             ->where('active', 'Y')
                             ->count();
                             
@@ -366,7 +385,7 @@ class RecruitmentController extends Controller
             
         }
 
-        if($emp_acc == 0){
+        if($emp_w_job == 0 && $emp_acc == 0){
             // create employee record
             Employee::create([
                 'job_id' => $applicant->job_id,
@@ -377,6 +396,24 @@ class RecruitmentController extends Controller
             $applicant->save();
             
             $message = $applicant->name.' is now an employee!';
+        }
+        elseif($emp_w_job == 0 && $emp_acc == 1){
+            $job = JobsAvailable::where('id', $applicant->job_id)
+                                ->where('active', 'Y')
+                                ->first();
+
+            $emp = Employee::where('name', $applicant->name)
+                            ->where('email', $applicant->email)
+                            ->where('active', 'Y')
+                            ->first();
+
+            $emp->job_id = $applicant->job_id;
+            $emp->save();
+
+            $applicant->remarks = 'Employee';
+            $applicant->save();
+            
+            $message = $applicant->name.' is promoted to '.$job->job_name;
         }
         else{
             $message = 'There is still an employee with the same job.';

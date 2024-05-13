@@ -98,7 +98,7 @@ class ApplicantController extends Controller
         $application = Application::orderBy('created_at', 'desc')
                                     ->where('email', $request->email)
                                     ->orWhere('contact_number', $request->number)
-                                    ->where('remarks', null)->first();
+                                    ->first();
         
         $files = [];
         if($application == null){
@@ -125,7 +125,63 @@ class ApplicantController extends Controller
             $message = 'Successfully Applied!';
         }
         else{
-            $message = 'You have an ongoing application with id: '.''.$application->id;
+            if($application->remarks == 'Employee'){
+                if( $request -> has('file')){
+                    foreach($request->file('file') as $f)
+                    {
+                        $filename = Str::of($request->input('name'))->remove(' ');
+                        $filename = $filename . '_' . $f->getClientOriginalName();
+                        $path = ('uploads/file');
+                        $f->move($path, $filename);
+                        $files[] = $filename;
+                    }
+                    
+                    $upload = json_encode($files); //encodes array, must be decoded when displayed
+                };
+                Application::create([
+                    'job_id' => $request->input('job_id'),
+                    'name' => $request->input('name'),
+                    'email' => $request->input('email'),
+                    'contact_number' => $request->input('number'),
+                    'file'=> $upload,
+                ]);
+    
+                $message = 'Successfully Applied!';
+            }
+            elseif($application->remarks == 'Inactive'){
+                $days = NOW()->diffInDays($application->created_at);
+
+                if($days > 182){
+                    if( $request -> has('file')){
+                        foreach($request->file('file') as $f)
+                        {
+                            $filename = Str::of($request->input('name'))->remove(' ');
+                            $filename = $filename . '_' . $f->getClientOriginalName();
+                            $path = ('uploads/file');
+                            $f->move($path, $filename);
+                            $files[] = $filename;
+                        }
+                        
+                        $upload = json_encode($files); //encodes array, must be decoded when displayed
+                    };
+                    Application::create([
+                        'job_id' => $request->input('job_id'),
+                        'name' => $request->input('name'),
+                        'email' => $request->input('email'),
+                        'contact_number' => $request->input('number'),
+                        'file'=> $upload,
+                    ]);
+        
+                    $message = 'Successfully Applied!';
+                }
+                else{
+                    $month = date('F', strtotime($application->created_at));
+                    $message = 'You had an application in '.$month.'. Apply 6 months after your previous application.';
+                }
+            }
+            else{
+                $message = 'You have an ongoing application with id: '.''.$application->id;
+            }
         }
 
         return redirect()->route('guest-application-get', ['id'=>$request->job_id])->with('message', $message);
