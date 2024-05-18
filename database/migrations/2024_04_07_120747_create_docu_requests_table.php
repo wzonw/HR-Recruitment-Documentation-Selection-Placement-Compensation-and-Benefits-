@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('docu_requests', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('emp_id')->constrained(table: 'employees')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('emp_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
             $table->text('documents')->nullable();
             $table->text('purpose')->nullable();

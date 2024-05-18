@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('dtrs', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('emp_id')->constrained(table: 'employees')->onDelete('cascade')->onUpdate('cascade');
-            $table->foreignId('job_id')->constrained(table: 'jobs_availables')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('emp_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
+            $table->foreignId('job_id')->references('id')->on('jobs_availables')->onDelete('cascade')->onUpdate('cascade');
             $table->date('date');
-            $table->int('absent');
+            $table->integer('absent');
             $table->decimal('undertime');
             $table->decimal('late');
             $table->decimal('overtime');
