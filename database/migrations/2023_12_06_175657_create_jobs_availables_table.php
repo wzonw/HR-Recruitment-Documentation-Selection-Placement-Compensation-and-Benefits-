@@ -16,9 +16,10 @@ return new class extends Migration
             $table->string('job_name'); 
             $table->string('status');
             $table->string('college');
-            $table->string('dept');
+            $table->string('dept')->nullable();
             $table->decimal('salary');
             $table->date('deadline');
+            $table->text('job_desc')->nullable();
             $table->string('active', 1)->default('Y');
             $table->timestamps();
         });

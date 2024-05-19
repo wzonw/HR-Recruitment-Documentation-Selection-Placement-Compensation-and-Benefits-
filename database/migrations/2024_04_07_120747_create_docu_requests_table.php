@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('emp_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
             $table->string('name');
-            $table->text('documents')->nullable();
+            $table->text('documents');
             $table->text('purpose')->nullable();
             $table->text('req_form')->nullable();
             $table->text('remarks')->nullable();

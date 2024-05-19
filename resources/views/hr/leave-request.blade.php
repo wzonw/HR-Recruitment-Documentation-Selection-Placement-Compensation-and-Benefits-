@@ -32,7 +32,7 @@
                 </div>
 
                 <!-- Employee Leave Request Table -->
-                <table class="mb-5 table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
+                <table class="w-full mb-5 table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
                     <!-- Header  -->
                     <thead class="bg-slate-100 text-gray-400">
                         <tr class="h-10">

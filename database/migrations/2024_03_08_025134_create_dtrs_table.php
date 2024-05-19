@@ -16,15 +16,15 @@ return new class extends Migration
             $table->foreignId('emp_id')->references('id')->on('employees')->onDelete('cascade')->onUpdate('cascade');
             $table->foreignId('job_id')->references('id')->on('jobs_availables')->onDelete('cascade')->onUpdate('cascade');
             $table->date('date');
-            $table->integer('absent');
-            $table->decimal('undertime');
-            $table->decimal('late');
-            $table->decimal('overtime');
-            $table->decimal('cto');
-            $table->decimal('vl_used');
-            $table->decimal('sl_used');
-            $table->integer('lwop');
-            $table->text('remarks');
+            $table->integer('absent')->nullable();
+            $table->decimal('undertime')->nullable();
+            $table->decimal('late')->nullable();
+            $table->decimal('overtime')->nullable();
+            $table->decimal('cto')->nullable();
+            $table->decimal('vl_used')->nullable();
+            $table->decimal('sl_used')->nullable();
+            $table->integer('lwop')->nullable();
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }

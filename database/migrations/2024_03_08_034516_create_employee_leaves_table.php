@@ -17,8 +17,8 @@ return new class extends Migration
             $table->date('start_date');
             $table->date('end_date');
             $table->text('type');
-            $table->text('leave_form');
-            $table->text('remarks');
+            $table->text('leave_form')->nullable();
+            $table->text('remarks')->nullable();
             $table->timestamps();
         });
     }
