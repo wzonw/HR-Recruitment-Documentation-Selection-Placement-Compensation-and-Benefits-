@@ -1,6 +1,6 @@
 <x-admin-layout>
     {{-- Success is as dangerous as failure. --}}
-    <div class="flex justify-center w-full px-5 py-5 space-x-3">
+    <div class="flex w-screen px-5 py-5 space-x-3">
         <!-- Jobs Available -->
         <div class="w-[550px] h-[600px] pt-7 bg-white shadow shadow-gray-400 border rounded-xl border-black">
             <div class="ml-6 min-w-max min-h-max inline-flex space-x-5">
@@ -23,7 +23,7 @@
 
         <!-- for recruitment -->
         <!-- Add Job Form-->
-        <div class="w-[500px] min-h-max bg-white shadow shadow-gray-400 border border-black">
+        <div class="w-[500px] h-[600px] bg-white shadow shadow-gray-400 border border-black">
             <div class="flex justify-end items-center shadow">
                 <p class="w-80 h-11 mr-1 pt-2 text-indigo-800 text-2xl text-center font-bold font-inter">Add Vacancies</p>
                 <a href="{{route('job-posting-2')}}" class="px-2 py-1 h-7 mr-2 text-sm opacity-50 border-b-2 text-indigo-800 focus:ring-2 focus:rounded-md">

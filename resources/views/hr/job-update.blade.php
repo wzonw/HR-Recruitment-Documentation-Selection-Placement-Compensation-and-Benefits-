@@ -1,6 +1,6 @@
 <x-admin-layout>
     {{-- Success is as dangerous as failure. --}}
-    <div class="flex justify-center w-full px-5 py-5 space-x-3">
+    <div class="flex w-screen h-screen px-5 py-5 space-x-3">
         <!-- Jobs Available -->
         <div class="w-[550px] h-[600px] pt-7 bg-white shadow shadow-gray-400 border rounded-xl border-black">
             <div class="ml-6 min-w-max min-h-max inline-flex space-x-5">

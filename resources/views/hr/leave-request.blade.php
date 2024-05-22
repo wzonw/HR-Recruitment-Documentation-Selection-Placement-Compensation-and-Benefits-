@@ -1,7 +1,7 @@
 <x-admin-layout>
-    <div class="w-full h-screen">
+    <div class=" flex w-screen h-screen">
         <div class="mx-10 my-5">
-            <div class="w-full h-14 mt-5 mb-5 bg-indigo-800 flex items-center">
+            <div class="w-[1014px] h-14 mt-5 mb-5 bg-indigo-800 flex items-center">
                 <p class="ml-5 text-white text-2xl font-bold font-inter">Leave Requests</p>
             </div>
             <form type="get" action=" {{ url('/compensation/leave/request/lr_search') }} ">
@@ -21,7 +21,7 @@
             </div>           
             @endif
              
-            <div class="w-full h-screen overflow-y-auto">
+            <div class="w-[1014px] h-screen overflow-y-auto">
                 <!-- For HR Chief Only -->
                 <div class="flex justify-end py-2 mr-1">
                     <a href="{{route('leave-request-not-hr')}}">

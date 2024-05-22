@@ -1,6 +1,7 @@
 <x-admin-layout>
-    <div class="ml-10 mt-0 h-screen">
-        <div class="w-[1000px] h-14 mt-5 bg-indigo-800 flex items-center">
+    <div class="flex w-screen h-screen">
+        <div class="mx-10 my-5">
+        <div class="w-[1014px] h-14 mt-5 bg-indigo-800 flex items-center">
             <p class="ml-5 text-white text-2xl font-bold font-inter">Daily Time Record</p>
         </div>
 
@@ -85,6 +86,7 @@
                 @endforeach
             </tbody>
         </table>
+    </div>
     </div>
     
 </x-admin-layout>

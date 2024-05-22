@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class="h-full w-[1111px] pl-2 pt-3 flex flex-wrap">
+    <div class="h-screen w-screen pl-2 pt-3 flex flex-wrap">
         <div class="w-[545px]">
             <!-- name, num of emp, num of emp on leave -->
             <div class="w-[545px] h-[246px] shadow flex">
