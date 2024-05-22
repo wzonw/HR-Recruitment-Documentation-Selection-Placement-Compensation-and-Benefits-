@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class=" ml-10 mt-0 w-screen">
+    <div class=" ml-10 mt-0">
         <div class="w-[1014px] h-14 mt-10 mb-0 bg-indigo-800 flex items-center">
             <p class="ml-5 text-white text-3xl font-bold font-inter">Applicant List</p>
         </div>

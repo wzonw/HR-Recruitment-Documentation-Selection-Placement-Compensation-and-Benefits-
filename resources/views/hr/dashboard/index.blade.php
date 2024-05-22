@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class="w-screen h-screen font-inter px-3">
+    <div class="h-screen justify-start font-inter px-3">
         <div class="w-screen h-4/5 flex py-2">
             <div class="w-1/2">
                 <div class="h-3/5 flex">
@@ -32,7 +32,7 @@
                     </div>
                     
                     <!-- Num of requests -->
-                    <div class="w-2/3 px-3">
+                    <div class="w-1/2 px-3">
                         <div class="h-full overflow-auto">
                             <div class="h-1/3 py-2">
                                 <div class="h-full bg-yellow-600 rounded-lg shadow flex items-center">
@@ -71,7 +71,7 @@
                 </div>
                 
                 <!-- Number of Employees -->
-                <div class="h-2/5 pr-2 pt-2">
+                <div class="h-2/5 w-5/6 pr-2 pt-2">
                     <div class="w-full h-full py-2 px-2 border border-black">
                         <form class="w-full h-full" action="{{route('update-dashboard')}}" method="get">
                             <div class="flex h-1/5 items-center">
@@ -132,7 +132,7 @@
                 </div>
             </div>
             <!-- careers -->
-            <div class="w-1/2 border border-black px-3 py-3 overflow-y-auto">
+            <div class="w-[585px] border border-black -mx-28 px-3 py-3">
                 <div class="h-14 bg-indigo-800 flex items-center">
                     <h1 class="text-indigo-50 text-2xl font-bold pl-5">PLM Careers!</h1>
                 </div>
@@ -172,7 +172,7 @@
         </div>
 
         <!-- Quicklinks -->
-        <div class="w-screen h-1/5 px-5 py-5 shadow shadow-gray-300 bg-gradient-to-t from-red-300 to-red-700">
+        <div class="w-[1200px] h-1/5 px-5 py-5 shadow shadow-gray-300 bg-gradient-to-t from-red-300 to-red-700">
             <div class="h-1/4 mt-1 flex items-center space-x-3">
                 <img class="w-14 h-14" src="https://plm.edu.ph/images/Seal/PLM_Seal_BOR-approved_2014.png"/>
                 <p class="h-6 text-gray-200 text-xl font-extrabold font-inter">Quick Links</p>
