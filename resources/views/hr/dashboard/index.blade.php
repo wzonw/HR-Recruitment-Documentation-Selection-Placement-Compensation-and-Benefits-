@@ -1,7 +1,7 @@
 <x-admin-layout>
-    <div class="h-screen justify-start font-inter px-3">
-        <div class="w-screen h-4/5 flex py-2">
-            <div class="w-1/2">
+    <div class="h-full font-inter px-3">
+        <div class=" h-4/5 flex py-2 p">
+            <div class="w-[600px] ">
                 <div class="h-3/5 flex">
                     <!-- Profile -->
                     <div class="w-1/3 h-full shadow-md">
@@ -32,7 +32,7 @@
                     </div>
                     
                     <!-- Num of requests -->
-                    <div class="w-1/2 px-3">
+                    <div class="w-3/4 px-3">
                         <div class="h-full overflow-auto">
                             <div class="h-1/3 py-2">
                                 <div class="h-full bg-yellow-600 rounded-lg shadow flex items-center">
@@ -132,11 +132,11 @@
                 </div>
             </div>
             <!-- careers -->
-            <div class="w-[585px] border border-black -mx-28 px-3 py-3">
+            <div class="w-[600px] border border-black px-3 py-3">
                 <div class="h-14 bg-indigo-800 flex items-center">
                     <h1 class="text-indigo-50 text-2xl font-bold pl-5">PLM Careers!</h1>
                 </div>
-                <div class="flex">
+                <div class="flex ">
                     <div class="w-1/2 px-4 py-3 text-black text-base font-semibold">
                         Part Time
                         <div class=" font-normal mt-2">

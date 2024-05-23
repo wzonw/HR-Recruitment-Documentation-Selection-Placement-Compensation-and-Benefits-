@@ -28,9 +28,13 @@
             <!--livewire:hr-header -->
 
             <!-- Page Content -->
-            <main class="inline-flex">
-                <livewire:hr-navigation-menu />
-                {{ $slot }}
+            <main class="w-screen h-screen inline-flex">
+                <div class="w-1/6 bg-indigo-800">
+                    <livewire:hr-navigation-menu />
+                </div>
+                <div class="w-5/6">
+                    {{ $slot }}
+                </div>
             </main>
         </div>
 

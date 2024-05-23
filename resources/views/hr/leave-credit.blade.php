@@ -1,7 +1,6 @@
 <x-admin-layout>
-    <div class="flex h-screen">
-        <div class="mx-10 my-5">
-        <div class="w-[1014px] h-14 mt-5 bg-indigo-800 flex items-center">
+    <div class="px-5 py-5 w-full h-full">
+        <div class="w-full h-14 bg-indigo-800 flex items-center">
             <p class="ml-5 text-white text-2xl font-bold font-inter">Leave Credit</p>
         </div>
 
@@ -12,8 +11,7 @@
             {{ session('message') }} 
         </div>
         @endif
-
-        <div class="w-[1014px] bg-slate-100 rounded-xl my-3 py-5 flex justify-center font-inter text-base flex-wrap">
+        <div class="w-[1014px] bg-slate-100 rounded-xl my-3 py-5 flex justify-start font-inter text-base flex-wrap">
             <!-- complete attendance -->
             <div class="w-[420px] flex flex-wrap justify-center border-r border-black">
                 <p>For Employees w/ Complete Attendance</p>

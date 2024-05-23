@@ -1,10 +1,10 @@
 <x-admin-layout>
-    <div class="h-screen mx-10">
-        <div class="flex my-5">
+    <div class=" h-full px-5">
+        <div class="flex">
             <div class="w-[700px] h-14 mt-5 bg-indigo-800 flex items-center">
                 <p class="ml-5 text-white text-3xl font-bold font-inter">Employee List</p>
             </div>
-            <form type="get" action=" {{ url('/view/employee/list/emp_search') }} " class="w-[315px] h-14 mt-5 flex items-center justify-center">
+            <form type="get" action=" {{ url('/view/employee/list/emp_search') }} " class="w-[315px] p-2 h-14 mt-5 flex items-center justify-center">
                 <div class="w-56 h-9 bg-white rounded border border-gray-400 shadow-md flex justify-center items-center">
                     <button type="submit" class="flex justify-center items-center w-10 h-8 border-none rounded">
                         <img src="https://icon-library.com/images/black-search-icon-png/black-search-icon-png-12.jpg" class="w-10 h-8">
@@ -13,8 +13,8 @@
                 </div>
             </form>
         </div>
-
-        <div class="mt-10 w-[1014px] inline-flex items-center">
+        <div class="flex justify-between">
+            <div class="mt-10 w-[1014px] inline-flex items-center ">
             <p class="mx-7 text-indigo-800 text-sm font-semibold font-inter">Name</p>
             <!--employee type-->
             <div class="ml-36 w-56">
@@ -36,10 +36,12 @@
                     Place of Assignment
                 </p>
             </div>
+            </div>
         </div>
 
         <!-- Employee Table -->
-        <table class="w-[1014px] bg-white shadow border-black border text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700">
+        <div class="flex">
+             <table class="w-[1014px] bg-white shadow border-black border text-sm text-left rtl:text-right text-gray-500 dark:text-gray-700">
             <tbody>
                 @foreach ($employees as $employee)
                 <tr class="odd:bg-white odd:dark:bg-white even:bg-gray-50 even:dark:bg-slate-100 dark:border-black">
@@ -58,6 +60,7 @@
                 </tr>
                 @endforeach
             </tbody>
-        </table>
+             </table>
+        </div>
     </div>
 </x-admin-layout>

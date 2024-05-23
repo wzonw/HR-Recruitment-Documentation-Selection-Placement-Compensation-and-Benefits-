@@ -1,7 +1,9 @@
 <x-admin-layout>
-    <div class="ml-3 mt-5 h-screen">
-        <div class="w-[1100px] h-20 flex items-center justify-center space-x-96 rounded-lg border shadow-md">
-            <p class=" text-indigo-800 text-2xl font-extrabold font-inter">Employee Document Requests</p>
+    <div class="px-5 h-full">
+        <div class="w-[1100px] h-20 mt-5 flex items-center space-x-96 rounded-lg border shadow-md">
+            <div class="flex">
+                <p class="ml-5 text-indigo-800 text-2xl font-extrabold font-inter">Employee Document Requests</p>
+            </div>
             <form type="get" action=" {{ url('/view/request/emp_search') }} ">
                 <div class="w-56 h-9 bg-white rounded border border-gray-400 shadow-md flex justify-center items-center">
                     <button type="submit" class="flex justify-center items-center w-10 h-8 border-none rounded">
