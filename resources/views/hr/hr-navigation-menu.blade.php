@@ -1,4 +1,4 @@
-<div class="w-full overflow-y-auto overflow-x-hidden bg-indigo-800">
+<div class="w-full h-full overflow-y-auto overflow-x-hidden bg-indigo-800">
     <!-- for personnel mangement -->
     <a class=" h-16 flex hover:bg-indigo-650" href="{{ route('dashboard-1') }}" :active="request()->routeIs('dashboard')">
         <svg viewBox="-7 -8 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="#ffffff">

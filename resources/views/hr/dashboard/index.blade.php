@@ -1,8 +1,8 @@
 <x-admin-layout>
-    <div class="h-full font-inter px-3">
-        <div class=" h-4/5 flex py-2 p">
-            <div class="w-[600px] ">
-                <div class="h-3/5 flex">
+    <div class="h-auto font-inter flex flex-wrap px-3">
+        <div class="w-full h-4/5 flex flex-wrap py-2">
+            <div class="w-[555px] h-[430px]">
+                <div class="h-1/2 flex">
                     <!-- Profile -->
                     <div class="w-1/3 h-full shadow-md">
                         <div class="h-1/2">
@@ -32,37 +32,37 @@
                     </div>
                     
                     <!-- Num of requests -->
-                    <div class="w-3/4 px-3">
+                    <div class="w-3/4 h-full px-3">
                         <div class="h-full overflow-auto">
-                            <div class="h-1/3 py-2">
+                            <div class="h-1/3 py-1">
                                 <div class="h-full bg-yellow-600 rounded-lg shadow flex items-center">
-                                    <div class="w-3/4 pl-5 bg-opacity-0 rounded-lg flex items-center">
-                                        <p class="w-3/4 h-1/2 text-white text-lg font-bold font-inter">Employee Document Requests</p>
+                                    <div class="w-3/4 rounded-lg flex items-center">
+                                        <p class="h-1/2 pl-5 text-white text-base font-bold font-inter">Employee Document Requests</p>
                                     </div>
-                                    <div class="w-1/4 h-1/2 bg-yellow-700 rounded-lg shadow-md flex justify-center items-center">
-                                        <p class="  h-8 text-center text-white text-2xl font-semibold font-inter">{{$num_reqs}}</p>
+                                    <div class="w-1/4 h-3/4 bg-yellow-700 rounded-lg shadow-md flex justify-center items-center">
+                                        <p class="h-8 text-center text-white text-2xl font-semibold font-inter">{{$num_reqs}}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="h-1/3 py-2">
+                            <div class="h-1/3 py-1">
                                 <div class="h-full bg-indigo-600 rounded-lg shadow flex items-center">
-                                    <div class="w-3/4 pl-5 bg-opacity-0 rounded-lg flex items-center">
-                                        <p class="w-3/4 h-1/2 text-white text-lg font-bold font-inter">Current Applicants</p>
+                                    <div class="w-3/4 rounded-lg flex items-center">
+                                        <p class="h-1/2 pl-5 text-white text-lg font-bold font-inter">Current Applicants</p>
                                     </div>
-                                    <div class="w-1/4 h-1/2 bg-indigo-700 rounded-lg shadow-md flex justify-center items-center">
-                                        <p class="  h-8 text-center text-white text-2xl font-semibold font-inter">{{$num_applicants}}</p>
+                                    <div class="w-1/4 h-3/4 bg-indigo-700 rounded-lg shadow-md flex justify-center items-center">
+                                        <p class="h-8 text-center text-white text-2xl font-semibold font-inter">{{$num_applicants}}</p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="h-1/3 py-2">
+                            <div class="h-1/3 py-1">
                                 <div class="h-full bg-red-600 rounded-lg shadow flex items-center">
-                                    <div class="w-3/4 pl-5 bg-opacity-0 rounded-lg flex items-center">
-                                        <p class="w-3/4 h-1/2 text-white text-lg font-bold font-inter">Employees On Leaves</p>
+                                    <div class="w-3/4 rounded-lg flex items-center">
+                                        <p class="h-1/2 pl-5 text-white text-lg font-bold font-inter">Employees On Leaves</p>
                                     </div>
-                                    <div class="w-1/4 h-1/2 bg-red-700 rounded-lg shadow-md flex justify-center items-center">
-                                        <p class="  h-8 text-center text-white text-2xl font-semibold font-inter">{{$num_onleave}}</p>
+                                    <div class="w-1/4 h-3/4 bg-red-700 rounded-lg shadow-md flex justify-center items-center">
+                                        <p class="h-8 text-center text-white text-2xl font-semibold font-inter">{{$num_onleave}}</p>
                                     </div>
                                 </div>
                             </div>
@@ -71,10 +71,10 @@
                 </div>
                 
                 <!-- Number of Employees -->
-                <div class="h-2/5 w-5/6 pr-2 pt-2">
-                    <div class="w-full h-full py-2 px-2 border border-black">
+                <div class="h-1/2 pr-2 pt-2">
+                    <div class="w-full h-full p-2 border border-black overflow-y-auto">
                         <form class="w-full h-full" action="{{route('update-dashboard')}}" method="get">
-                            <div class="flex h-1/5 items-center">
+                            <div class="flex h-1/4">
                                 <p class="w-3/4 text-yellow-600 text-xl font-bold font-inter">
                                     Number of Employees
                                 </p>
@@ -85,12 +85,12 @@
                                 </div>
                             </div>
                             <!-- dropdown option -->
-                            <div class="h-4/5 flex ">
+                            <div class="h-3/4 flex">
                                 <div class="w-1/2 h-full">
                                     <div class="h-1/2">
                                         <p class="h-1/4 font-inter">Place of Assignment</p>
                                         <select name="college" id="college"
-                                                class="block mt-2 w-full h-1/2 text-sm border-gray-300 rounded-md font-inter">
+                                                class="block mt-2 w-full text-sm border-gray-300 rounded-md font-inter">
                                             <option value="null"></option>
                                             <option class="uppercase" value="Accounting Office">Accounting Office</option>
                                             <option class="uppercase" value="Human Resources">Human Resources</option>
@@ -113,7 +113,7 @@
                                             <option value="School of Public Health">School of Public Health</option>
                                         </select>
                                     </div>
-                                    <div class="h-1/2 py-2 px-2 border border-black">
+                                    <div class="p-2 border border-black">
                                         @if($selected_college == 'null')
                                         
                                         @else
@@ -131,15 +131,16 @@
                     </div>
                 </div>
             </div>
+
             <!-- careers -->
-            <div class="w-[600px] border border-black px-3 py-3">
+            <div class="w-[555px] h-[430px] overflow-y-auto border border-black p-3">
                 <div class="h-14 bg-indigo-800 flex items-center">
                     <h1 class="text-indigo-50 text-2xl font-bold pl-5">PLM Careers!</h1>
                 </div>
-                <div class="flex ">
+                <div class="flex">
                     <div class="w-1/2 px-4 py-3 text-black text-base font-semibold">
                         Part Time
-                        <div class=" font-normal mt-2">
+                        <div class="font-normal mt-2">
                             @foreach($part_time as $pt)
                             <p class="mt-2">
                                 <span class="font-bold">{{$pt->college}} | </span>
@@ -172,29 +173,28 @@
         </div>
 
         <!-- Quicklinks -->
-        <div class="w-[1200px] h-1/5 px-5 py-5 shadow shadow-gray-300 bg-gradient-to-t from-red-300 to-red-700">
+        <div class="w-full h-1/5 px-5 py-5 shadow shadow-gray-300 bg-gradient-to-t from-red-300 to-red-700">
             <div class="h-1/4 mt-1 flex items-center space-x-3">
                 <img class="w-14 h-14" src="https://plm.edu.ph/images/Seal/PLM_Seal_BOR-approved_2014.png"/>
                 <p class="h-6 text-gray-200 text-xl font-extrabold font-inter">Quick Links</p>
             </div>
-            <div class="h-3/4 mt-4 flex space-x-7">
-                <a href="https://www.plm.edu.ph">
-                    <x-button-blue class="w-60 h-12 text-base">
+            <div class="h-3/4 flex flex-wrap">
+                <a target="_blank" href="https://www.plm.edu.ph">
+                    <x-button-blue class="w-60 h-12 m-4 text-base">
                         PLM Website
                     </x-button-blue>
                 </a>
-                <a href="">
-                    <x-button-blue class="w-60 h-12 text-base">
+                <a target="_blank" href="">
+                    <x-button-blue class="w-60 h-12 m-4 text-base">
                         HR Request Form
                     </x-button-blue>
                 </a>
-                <a href="">
-                    <x-button-blue class="w-60 h-12 text-base">
+                <a target="_blank" href="{{ route('guest-jobs') }}">
+                    <x-button-blue class="w-60 h-12 m-4 text-base">
                         PLM Application Site
                     </x-button-blue>
                 </a>
             </div>
-        </div>
-        
+        </div>  
     </div>
 </x-admin-layout>

@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="mt-3 text-indigo-800 hover:text-indigo-700 hover:underline">
-        <a href="{{ route('landing-page') }}" ">
+        <a href=" ">
             <i>Go Back to Landing Page</i>
         </a>
     </div>

@@ -1,6 +1,6 @@
 <x-admin-layout>
-    <div class="px-5 py-5 w-full h-full">
-        <div class="w-full h-14 bg-indigo-800 flex items-center">
+    <div class="px-5 h-screen">
+        <div class=" h-14 mt-5 bg-indigo-800 flex items-center">
             <p class="ml-5 text-white text-2xl font-bold font-inter">Leave Credit</p>
         </div>
 
@@ -11,71 +11,86 @@
             {{ session('message') }} 
         </div>
         @endif
-        <div class="w-[1014px] bg-slate-100 rounded-xl my-3 py-5 flex justify-start font-inter text-base flex-wrap">
-            <!-- complete attendance -->
-            <div class="w-[420px] flex flex-wrap justify-center border-r border-black">
-                <p>For Employees w/ Complete Attendance</p>
+
+        <div class="flex flex-wrap justify-center">
+
+            <div class="m-2 w-[500px] rounded-md bg-white shadow shadow-gray-300 hover:bg-gray-100">
+                <!-- complete attendance -->
                 <a href="{{route('lc-complete-attendance')}}">
-                    <x-button-gold class="w-56 h-12 py-2">
-                        Compute Earned Leave Credits
-                    </x-button-gold>
+                    <div class="text-xl w-full h-full uppercase tracking-widest font-medium px-5 py-5">
+                        <p>Complete Attendance</p>
+                        <p class="text-sm tracking-wider text-indigo-800 mb-3">leave credit</p>
+                    </div>
                 </a>
             </div>
-            <!-- w/ Absences, Late, Undertime, Overtime -->
-            <form action="{{ route('lc-computation') }}" method="post">
-                @csrf
-                <div class="w-[450px] ml-5 flex flex-wrap justify-center">
-                    <p>For Employees w/ Absences, Late, Undertime, Overtime</p>
-                    <div class="mt-2 mx-12">
-                        <x-input id="id" class="block mt-1 w-72 font-bold" type="text" name="id"
-                        placeholder="Employee ID" autofocus required/>
-                    </div>
-                    <div class="mt-2 mx-12 min-h-max flex justify-center">
-                        <x-button-gold class="w-28 mt-2">
-                            Apply
-                        </x-button-gold>
-                    </div>
-                </div>
-            </form>
-            <hr class="w-[900px] my-7">
-            <!-- for resignation -->
-            <form action="{{ route('lc-resignation') }}" method="post">
-                @csrf
-                <div class="w-[420px] flex flex-wrap justify-center border-r border-black">
-                    <p>For Resignation</p>
-                    <div class="mt-2 mx-12">
-                        <x-input id="id" class="block mt-1 w-72 font-bold" type="text" name="id"
-                        placeholder="Employee ID" autofocus required/>
-                        <x-input id="name" class="block mt-1 w-72 font-bold" type="text" name="name"
-                        placeholder="Employee Name" required/>
-                    </div>
-                    <div class="mt-2 mx-12 min-h-max flex justify-center">
-                        <x-button-gold class="w-28 mt-2">
-                            Apply
-                        </x-button-gold>
-                    </div>
-                </div>
-            </form>
-            <!-- for retirement -->
-            <form action="{{ route('lc-retirement') }}" method="get">
-                @csrf
-                <div class="w-[450px] ml-5 flex flex-wrap justify-center">
-                    <p>For Retirement</p>
-                    <div class="mt-2 mx-12">
-                        <x-input id="id" class="block mt-1 w-72 font-bold" type="text" name="id"
-                        placeholder="Employee ID" autofocus required/>
-                        <x-input id="name" class="block mt-1 w-72 font-bold" type="text" name="name"
-                        placeholder="Employee Name" required/>
-                    </div>
-                    <div class="mt-2 mx-12 min-h-max flex justify-center">
-                        <x-button-gold class="w-28 mt-2">
-                            Apply
-                        </x-button-gold>
-                    </div>
-                </div>
-            </form>
-        </div>
 
-    </div> 
+            <div class="m-2 w-[500px] rounded-md bg-white shadow shadow-gray-300 px-5 py-5">
+                <!-- w/ Absences, Late, Undertime, Overtime -->
+                <form action="{{ route('lc-computation') }}" method="post">
+                    @csrf
+                    <div class="text-xl uppercase tracking-widest font-medium">
+                        <p>Summary - computation</p>
+                        <p class="text-sm tracking-wider text-indigo-800 mb-3">leave credit</p>
+                        <div class="w-full h-full flex flex-wrap justify-center m-3">
+                            <x-input id="id" class="w-72 font-bold" type="text" name="id"
+                            placeholder="Employee ID" autofocus required/>
+                        </div>
+                        <div class="flex justify-center">
+                            <x-button-gold class="p-2">
+                                Compute
+                            </x-button-gold>    
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="m-2 w-[500px] rounded-md bg-white shadow shadow-gray-300 px-5 py-5">
+                <!-- w/ Absences, Late, Undertime, Overtime -->
+                <form action="{{ route('lc-resignation') }}" method="post">
+                    @csrf
+                    <div class="text-xl uppercase tracking-widest font-medium">
+                        <p>Resignation</p>
+                        <p class="text-sm tracking-wider text-indigo-800 mb-3">leave credit</p>
+                        <div class="w-full h-full flex flex-wrap justify-center m-3">
+                            <x-input id="id" class="block mt-1 w-72 font-bold" type="text" name="id"
+                            placeholder="Employee ID" autofocus required/>
+                            <x-input id="name" class="block mt-1 w-72 font-bold" type="text" name="name"
+                            placeholder="Employee Name"/>
+                            <x-input id="vl" class="block mt-1 w-72 font-bold" type="text" name="vl"
+                            placeholder="Vacation Leave Credit"/>
+                            <x-input id="sl" class="block mt-1 w-72 font-bold" type="text" name="sl"
+                            placeholder="Sick Leave Credit"/>
+                        </div>
+                        <div class="flex justify-center">
+                            <x-button-gold class="p-2">
+                                Compute
+                            </x-button-gold>    
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="m-2 w-[500px] rounded-md bg-white shadow shadow-gray-300 px-5 py-5">
+                <!-- for retirement -->
+                <form action="{{ route('lc-retirement') }}" method="get">
+                    @csrf
+                    <div class="text-xl uppercase tracking-widest font-medium">
+                        <p>Retirement</p>
+                        <p class="text-sm tracking-wider text-indigo-800 mb-3">leave credit monetization</p>
+                        <div class="w-full h-full flex flex-wrap justify-center m-3">
+                            <x-input id="id" class="block mt-1 w-72 font-bold" type="text" name="id"
+                            placeholder="Employee ID" autofocus required/>
+                            <x-input id="name" class="block mt-1 w-72 font-bold" type="text" name="name"
+                            placeholder="Employee Name" required/>
+                        </div>
+                        <div class="flex justify-center">
+                            <x-button-gold class="p-2">
+                                Compute
+                            </x-button-gold>    
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 </x-admin-layout>
