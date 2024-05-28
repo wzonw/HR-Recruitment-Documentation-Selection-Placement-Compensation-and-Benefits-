@@ -1,17 +1,17 @@
 <x-admin-layout>
-    <div class="ml-10 mt-5 h-screen">
-        <div class="w-[1000px] h-14 mt-5 bg-indigo-800 flex items-center">
-            <p class="ml-5 text-white text-2xl font-bold font-inter">
+    <div class="h-full p-5">
+        <div class="p-5 h-14 bg-indigo-800 flex items-center">
+            <p class="text-white text-2xl font-bold font-inter">
                 Leave Credit <span class="text-lg">(Complete Attendance)</span>
             </p>
         </div>
         
-        <div class="h-[530px] mt-5 overflow-auto">
+        <div class="w-full h-5/6 mt-5 overflow-auto">
             <h1 class="text-xl text-center font-bold">Month: {{date('F Y', strtotime(NOW()))}}</h1>
 
             <!-- LC Computation Table -->
             <h1 class="font-semibold">Leave Credit Computation</h1>
-            <table class="w-[1000px] table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
+            <table class="w-full table-fixed shadow border-black border text-sm text-left whitespace-normal rtl:text-right text-gray-500">
                 <!-- Header  -->
                 <thead class="text-black">
                     <tr class="h-10">

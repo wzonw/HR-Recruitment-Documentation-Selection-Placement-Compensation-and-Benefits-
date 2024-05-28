@@ -55,9 +55,9 @@
                     </div>
                     <!-- used terminal leave formula -->
                     <div class="w-full pl-44 my-2 space-y-1">
-                        <p class="text-gray-400">Salary x Accumulated Leave Credits x 0.0478087</p>
-                        <p>{{number_format($job->salary, 2, '.', '')}} x {{$lc}} x 0.0478087</p>
-                        <p class="font-bold text-indigo-800">= P {{number_format($job->salary*$lc*0.0478087, 2, '.', ',')}}</p>
+                        <p class="text-gray-400">Salary x Accumulated Leave Credits x 0.0481927</p>
+                        <p>{{number_format($job->salary, 2, '.', '')}} x {{$lc}} x 0.0481927</p>
+                        <p class="font-bold text-indigo-800">= P {{number_format($job->salary*$lc*0.0481927, 2, '.', ',')}}</p>
                     </div>
                 </div>
             </div>

@@ -1,7 +1,7 @@
 <x-admin-layout>
     <div class="h-auto font-inter flex flex-wrap px-3">
-        <div class="w-full h-4/5 flex flex-wrap py-2">
-            <div class="w-[555px] h-[430px]">
+        <div class="w-full h-4/5 flex flex-wrap ">
+            <div class="w-[555px] h-[430px] my-2">
                 <div class="h-1/2 flex">
                     <!-- Profile -->
                     <div class="w-1/3 h-full shadow-md">
@@ -133,7 +133,7 @@
             </div>
 
             <!-- careers -->
-            <div class="w-[555px] h-[430px] overflow-y-auto border border-black p-3">
+            <div class="w-[555px] h-[430px] overflow-y-auto border border-black my-2 p-3">
                 <div class="h-14 bg-indigo-800 flex items-center">
                     <h1 class="text-indigo-50 text-2xl font-bold pl-5">PLM Careers!</h1>
                 </div>

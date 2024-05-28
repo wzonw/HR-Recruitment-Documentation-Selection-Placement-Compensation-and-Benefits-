@@ -1,5 +1,5 @@
 <x-admin-layout>
-    <div class="px-5 h-screen">
+    <div class="px-5 h-auto">
         <div class=" h-14 mt-5 bg-indigo-800 flex items-center">
             <p class="ml-5 text-white text-2xl font-bold font-inter">Leave Credit</p>
         </div>

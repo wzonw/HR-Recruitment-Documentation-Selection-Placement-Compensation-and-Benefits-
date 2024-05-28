@@ -34,7 +34,7 @@
                             <td class="w-20 text-center border-r border-black text-red-600">{{$vl_used}}</td>
                             <td class="w-20 text-center border-r border-black text-red-600">{{$sl_used}}</td>
                             <td class="w-28 text-center border-r border-black">
-                                @if($undertime == null)
+                                @if($undertime == null) 
                                     <p></p>
                                 @else
                                     {{$undertime}}
@@ -73,7 +73,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Rows -->
+                        <!-- 1st Row -->
                         <tr class="h-10 border border-black text-red-500">
                             <td class="w-20 text-center border-r border-black text-black">{{$vl}}</td>
                             <td class="w-20 text-center border-r border-black text-black">{{$sl}}</td>
@@ -94,16 +94,35 @@
                             </td>
                             <td class="w-20 text-center border-r border-black"></td>
                         </tr>
+                        <!-- 2nd Row -->
                         <tr class="h-10 border border-t-2 border-black text-black bg-green-50">
                             <td class="w-20 text-center border-r border-black text-black font-bold">
-                                <input name="new_vl" type="number" readonly
-                                    value="{{number_format($vl += - ($undertime + $late + $vl_used), 3, '.', '')}}"
-                                    class="w-28 h-8 ml-3 text-center text-sm bg-green-50 border-none">
+                                @if(number_format($vl_new = $vl - ($undertime + $late + $vl_used), 3, '.', '') < 0)
+                                    <p class="text-center text-red-500 text-sm bg-green-50 border-none">
+                                        {{number_format($vl_new, 3, '.', '')}}
+                                    </p>
+                                    <input name="new_sl" type="number" readonly hidden
+                                        value="{{number_format(0, 3, '.', '')}}"
+                                        class="w-28 h-8 ml-3 text-center text-red-500 text-sm bg-green-50 border-none">
+                                @elseif(number_format($vl_new = $vl - ($undertime + $late + $vl_used), 3, '.', '') >= 0)
+                                    <input name="new_sl" type="number" readonly
+                                        value="{{number_format($vl_new, 3, '.', '')}}"
+                                        class="w-28 h-8 ml-3 text-center text-blue-500 text-sm bg-green-50 border-none">
+                                @endif
                             </td>
                             <td class="w-20 text-center border-r border-black text-black font-bold">
-                                <input name="new_sl" type="number" readonly
-                                    value="{{number_format($sl += - $sl_used, 3, '.', '')}}"
-                                    class="w-28 h-8 ml-3 text-center text-sm bg-green-50 border-none">
+                                @if(number_format($sl_new = $sl - $sl_used, 3, '.', '') < 0)
+                                    <p class="text-center text-red-500 text-sm bg-green-50 border-none">
+                                        {{number_format($sl_new, 3, '.', '')}}
+                                    </p>
+                                    <input name="new_sl" type="number" readonly hidden
+                                        value="{{number_format(0, 3, '.', '')}}"
+                                        class="w-28 h-8 ml-3 text-center text-red-500 text-sm bg-green-50 border-none">
+                                @elseif(number_format($sl_new = $sl - $sl_used, 3, '.', '') >= 0)
+                                    <input name="new_sl" type="number" readonly
+                                        value="{{number_format($sl_new, 3, '.', '')}}"
+                                        class="w-28 h-8 ml-3 text-center text-blue-500 text-sm bg-green-50 border-none">
+                                @endif
                             </td>
                             <td class="w-20 text-center border-r border-black"></td>
                             <td class="w-28 text-center border-r border-black"></td>
@@ -164,13 +183,33 @@
                     </tbody>
                 </table>
             </form>
+            
             <!-- LWOP or No enough VL -->
             <h1 class="font-inter mt-3 font-semibold">Salary Deduction (LWOP)</h1>
                 <div class="font-inter pl-5 border-b">
-                @if($vl < 0)
-                    <p> VL Credit: {{number_format($vl, 3, '.', '')}}</p>
+                @if($vl_new < 0)
+                    <p> VL Credit: {{number_format($vl_new, 3, '.', '')}}</p>
                     <p> LC Deduction: {{number_format($undertime + $late, 3, '.', '')}}</p>
-                    <p class="text-red-600"> Remaining Balance: {{number_format($lc_deduc = abs($vl), 3, '.', '')}}</p>
+                    <p class="text-red-600"> Remaining Balance: {{number_format($lc_deduc = abs($vl_new), 3, '.', '')}}</p>
+                    <p>Equivalent Working Hours: 
+                            {{$eqwh = number_format($lc_deduc/0.005208, 2, '.', '')}}
+                    </p>
+
+                    <div class="absolute ml-[600px] mt-[-96px]">
+                        <p> Salary: {{$salary = 20000}}</p>
+                        <p>Hourly Wage = Salary / 176 Hours </p>
+                        <p>Hourly Wage = {{$hw = number_format($salary/176, 2, '.', ',')}}</p>
+                        
+                    </div>
+
+                    <div class="pt-2 pb-3 pl-72">
+                        <p>Deduction: hourly wage * EQWH</p>
+                        <p class="text-red-600">Deduction: {{number_format($deduction1 = $hw * $eqwh, 2, '.', ',')}}</p>
+                    </div>
+                @elseif($sl_new < 0)
+                    <p> LC Deduction: {{number_format($sl_used, 3, '.', '')}}</p>
+                    <p> SL Credit: <span class="text-red-500">{{number_format($sl_new, 3, '.', '')}}</span></p>
+                    <p class="text-blue-600"> Remaining Balance: {{number_format($lc_deduc = abs($sl), 3, '.', '')}}</p>
                     <p>Equivalent Working Hours: 
                             {{$eqwh = number_format($lc_deduc/0.005208, 2, '.', '')}}
                     </p>
