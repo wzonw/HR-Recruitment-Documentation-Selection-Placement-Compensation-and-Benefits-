@@ -16,11 +16,6 @@
                 <th scope="col" class="text-center py-2 w-6">
                     Remarks
                 </th>
-                @can('for-recruitment')
-                <th scope="col" class="">
-                    
-                </th>
-                @endif
             </tr>
         </thead>
         <tbody>
@@ -30,7 +25,7 @@
                     {{ Str::between($value, '_', '.') }}
                 </th>       
                 <td class="px-6 py-3">
-                    <a href="{{ route('view-file', ['file' => $value]) }}">{{ $value }} </a>
+                    <a href="{{ route('view-file', ['file' => $value]) }}" target="_blank">{{ $value }} </a>
                 </td>
                 @if($applicant->file_remarks != null)
                     @if($applicant->file_remarks[$index] == 'declined')

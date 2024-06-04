@@ -39,6 +39,12 @@ class ApplicantController extends Controller
         return view('job-details', ['job' => $job]);
     }
 
+    public function view_file($file)
+    {
+        $data = $file;
+        return view('livewire.view-file', compact('data'));
+    }
+
 
     /**
      * Show the form for creating a new resource.
@@ -220,7 +226,7 @@ class ApplicantController extends Controller
             $message = 'Error in uploading file.';
         }
 
-        return redirect()->route('applicant.dashboard.index')->with('message', $message);
+        return redirect()->route('applicant-dashboard')->with('message', $message);
     }
 
     public function send_otp(Request $request){
