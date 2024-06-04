@@ -195,6 +195,31 @@ class ApplicantController extends Controller
         return redirect()->route('guest-application-get', ['id'=>$request->job_id])->with('message', $message);
     }
 
+    public function update_personal_info(Request $request){
+        $applicant = Application::where('id', $request->id)->first();
+        if($applicant != null && $request != null){
+            $applicant->first_name = $request->first_name;
+            $applicant->middle_name = $request->middle_name;
+            $applicant->last_name = $request->last_name;
+            $applicant->suffix = $request->suffix;
+            if ($request->gender != 'x'){
+                $applicant->gender = $request->gender;
+            }
+            $applicant->birth_date = $request->birthdate;
+            $applicant->age = $request->age;
+            $applicant->email = $request->email;
+            $applicant->address = $request->address;
+            $applicant->contact_number = $request->mobile;
+            $applicant->save();
+            $message = "Successfully updated.";
+        }
+        else{
+            $message = "Error found.";
+        }
+        return redirect()->route('personal-info')->with('message', $message);
+
+    }
+
     public function add_file(Request $request){
         $request->validate([
             'file.*'=> ['required', 'mimes:pdf', 'max:1024'], //only accept pdf w/ max size 1mb

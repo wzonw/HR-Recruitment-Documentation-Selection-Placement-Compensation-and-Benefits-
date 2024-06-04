@@ -22,6 +22,16 @@ Route::get('/landing', function () {
 Route::get('/applicant/dashboard', [\App\Http\Controllers\Applicant\ApplicantController::class, 'index'])
 ->name('applicant-dashboard');
 
+Route::get('/applicant/personal/info', function () {
+    return view('livewire.user-personal-info');
+})->name('personal-info');
+
+Route::get('/applicant/personal/info/s', [\App\Http\Controllers\Applicant\ApplicantController::class, 'update_info'])
+->name('personal-info-update');
+
+Route::post('/applicant/personal/info/success', [\App\Http\Controllers\Applicant\ApplicantController::class, 'update_personal_info'])
+->name('personal-info-success');
+
 Route::get('/view/applicant/profile/{file}', [\App\Http\Controllers\Applicant\ApplicantController::class, 'view_file'])
 ->name('view-file');
 

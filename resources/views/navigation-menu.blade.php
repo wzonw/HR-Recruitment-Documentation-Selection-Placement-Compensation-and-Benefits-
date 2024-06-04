@@ -10,9 +10,14 @@
                     <x-nav-link href="{{ route('applicant-dashboard') }}" :active="request()->routeIs('applicant-dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-
+                    
                     {{-- only works when logged in --}}
                     @can('for-applicants')
+                    <x-nav-link href="{{ route('personal-info') }}" :active="request()->routeIs('personal-info')">
+                        {{ __('Personal Info') }}
+                    </x-nav-link>
+
+                    
                     <x-nav-link href="{{ route('application-section') }}" :active="request()->routeIs('application-section')">
                         {{ __('Application') }}
                     </x-nav-link>
