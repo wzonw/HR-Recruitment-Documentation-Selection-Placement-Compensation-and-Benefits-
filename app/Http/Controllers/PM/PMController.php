@@ -118,7 +118,9 @@ class PMController extends Controller
         $employees = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                             ->get([
                                 'employees.id',
-                                'employees.name',
+                                'employees.first_name',
+                                'employees.last_name',
+                                'employees.middle_name',
                                 'jobs_availables.job_name', 
                                 'jobs_availables.college',  
                                 'jobs_availables.dept', 
@@ -240,7 +242,9 @@ class PMController extends Controller
             ->orWhere('jobs_availables.dept', 'LIKE', '%' . $emp_search . '%')
             ->get([
                 'employees.id',
-                'employees.name',
+                'employees.first_name',
+                'employees.last_name',
+                'employees.middle_name',
                 'jobs_availables.job_name', 
                 'jobs_availables.college',  
                 'jobs_availables.dept', 

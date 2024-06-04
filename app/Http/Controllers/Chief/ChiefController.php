@@ -49,7 +49,9 @@ class ChiefController extends Controller
                                     'employee_leaves.end_date',
                                     'employee_leaves.type',
                                     'employee_leaves.remarks',
-                                    'employees.name',
+                                    'employees.first_name',
+                                    'employees.last_name',
+                                    'employees.middle_name',
                                 ]);
                                 
         foreach($leaves as $leave){
@@ -155,7 +157,9 @@ class ChiefController extends Controller
         $applications = Application::join('jobs_availables', 'jobs_availables.id', '=', 'applications.job_id')
                                     ->get([
                                         'applications.remarks',
-                                        'applications.name',
+                                        'applications.first_name',
+                                        'applications.middle_name',
+                                        'applications.last_name',
                                         'applications.remarks',
                                         'jobs_availables.college',
                                         'jobs_availables.job_name',
@@ -169,7 +173,9 @@ class ChiefController extends Controller
                                     'employee_leaves.end_date',
                                     'employee_leaves.type',
                                     'employee_leaves.remarks',
-                                    'employees.name',
+                                    'employees.first_name',
+                                    'employees.last_name',
+                                    'employees.middle_name',
                                 ]);
                                 
         foreach($leaves as $leave){
@@ -205,7 +211,9 @@ class ChiefController extends Controller
                                     'employee_leaves.type',
                                     'employee_leaves.leave_form',
                                     'employee_leaves.remarks',
-                                    'employees.name', 
+                                    'employees.first_name',
+                                    'employees.last_name',
+                                    'employees.middle_name', 
                                     'jobs_availables.status',
                                     'jobs_availables.college',
                                 ]);
@@ -228,7 +236,9 @@ class ChiefController extends Controller
                                     'employee_leaves.type',
                                     'employee_leaves.leave_form',
                                     'employee_leaves.remarks',
-                                    'employees.name', 
+                                    'employees.first_name',
+                                    'employees.last_name',
+                                    'employees.middle_name',
                                     'jobs_availables.status',
                                     'jobs_availables.college',
                                 ]);
@@ -326,7 +336,9 @@ class ChiefController extends Controller
                                 'employee_leaves.type',
                                 'employee_leaves.leave_form',
                                 'employee_leaves.remarks',
-                                'employees.name', 
+                                'employees.first_name',
+                                'employees.last_name',
+                                'employees.middle_name',
                                 'jobs_availables.status',
                                 'jobs_availables.college',
                             ]);

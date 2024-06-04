@@ -292,12 +292,13 @@ class RecruitmentController extends Controller
                         ->first();    
 
         if ($status == null && $request->status != null){
-            $password = Str::of($applicant->name)->remove(' ');
+            $name = $applicant->first_name.''.$applicant->last_name;
+            $password = Str::of($name)->remove(' ');
             $password = strtolower($password);
 
             if($account == null){
                 User::create([
-                    'name' => $applicant->name,
+                    'name' => $applicant->first_name.' '.$applicant->last_name,
                     'email' => $applicant->email,
                     'password' => Hash::make($password),
                     'application_id' => $request->id,
@@ -361,8 +362,9 @@ class RecruitmentController extends Controller
         $emp_w_job = Employee::where('job_id', $applicant->job_id)
                             ->where('active', 'Y')
                             ->count();
-        
-        $emp_acc = Employee::where('name', $applicant->name)
+        $name = $applicant->first_name.' '.$applicant->last_name;
+        $emp_acc = Employee::where('first_name', $applicant->first_name)
+                            ->where('last_name', $applicant->last_name)
                             ->where('email', $applicant->email)
                             ->where('active', 'Y')
                             ->count();
@@ -387,22 +389,34 @@ class RecruitmentController extends Controller
 
         if($emp_w_job == 0 && $emp_acc == 0){
             // create employee record
+            $job = JobsAvailable::where('id', $applicant->job_id)->first();
+            $school_email = Str::charAt($applicant->first_name, 0).Str::charAt($applicant->middle_name, 0).$applicant->last_name;
             Employee::create([
                 'job_id' => $applicant->job_id,
-                'name' => $applicant->name,
+                'employee_type' => $job->status,
+                'school_email' => strtolower($school_email),
+                'first_name' => $applicant->first_name,
+                'middle_name' => $applicant->middle_name,
+                'last_name' => $applicant->last_name,
+                'age' => $applicant->age,
+                'gender' => $applicant->gender,
+                'personal_email' => $applicant->email,
+                'phone' => $applicant->contact_number,
+                'birth_date' => $applicant->birth_date,
+                'address' => $applicant->address,
+                'start_of_employment' => NOW(),
             ]);
 
             $applicant->remarks = 'Employee';
             $applicant->save();
-            
-            $message = $applicant->name.' is now an employee!';
+            $message = $name.' is now an employee!';
         }
         elseif($emp_w_job == 0 && $emp_acc == 1){
             $job = JobsAvailable::where('id', $applicant->job_id)
                                 ->where('active', 'Y')
                                 ->first();
 
-            $emp = Employee::where('name', $applicant->name)
+            $emp = Employee::where('name', $name)
                             ->where('email', $applicant->email)
                             ->where('active', 'Y')
                             ->first();
@@ -413,7 +427,7 @@ class RecruitmentController extends Controller
             $applicant->remarks = 'Employee';
             $applicant->save();
             
-            $message = $applicant->name.' is promoted to '.$job->job_name;
+            $message = $name.' is promoted to '.$job->job_name;
         }
         else{
             $message = 'There is still an employee with the same job.';
