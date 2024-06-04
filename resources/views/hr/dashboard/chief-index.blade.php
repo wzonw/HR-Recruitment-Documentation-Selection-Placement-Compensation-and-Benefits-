@@ -53,7 +53,7 @@
                         <tbody>
                             @foreach($leaves as $leave)
                             <tr class="border-t h-8 ">
-                                <td class="w-36 pl-3">{{$leave->name}}</td>
+                                <td class="w-36 pl-3">{{$leave->first_name}} {{$leave->last_name}}</td>
                                 <td class="w-36 text-center">{{$leave->start_date}} - {{$leave->end_date}}</td>
                                 <td class="w-32 pl-3">{{$leave->type}}</td>
                                 @if(strtolower($leave->remarks) == 'approved')
@@ -72,16 +72,16 @@
         </div>
         <div class="w-1/2">
             <!-- Jobs Applications -->
-            <div class="h-min ml-3 bg-white shadow py-5">
+            <div class="ml-3 bg-white shadow py-5">
                 <div class=" px-5 h-9 text-yellow-600 text-xl font-bold font-inter flex items-center">
                     <p>Job Applications</p>
                 </div>
-                <div class="flex flex-wrap overflow-auto">
+                <div class="max-h-[280px] flex flex-wrap overflow-auto">
                     @foreach($applications as $application)
                         @if(strtolower($application->remarks) == 'inactive' || strtolower($application->remarks) == 'employee')
                         @else
                             <div class="w-60 min-h-max bg-neutral-100 rounded shadow text-sm mt-4 ml-5 px-2 py-2">
-                                <p class="font-bold">{{$application->name}}</p>
+                                <p class="font-bold">{{$application->first_name}} {{$application->middle_name}} {{$application->last_name}} {{$application->suffix}}</p>
                                 <p class="text-neutral-400">Applied for 
                                     <span class="font-bold text-black">{{$application->college}} {{$application->job_name}}</span>
                                 </p>
@@ -160,7 +160,7 @@
                                 <option value="Plantilla">Plantilla</option>
                                 <option value="COS/JO">COS/JO</option>
                             </select>
-                            <div class="mt-5 py-2 px-2 border border-black">
+                            <div class="max-h-14 overflow-auto mt-5 py-2 px-2 border border-black">
                                 @if($selected_position == 'null' && $selected_college == 'null' && $selected_status == 'null')
                                 @elseif($selected_position != 'null' && $selected_college != 'null' && $selected_status == 'null')   
                                     <p class="font-bold">{{$selected_college}}</p>

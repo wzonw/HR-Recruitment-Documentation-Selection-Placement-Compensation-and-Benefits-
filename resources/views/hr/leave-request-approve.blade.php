@@ -50,7 +50,7 @@
                                 @foreach ($leaves as $leave)
                                 <tr class="h-10 shadow-sm text-black">
                                     <td class="w-36 pl-3 hover:text-gray-400">
-                                        <a href="{{route('leave-request-id', [$leave->emp_id, $leave->type])}}">{{ $leave->name }}</a>
+                                        <a href="{{route('leave-request-id', [$leave->emp_id, $leave->type])}}">{{ $leave->first_name }} {{ $leave->last_name }}</a>
                                     </td>
                                     <td class="w-24 pl-3">{{ $leave->status }}</td>
                                     <td class="w-36 pl-3">{{ $leave->college }}</td>

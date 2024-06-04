@@ -11,7 +11,7 @@
                     Full Name:
                 </p>
                 <p class="w-32 min-h-max text-black text-base font-medium font-inter leading-loose">
-                    {{ $user->name }}
+                    {{ $user->first_name }} {{$user->middle_name}} {{$user->last_name}} {{$user->suffix}}
                 </p> 
             </div>
             <div class="flex space-x-3">
@@ -47,12 +47,12 @@
             </p>
         </div>
         <div class="w-80 h-56 border-l border-r border-b border-black">
-            <div class="bg-blue-50 w-72 h-8 text-left mt-2 ml-3 px-3 py-1 rounded">
-                TaylorDelaCruz_Resume.pdf
+            @forelse ($files->file as $index=> $value)
+            <div class="bg-blue-50 w-72 h-auto text-left mt-2 ml-3 px-3 py-1 rounded">
+                {{$value}}
             </div>
-            <div class="bg-blue-50 w-72 h-8 text-left mt-2 ml-3 px-3 py-1 rounded">
-                text.pdf
-            </div>
+            @empty
+            @endforelse
         </div>
     </div>
     <div>

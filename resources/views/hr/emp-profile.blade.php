@@ -16,7 +16,7 @@
                 <!-- Applicant name, status button -->
                 <div class="items-baseline space-y-3">
                     <p class="w-fit min-h-max  text-indigo-800 text-3xl font-bold font-inter">
-                        {{ $user->name }}
+                        {{ $user->first_name }} {{$user->middle_name}} {{$user->last_name}} {{$user->suffix}}
                     </p>
                     <div class="inline-flex space-x-5">
                         <p class="min-w-max h-5 text-black text-base font-medium font-inter">

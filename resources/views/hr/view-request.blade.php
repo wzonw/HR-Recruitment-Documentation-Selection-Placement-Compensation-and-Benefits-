@@ -32,7 +32,7 @@
                 @foreach($requests as $req)
                     <div class="w-[1019px] py-2 border-b flex text-inter text-sm">
                         <p class="w-56 min-h-max px-2">{{$req->emp_id}}</p>
-                        <p class="w-48 min-h-max px-3">{{$req->name}}</p>
+                        <p class="w-48 min-h-max px-3">{{$req->first_name}} {{$req->last_name}}</p>
                         <p class="w-60 min-h-max px-1">{{$req->documents}}</p>
                         <p class="w-56 min-h-max px-1">{{$req->purpose}}</p>
                         <!-- for pm -->

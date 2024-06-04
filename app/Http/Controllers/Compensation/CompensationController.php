@@ -60,7 +60,9 @@ class CompensationController extends Controller
                                     'employee_leaves.type',
                                     'employee_leaves.leave_form',
                                     'employee_leaves.remarks',
-                                    'employees.name', 
+                                    'employees.first_name', 
+                                    'employees.middle_name', 
+                                    'employees.last_name', 
                                     'jobs_availables.status',
                                     'jobs_availables.college',
                                 ]);
@@ -80,7 +82,9 @@ class CompensationController extends Controller
                                     'employee_leaves.type',
                                     'employee_leaves.leave_form',
                                     'employee_leaves.remarks',
-                                    'employees.name', 
+                                    'employees.first_name', 
+                                    'employees.middle_name', 
+                                    'employees.last_name',
                                     'jobs_availables.status',
                                     'jobs_availables.college',
                                     'jobs_availables.dept',
@@ -102,7 +106,9 @@ class CompensationController extends Controller
                         'dtrs.undertime',
                         'dtrs.overtime',
                         'dtrs.late',
-                        'employees.name',
+                        'employees.first_name', 
+                        'employees.middle_name', 
+                        'employees.last_name',
                     ]);
         return view('hr.time-keeping', compact('data'));
     }
@@ -257,7 +263,8 @@ class CompensationController extends Controller
 
     public function lc_resignation(Request $request){
         $emp = Employee::where('id', $request->id)
-                        ->where('name', 'LIKE', '%'.$request->name.'%')
+                        ->where('first_name', 'LIKE', '%'.$request->first_name.'%')
+                        ->where('last_name', 'LIKE', '%'.$request->last_name.'%')
                         ->where('active', 'Y')
                         ->first();
         if($emp == null){

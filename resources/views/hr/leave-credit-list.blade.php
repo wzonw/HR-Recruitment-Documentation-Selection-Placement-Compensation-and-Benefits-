@@ -27,7 +27,7 @@
                     @foreach($employees as $emp)
                     <tr class="h-10 border border-black text-black">
                         <td class="w-5 text-center border-r border-black">{{$emp->id}}</td>
-                        <td class="w-36 text-center border-r border-black">{{$emp->name}}</td>
+                        <td class="w-36 text-center border-r border-black">{{$emp->first_name}} {{$emp->last_name}}</td>
                         <td class="w-20 text-center border-r border-black">{{$emp->vl_credit}}</td>
                         <td class="w-20 text-center border-r border-black">{{$emp->sl_credit}}</td>
                         <td class="w-20 text-center border-r border-black">

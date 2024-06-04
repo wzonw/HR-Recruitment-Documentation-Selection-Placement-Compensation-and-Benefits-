@@ -16,11 +16,11 @@
                 <th scope="col" class="text-center py-2 w-6">
                     Remarks
                 </th>
-                @can('for-recruitment')
+                {{--@can('for-recruitment')--}}
                 <th scope="col" class="">
                     
                 </th>
-                @endif
+                {{--@endif--}}
             </tr>
         </thead>
         <tbody>
@@ -30,7 +30,7 @@
                     {{ Str::between($value, '_', '.') }}
                 </th>       
                 <td class="px-6 py-3">
-                    <a href="{{ route('view-file', ['file' => $value]) }}">{{ $value }} </a>
+                    <a href="{{ route('view-file', ['file' => $value]) }}" target="_blank">{{ $value }} </a>
                 </td>
                 @if($applicant->file_remarks != null)
                     @if($applicant->file_remarks[$index] == 'declined')
@@ -46,7 +46,7 @@
                     <td class="pl-2 py-3 text-blue-600">
                     </td>
                 @endif
-                @can('for-recruitment')
+                {{--@can('for-recruitment')--}}
                 <td class="pl-2 py-3  w-10">
                     <div class="flex space-x-3">
                         <div class="bg-green-700 w-5 flex justify-center rounded">
@@ -65,7 +65,7 @@
                         </div>
                     </div>
                 </td>
-                @endif
+                {{--@endif--}}
             </tr>
             @empty
             <span>Sorry, empty!</span>

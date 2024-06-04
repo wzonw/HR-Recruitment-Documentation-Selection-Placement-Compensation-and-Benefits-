@@ -19,8 +19,8 @@
             <!-- employee details -->
             <div class="text-sm">
                 <p class="text-gray-400">Employee Details:</p>
-                <p>{{$emp->name}}</p>
-                <p>{{$emp->email}}</p>
+                <p>{{$emp->first_name}} {{$emp->last_name}}</p>
+                <p>{{$emp->personal_email}}</p>
                 <p>{{$job->job_name}}</p>
             </div>
             <!-- table -->

@@ -139,10 +139,15 @@ class PMController extends Controller
 
         $leaves = EmployeeLeave::where('emp_id', $id)->get();
 
+        $files = Application::where('email', $user->personal_email)->first();
+
+        $files->file = json_decode($files->file);
+
         return view('hr.view-employee-profile', [
             'user' => $user,
             'job' => $job,
             'leaves' => $leaves,
+            'files' => $files,
         ]);
     }
 

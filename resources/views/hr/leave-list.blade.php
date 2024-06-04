@@ -31,7 +31,7 @@
                 <!-- Rows -->
                 @foreach ($leaves as $leave)
                 <tr class="h-10 shadow-sm">
-                    <td class="w-36 pl-3">{{ $leave->name }}</td>
+                    <td class="w-36 pl-3">{{ $leave->first_name }} {{ $leave->last_name }}</td> 
                     <td class="w-24 pl-3">{{ $leave->status }}</td>
                     <td class="w-36 pl-3">
                         @if($leave->dept == null)

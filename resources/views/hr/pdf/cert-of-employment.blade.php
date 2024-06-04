@@ -25,7 +25,7 @@
         <h2 class="text-center uppercase tracking-wide">Certificate of Employment</h2>
         <br>
         <p class="a">
-            This is to certify that Mr/Ms <span><b><u>{{$data->name}}</u></b></span> is employed as 
+            This is to certify that Mr/Ms <span><b><u>{{$data->first_name}} {{$data->last_name}}</u></b></span> is employed as 
             <b>{{$job->job_name}}</b> in Pamantasan ng Lungsod ng Maynila since 
             {{date('F j, Y',strtotime($data->created_at))}}.
         </p>

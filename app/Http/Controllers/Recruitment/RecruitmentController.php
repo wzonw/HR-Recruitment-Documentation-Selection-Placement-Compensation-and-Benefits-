@@ -336,23 +336,26 @@ class RecruitmentController extends Controller
         elseif($status != null && $request->status != null){
             $applicant->remarks = $request->status;
             $applicant->save();
-            //notif via db (system)
-            event(new StatusChanged($applicant));
-            $message = 'This applicant status is updated to '.$request->status;
-        }
-        elseif($status != null && $request->status == 'Signing of Documents'){
-            $applicant->remarks = $request->status;
-            $applicant->save();
 
-            $job = JobsAvailable::where('id', $applicant->job_id);
-
-            //notif via db (system)
-            event(new StatusChanged($applicant));
-
-            //notif via mail
-            Mail::to($applicant->email)->send(new ApplicantSigning($applicant, $job));
-
-            $message = 'This applicant status is updated to '.$request->status;
+            if($status != null && $request->status == 'Signing of Documents'){
+                $applicant->remarks = $request->status;
+                $applicant->save();
+    
+                $job = JobsAvailable::where('id', $applicant->job_id)->first();
+    
+                //notif via db (system)
+                event(new StatusChanged($applicant));
+    
+                //notif via mail
+                Mail::to($applicant->email)->send(new ApplicantSigning($applicant, $job));
+    
+                $message = 'This applicant status is updated to '.$request->status;
+            }
+            else{
+                //notif via db (system)
+                event(new StatusChanged($applicant));
+                $message = 'This applicant status is updated to '.$request->status;
+            }
         }
         else{
             $message = 'This applicant status is null.';
@@ -370,7 +373,7 @@ class RecruitmentController extends Controller
         $name = $applicant->first_name.' '.$applicant->last_name;
         $emp_acc = Employee::where('first_name', $applicant->first_name)
                             ->where('last_name', $applicant->last_name)
-                            ->where('email', $applicant->email)
+                            ->where('personal_email', $applicant->email)
                             ->where('active', 'Y')
                             ->count();
                             

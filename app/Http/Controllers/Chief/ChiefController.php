@@ -35,7 +35,9 @@ class ChiefController extends Controller
         $applications = Application::join('jobs_availables', 'jobs_availables.id', '=', 'applications.job_id')
                                     ->get([
                                         'applications.remarks',
-                                        'applications.name',
+                                        'applications.first_name',
+                                        'applications.middle_name',
+                                        'applications.last_name',
                                         'applications.remarks',
                                         'jobs_availables.college',
                                         'jobs_availables.job_name',
