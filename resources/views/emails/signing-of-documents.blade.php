@@ -17,7 +17,7 @@
 </head>
 <body>
     <div class="font-inter text-sm">
-        <h1>Dear {{$applicant}},</h1>
+        <h1>Dear {{$applicant->first_name}} {{$applicant->last_name}},</h1>
         <p> We are pleased to offer you the position <span class="font-semibold">{{ $job->job_name }}</span> 
             in {{$job->college}}. 
         </p>

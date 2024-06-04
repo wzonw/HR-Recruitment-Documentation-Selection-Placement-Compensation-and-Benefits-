@@ -192,7 +192,9 @@ class RecruitmentController extends Controller
                             ->orWhere('applications.remarks', null)
                             ->get([
                                 'applications.id',
-                                'applications.name',
+                                'applications.first_name',
+                                'applications.middle_name',
+                                'applications.last_name',
                                 'applications.contact_number',
                                 'applications.remarks',
                                 'jobs_availables.job_name', 
@@ -292,13 +294,16 @@ class RecruitmentController extends Controller
                         ->first();    
 
         if ($status == null && $request->status != null){
-            $name = $applicant->first_name.''.$applicant->last_name;
+            $name = $applicant->first_name.$applicant->last_name;
             $password = Str::of($name)->remove(' ');
             $password = strtolower($password);
 
             if($account == null){
                 User::create([
-                    'name' => $applicant->first_name.' '.$applicant->last_name,
+                    'first_name' => $applicant->first_name,
+                    'middle_name' => $applicant->middle_name,
+                    'last_name' => $applicant->last_name,
+                    'suffix' => $applicant->suffix,
                     'email' => $applicant->email,
                     'password' => Hash::make($password),
                     'application_id' => $request->id,
@@ -416,7 +421,8 @@ class RecruitmentController extends Controller
                                 ->where('active', 'Y')
                                 ->first();
 
-            $emp = Employee::where('name', $name)
+            $emp = Employee::where('first_name', $applicant->first_name)
+                            ->where('last_name', $applicant->last_name)
                             ->where('email', $applicant->email)
                             ->where('active', 'Y')
                             ->first();

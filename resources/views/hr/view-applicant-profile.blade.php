@@ -1,7 +1,7 @@
 <x-admin-layout>
     <div class="pt-2 space-y-10 h-screen">
         <!--Profile-->
-        <div class="w-[1119px] inline-flex">
+        <div class="inline-flex">
             <div class="relative opacity-30">
                 <img class="relative h-36 w-screen object-cover object-top" src="https://plm.edu.ph/images/banners/hero-banner-facade.jpg" />
             </div>
@@ -19,7 +19,7 @@
                         <!-- Applicant name, status button -->
                         <div class="items-baseline">
                             <p class="w-fit min-h-max  text-indigo-800 text-3xl font-bold font-inter">
-                                {{ $applicant->name. " ". $applicant->surname }}
+                                {{ $applicant->first_name. " ". $applicant->last_name }}
                             </p>
                             <p class="w-20 h-5 text-neutral-950 text-opacity-50 text-base font-normal font-inter">
                                 Applicant

@@ -31,7 +31,9 @@
                                     {{$applicant->id}}
                                 </td>
                                 <td class="w-1/6 px-5 font-medium hover:text-gray-400">
-                                    <a href="{{ route('view-applicant-profile', $applicant->id) }}">{{$applicant->name}}</a>
+                                    <a href="{{ route('view-applicant-profile', $applicant->id) }}">
+                                        {{$applicant->first_name}} {{$applicant->last_name}}
+                                    </a>
                                 </td>
                                 <td class="w-1/5 px-5">
                                     {{$applicant->job_name}}

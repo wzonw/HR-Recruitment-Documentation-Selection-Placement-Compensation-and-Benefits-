@@ -47,7 +47,7 @@
                     @foreach ($employees as $employee)
                     <tr class="odd:bg-white odd:dark:bg-white even:bg-gray-50 even:dark:bg-slate-100 dark:border-black">
                         <th scope="row" class="w-1/4 p-5 font-medium text-black hover:text-gray-400">
-                            <a href="{{ route('view-employee-profile', $employee->id) }}">{{$employee->first_name}}.{{$employee->last_name}} </a>
+                            <a href="{{ route('view-employee-profile', $employee->id) }}">{{$employee->first_name}} {{$employee->last_name}} </a>
                         </th>
                         <td class="w-1/4 p-5">
                             {{$employee->status}}

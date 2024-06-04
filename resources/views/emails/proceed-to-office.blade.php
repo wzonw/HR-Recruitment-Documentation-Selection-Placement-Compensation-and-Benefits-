@@ -19,7 +19,7 @@
 <body>
     <div>
         <div class="font-inter text-sm">
-            <h1>Dear {{$applicant->name}},</h1>
+            <h1>Dear {{$applicant->first_name}} {{$applicant->last_name}},</h1>
             <p>Congratulations! We are pleased to tell you that your application and credentials have been passed to the hiring office.</p>
             <p>Please, wait for the hiring office to contact you for your application status and futher instructions.</p>
             <p>Here is your login credentials to <a href="http://127.0.0.1:8000/login">our website</a>, <br>

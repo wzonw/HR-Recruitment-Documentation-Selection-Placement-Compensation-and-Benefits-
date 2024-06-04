@@ -116,7 +116,7 @@ class ApplicantController extends Controller
             };
             Application::create([
                 'job_id' => $request->input('job_id'),
-                'name' => $request->input('name'),
+                'first_name' => $request->input('name'),
                 'email' => $request->input('email'),
                 'contact_number' => $request->input('number'),
                 'file'=> $upload,
@@ -140,7 +140,7 @@ class ApplicantController extends Controller
                 };
                 Application::create([
                     'job_id' => $request->input('job_id'),
-                    'name' => $request->input('name'),
+                    'first_name' => $request->input('name'),
                     'email' => $request->input('email'),
                     'contact_number' => $request->input('number'),
                     'file'=> $upload,
@@ -166,7 +166,7 @@ class ApplicantController extends Controller
                     };
                     Application::create([
                         'job_id' => $request->input('job_id'),
-                        'name' => $request->input('name'),
+                        'first_name' => $request->input('name'),
                         'email' => $request->input('email'),
                         'contact_number' => $request->input('number'),
                         'file'=> $upload,

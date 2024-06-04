@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="font-inter text-sm">
-        <h1>Dear {{$applicant->name}},</h1>
+        <h1>Dear {{$applicant->first_name}} {{$applicant->last_name}},</h1>
         <p>Thank you for taking the time to apply in Pamantasan. After reviewing your application,
         we'd like to inform you that you did not passed the pre-screening of applicants. As 
         a result, we won't proceed with your application.</p>

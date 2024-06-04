@@ -14,10 +14,10 @@
 </head>
 <body>
     <div class="font-inter text-sm">
-        <h1>Dear {{$applicant}},</h1>
+        <h1>Dear {{$applicant->first_name}} {{$applicant->last_name}},</h1>
         <p> Congratulations! We would like to inform you that you passed the pre-screening for applicants. </p>
         <p>Here's your login credentials to <span class="text-slate-100 italic"><a href="http://127.0.0.1:8000/login">our website</a>,</span>
-        <br> Email: {{$email}} <br> 
+        <br> Email: {{$applicant->email}} <br> 
             Password: {{$password}}</p>
         <p>Please upload the following as soon as possible:
         <br> 1. Letter of Application (indicate the position title, item#, place of assignment, 

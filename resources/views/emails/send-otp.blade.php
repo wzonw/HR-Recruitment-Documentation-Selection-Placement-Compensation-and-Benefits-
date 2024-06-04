@@ -27,7 +27,7 @@
 <body>
     <div>
         <div class="font-inter text-sm">
-            <p class="text-lg">Dear {{$applicant->name}},</p>
+            <p class="text-lg">Dear {{$applicant->first_name}} {{$applicant->last_name}},</p>
             <p>This is your otp: <b class="text-base">{{$otp}}</b></p>
             <p>Please be informed that <b>otp will expire once input incorrectly</b>.</p>
             <p>Regards,<br>Recruitment Team</p>

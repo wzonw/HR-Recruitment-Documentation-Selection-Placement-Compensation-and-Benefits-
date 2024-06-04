@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="font-inter text-sm">
-        <h2>Dear {{$applicant}},</h2>
+        <h2>Dear {{$applicant->first_name}} {{$applicant->last_name}},</h2>
         <p> Congratulations! We would like to inform you that you passed the pre-screening for applicants. 
             <span>However, you have incomplete requirements.</span>
         </p>
