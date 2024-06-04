@@ -23,19 +23,11 @@
             <div class="sm:fixed sm:top-0 sm:left-0">
                 <img class="h-16 mt-6" src="https://www.plm.edu.ph/images/ui/plm-logo--white.png" alt="PLM">
             </div>
-            @if (Route::has('login'))
-                <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                    @auth
-                        @if(Auth::user()->id == 4)
-                            <a href="{{ route('dashboard-chief') }}" class="font-semibold hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                        @else
-                            <a href="{{ route('dashboard') }}" class="font-semibold hover:text-gray-900 focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500">Dashboard</a>
-                        @endif
-                    @else
-                        <a href="{{ route('login') }}" class="font-semibold focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500" style="color:white">Log in</a>
-                    @endauth
-                </div>
-            @endif
+
+            <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
+                <a href="{{ route('applicant-dashboard') }}" class="font-semibold focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500" style="color:white">Applicant Page (Log in)</a>
+            </div>
+
             <div class="sm:fixed text-center" style=" width: 50%;color: #2D349A; font-size: 64px; font-weight: 800; box-shadow:4px 4px 4px; border-radius:10px; border:1px; background-color:#ffffff8b;">
                 PLM APPLICANT PAGE 
             </div>

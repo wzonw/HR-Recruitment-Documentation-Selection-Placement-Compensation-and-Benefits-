@@ -8,9 +8,9 @@ use Livewire\Component;
 
 class UserProfileCover extends Component
 {
+    public $applicant;
     public function render()
     {
-        $applicant = Application::where('id', Auth::user()->application_id)->first();
-        return view('livewire.user-profile-cover', compact('applicant'));
+        return view('livewire.user-profile-cover');
     }
 }

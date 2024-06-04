@@ -11,7 +11,7 @@
         <!-- Applicant name, status button -->
         <div class="items-baseline">
             <p class="w-fit min-h-max  text-indigo-800 text-3xl font-bold font-inter">
-                {{ Auth::user()->name }}
+                {{ $applicant->name }}
             </p>
             <p class="w-20 h-5 text-neutral-950 text-opacity-50 text-base font-normal font-inter">
                 Applicant
@@ -23,19 +23,13 @@
             <div class="ml-3 items-center inline-flex space-x-3">
                 <img class="w-6 h-5 relative" src="https://uxwing.com/wp-content/themes/uxwing/download/communication-chat-call/email-envelop-open-icon.png">
                 <p class="text-left text-black text-base font-semibold font-inter leading-10">
-                    {{ Auth::user()->email }}
+                    {{ $applicant->email }}
                 </p>
             </div>
             <div class="ml-3 items-center inline-flex space-x-3">
                 <img class="w-6 h-5 relative" src="https://cdn-icons-png.flaticon.com/512/126/126523.png">
                 <p class="text-left text-black text-base font-semibold font-inter leading-10">
                     {{ $applicant->contact_number }}
-                </p>
-            </div>
-            <div class="ml-3 items-center inline-flex space-x-3">
-                <img class="w-6 h-5 relative" src="https://cdn-icons-png.flaticon.com/512/535/535239.png">
-                <p class="text-left text-black text-base font-semibold font-inter leading-10">
-                    {{ Auth::user()->address }}
                 </p>
             </div>
         </div>
