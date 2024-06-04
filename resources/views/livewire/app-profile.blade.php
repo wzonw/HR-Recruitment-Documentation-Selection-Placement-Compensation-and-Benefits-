@@ -76,8 +76,18 @@
                 </div>
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
-                    <x-label class="w-24" for="name" value="{{ __('Full Name') }}" />
-                    <x-input id="name" class="block mt-1 w-72 " type="text" name="name" :value="old('name')" required autofocus autocomplete="name" />
+                    <x-label class="w-24" for="first_name" value="{{ __('First Name') }}" />
+                    <x-input id="first_name" class="block mt-1 w-72 " type="text" name="first_name" :value="old('first_name')" required autofocus autocomplete="first_name" />
+                </div>
+
+                <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
+                    <x-label class="w-24" for="middle_name" value="{{ __('Middle Name') }}" />
+                    <x-input id="middle_name" class="block mt-1 w-72 " type="text" name="middle_name" :value="old('middle_name')" autocomplete="middle_name" />
+                </div>
+
+                <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">
+                    <x-label class="w-24" for="last_name" value="{{ __('Last Name') }}" />
+                    <x-input id="last_name" class="block mt-1 w-72 " type="text" name="last_name" :value="old('last_name')" required autocomplete="last_name" />
                 </div>
 
                 <div class="mt-4 mx-12 inline-flex justify-center items-center space-x-2">

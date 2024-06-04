@@ -96,7 +96,8 @@ class ApplicantController extends Controller
         
         $request->validate([
             'job_id'=> ['required', 'numeric'], //only numbers
-            'name'=> ['required', 'min:5', 'max:50', 'regex:/^[a-zA-Z \-\.]*$/'], //alpha, space, -, .
+            'first_name'=> ['required', 'min:3', 'max:50', 'regex:/^[a-zA-Z \-\.]*$/'], //alpha, space, -, .
+            'last_name'=> ['required', 'min:3', 'max:50', 'regex:/^[a-zA-Z \-\.]*$/'], //alpha, space, -, .
             'email'=> ['required', 'regex:/^.+@.+\.com$/'], //must have @ and .com
             'number'=> ['required', 'regex:/^(09\d{9}|\+639\d{9})+$/', 'min:11', 'max:13'], //"09,9digits", "+63,9digits"
             'file.*'=> ['required', 'mimes:pdf', 'max:1024'], //only accept pdf w/ max size 1mb
@@ -107,13 +108,14 @@ class ApplicantController extends Controller
                                     ->where('email', $request->email)
                                     ->orWhere('contact_number', $request->number)
                                     ->first();
+        $name = $request->input('first_name').$request->input('last_name');
         
         $files = [];
         if($application == null){
             if( $request -> has('file')){
                 foreach($request->file('file') as $f)
                 {
-                    $filename = Str::of($request->input('name'))->remove(' ');
+                    $filename = Str::of($name)->remove(' ');
                     $filename = $filename . '_' . $f->getClientOriginalName();
                     $path = ('uploads/file');
                     $f->move($path, $filename);
@@ -124,7 +126,9 @@ class ApplicantController extends Controller
             };
             Application::create([
                 'job_id' => $request->input('job_id'),
-                'name' => $request->input('name'),
+                'first_name' => $request->input('first_name'),
+                'middle_name' => $request->input('middle_name'),
+                'last_name' => $request->input('last_name'),
                 'email' => $request->input('email'),
                 'contact_number' => $request->input('number'),
                 'file'=> $upload,
@@ -148,7 +152,9 @@ class ApplicantController extends Controller
                 };
                 Application::create([
                     'job_id' => $request->input('job_id'),
-                    'name' => $request->input('name'),
+                    'first_name' => $request->input('first_name'),
+                    'middle_name' => $request->input('middle_name'),
+                    'last_name' => $request->input('last_name'),
                     'email' => $request->input('email'),
                     'contact_number' => $request->input('number'),
                     'file'=> $upload,
@@ -174,7 +180,9 @@ class ApplicantController extends Controller
                     };
                     Application::create([
                         'job_id' => $request->input('job_id'),
-                        'name' => $request->input('name'),
+                        'first_name' => $request->input('first_name'),
+                        'middle_name' => $request->input('middle_name'),
+                        'last_name' => $request->input('last_name'),
                         'email' => $request->input('email'),
                         'contact_number' => $request->input('number'),
                         'file'=> $upload,
