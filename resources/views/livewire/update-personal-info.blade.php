@@ -87,7 +87,7 @@
 
         <div class="my-2">
             <x-button-gold class="w-28" onclick="return confirm('Are you sure?')">
-                Apply
+                Update
             </x-button-gold>
         </div>
     </form>
