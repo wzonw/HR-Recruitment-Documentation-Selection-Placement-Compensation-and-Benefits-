@@ -50,15 +50,15 @@
                         </tr>
                         <tr class="h-7">
                             <td class="pl-2">Vacation Leave Credit</td>
-                            <td class="text-right">{{$emp->vl_credit}}</td>
+                            <td class="text-right">{{$emp->vacation_credits}}</td>
                         </tr>
                         <tr class="h-7">
                             <td class="pl-2">Sick Leave Credit</td>
-                            <td class="text-right border-b">{{$emp->sl_credit}}</td>
+                            <td class="text-right border-b">{{$emp->sick_credits}}</td>
                         </tr>
                         <tr class="h-7">
                             <td class="pl-2"></td>
-                            <td class="text-right text-indigo-800">{{$lc = $emp->vl_credit + $emp->sl_credit}}</td>
+                            <td class="text-right text-indigo-800">{{$lc = $emp->vacation_credits + $emp->sick_credits}}</td>
                         </tr>
                     </tbody>
                 </table>
@@ -72,10 +72,10 @@
                         </p>
                         <!-- used terminal leave formula -->
                         <div class="pl-44 my-2">
-                            <p class="my-1 text-gray-400">Salary x Accumulated Leave Credits x 0.0478087</p>
-                            <p class="my-1">{{number_format($job->salary, 2, '.', '')}} x {{$lc}} x 0.0478087</p>
+                            <p class="my-1 text-gray-400">Salary x Accumulated Leave Credits x 0.0481927</p>
+                            <p class="my-1">{{number_format($job->salary, 2, '.', '')}} x {{$lc}} x 0.0481927</p>
                             <p class="my-1 text-indigo-800">
-                                = P {{number_format($job->salary*$lc*0.0478087, 2, '.', ',')}}
+                                = P {{number_format($job->salary*$lc*0.0481927, 2, '.', ',')}}
                             </p>
                         </div>
                     </div>

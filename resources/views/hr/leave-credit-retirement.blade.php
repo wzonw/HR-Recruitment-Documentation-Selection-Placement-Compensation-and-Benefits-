@@ -33,15 +33,15 @@
                     </tr>
                     <tr class="h-7">
                         <td class="pl-2">Vacation Leave Credit</td>
-                        <td class="text-right pr-10">{{$emp->vl_credit}}</td>
+                        <td class="text-right pr-10">{{$emp->vacation_credits}}</td>
                     </tr>
                     <tr class="h-7">
                         <td class="pl-2">Sick Leave Credit</td>
-                        <td class="text-right pr-10 border-b">{{$emp->sl_credit}}</td>
+                        <td class="text-right pr-10 border-b">{{$emp->sick_credits}}</td>
                     </tr>
                     <tr class="h-7">
                         <td class="pl-2"></td>
-                        <td class="text-right pr-10 font-semibold">{{$lc = $emp->vl_credit + $emp->sl_credit}}</td>
+                        <td class="text-right pr-10 font-semibold">{{$lc = $emp->vacation_credits + $emp->sick_credits}}</td>
                     </tr>
                 </tbody>
             </table>
@@ -55,14 +55,14 @@
                     </div>
                     <!-- used terminal leave formula -->
                     <div class="w-full pl-44 my-2 space-y-1">
-                        <p class="text-gray-400">Salary x Accumulated Leave Credits x 0.0478087</p>
-                        <p>{{number_format($job->salary, 2, '.', '')}} x {{$lc}} x 0.0478087</p>
-                        <p class="font-bold text-indigo-800">= P {{number_format($job->salary*$lc*0.0478087, 2, '.', ',')}}</p>
+                        <p class="text-gray-400">Salary x Accumulated Leave Credits x 0.0481927</p>
+                        <p>{{number_format($job->salary, 2, '.', '')}} x {{$lc}} x 0.0481927</p>
+                        <p class="font-bold text-indigo-800">= P {{number_format($job->salary*$lc*0.0481927, 2, '.', ',')}}</p>
                     </div>
                 </div>
             </div>
             <div>
-                <a href="{{ route('download-lc', $emp->id) }}" class="text-blue-600 underline">Download</a>
+                <a href="{{ route('download-lc', $emp->employee_id) }}" target="_blank" class="text-blue-600 underline">Download</a>
             </div>
         </div>
     </div>

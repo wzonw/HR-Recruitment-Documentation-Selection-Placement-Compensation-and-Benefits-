@@ -10,6 +10,7 @@ use App\Models\documentrequest;
 use App\Models\employee;
 use App\Models\leaverequest;
 use App\Models\JobsAvailable;
+use App\Models\leaverequest;
 use App\Models\User;
 use App\Notifications\DocumentReqNotif;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -49,7 +50,11 @@ class PMController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
+<<<<<<< HEAD
         $NumOnLeave = leaverequest::where('status', 'Approved')
+=======
+        $NumOnLeave = leaverequest::where('remarks', 'Approved')
+>>>>>>> refs/remotes/origin/hr_0604
                                     ->where('inclusive_start_date', '<=' ,Carbon::today())
                                     ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
@@ -92,7 +97,11 @@ class PMController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
+<<<<<<< HEAD
         $NumOnLeave = leaverequest::where('status', 'Approved')
+=======
+        $NumOnLeave = leaverequest::where('remarks', 'Approved')
+>>>>>>> refs/remotes/origin/hr_0604
                                     ->where('inclusive_start_date', '<=' ,Carbon::today())
                                     ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
@@ -138,7 +147,11 @@ class PMController extends Controller
 
         $job = JobsAvailable::where('id', $user->job_id)->first();
 
+<<<<<<< HEAD
         $leaves = leaverequest::where('employees_id', $id)->get();
+=======
+        $leaves = leaverequest::where('employee_id', $id)->get();
+>>>>>>> refs/remotes/origin/hr_0604
 
         $files = Application::where('email', $user->personal_email)->first();
 
@@ -164,8 +177,13 @@ class PMController extends Controller
     }
 
     public function notify_emp($id){
+<<<<<<< HEAD
         $employee = documentrequest::where('employees_id', $id)
                                 ->where('status', null)
+=======
+        $employee = DocuRequest::where('employee_id', $id)
+                                ->where('remarks', null)
+>>>>>>> refs/remotes/origin/hr_0604
                                 ->first();  
         if($employee != null){
             $employee->status = 'done';

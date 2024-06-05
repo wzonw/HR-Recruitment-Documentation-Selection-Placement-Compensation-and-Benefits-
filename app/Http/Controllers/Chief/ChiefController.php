@@ -5,8 +5,13 @@ namespace App\Http\Controllers\Chief;
 use App\Events\LeaveReqApproval;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
+<<<<<<< HEAD
 use App\Models\dtr;
 use App\Models\employee;
+=======
+use App\Models\dailytimerecord;
+use App\Models\Employee;
+>>>>>>> refs/remotes/origin/hr_0604
 use App\Models\leaverequest;
 use App\Models\JobsAvailable;
 use DateTime;
@@ -256,6 +261,7 @@ class ChiefController extends Controller
                             ->first();
         if($req != null && $request->remarks == 'approved'){
             $req->remarks = $request->remarks;
+            $req->status = $request->remarks;
 
             $lc_per_day = 0.005209*8;
             $start = Carbon::parse($req->inclusive_start_date);
@@ -263,8 +269,8 @@ class ChiefController extends Controller
             $days_on_leave = $start->diffInDays($end) + 1;
             $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
 
-            $dtr = dtr::where('employee_id', $req->employee_id)
-                        ->whereMonth('date', Carbon::now()->month)
+            $dtr = dailytimerecord::where('employee_id', $req->employee_id)
+                        ->whereMonth('attendance_date', Carbon::now()->month)
                         ->first();
             
             $emp_record = employee::where('employee_id', $req->employee_id)->first();
@@ -272,31 +278,31 @@ class ChiefController extends Controller
             // input equivalent leave credit in table
             if(strtolower($req->type_of_leave) == 'vacation' && $req->remarks == 'approved'){
                 if($dtr == null){
-                    dtr::create([
+                    dailytimerecord::create([
                         'employee_id' => $req->employee_id,
                         'job_id' => $emp_record->job_id,
-                        'date' => Carbon::now()->toDateString(),
+                        'attendance_date' => Carbon::now()->toDateString(),
                         'vl_used' => $equivalent_lc,
                     ]);
                 }
                 elseif($dtr != null){
-                    $dtr->vl_used = $equivalent_lc;
-                    $dtr->date = Carbon::now()->toDateString();
+                    $dtr->vl_used += $equivalent_lc;
+                    $dtr->attendance_date = Carbon::now()->toDateString();
                     $dtr->save();
                 }
             }
             elseif(strtolower($req->type_of_leave) == 'sick' && $req->remarks == 'approved'){
                 if($dtr == null){
-                    dtr::create([
+                    dailytimerecord::create([
                         'employee_id' => $req->employee_id,
                         'job_id' => $emp_record->job_id,
-                        'date' => Carbon::now()->toDateString(),
+                        'attendance_date' => Carbon::now()->toDateString(),
                         'sl_used' => $equivalent_lc,
                     ]);
                 }
                 elseif($dtr != null){
-                    $dtr->sl_used = $equivalent_lc;
-                    $dtr->date = Carbon::now()->toDateString();
+                    $dtr->sl_used += $equivalent_lc;
+                    $dtr->attendance_date = Carbon::now()->toDateString();
                     $dtr->save();
                 }
             }
@@ -309,6 +315,7 @@ class ChiefController extends Controller
         }
         elseif($req != null && $request->remarks == 'authorized'){
             $req->remarks = $request->remarks;
+            $req->status = $request->remarks;
             $req->save();
             $message = 'successfully saved.';
 
@@ -317,8 +324,9 @@ class ChiefController extends Controller
 
             //send to faculty module for leave approval of dept head
         }
-        elseif($req != null && $request->remarks == 'denied'){
+        elseif($req != null && $request->remarks == 'declined'){
             $req->remarks = $request->remarks;
+            $req->status = $request->remarks;
             $req->save();
             $message = 'successfully saved.';
 
@@ -353,17 +361,18 @@ class ChiefController extends Controller
                                 'jobs_availables.status',
                                 'jobs_availables.college',
                             ]);
+        $message = 'no approved.';
 
         foreach($datas as $data){
             if($data != null && $data->remarks == 'approved' && $data->college != 'human resources'){
                 $lc_per_day = 0.005209*8;
                 $start = Carbon::parse($data->inclusive_start_date);
-                $end = Carbon::parse($data->end_date);
+                $end = Carbon::parse($data->inclusive_end_date);
                 $days_on_leave = $start->diffInDays($end) + 1;
                 $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
     
-                $dtr = dtr::where('employee_id', $data->employee_id)
-                            ->whereMonth('date', Carbon::now()->month)
+                $dtr = dailytimerecord::where('employee_id', $data->employee_id)
+                            ->whereMonth('attendance_date', Carbon::now()->month)
                             ->first();
                 
                 $emp_record = employee::where('employee_id', $data->employee_id)->first();
@@ -371,36 +380,37 @@ class ChiefController extends Controller
                 // input equivalent leave credit in table
                 if(strtolower($data->type_of_leave) == 'vacation' && $data->remarks == 'approved'){
                     if($dtr == null){
-                        dtr::create([
+                        dailytimerecord::create([
                             'employee_id' => $data->employee_id,
                             'job_id' => $emp_record->job_id,
-                            'date' => Carbon::now()->toDateString(),
+                            'attendance_date' => Carbon::now()->toDateString(),
                             'vl_used' => $equivalent_lc,
                         ]);
                     }
                     elseif($dtr != null){
-                        $dtr->vl_used = $equivalent_lc;
-                        $dtr->date = Carbon::now()->toDateString();
+                        $dtr->vl_used += $equivalent_lc;
+                        $dtr->attendance_date = Carbon::now()->toDateString();
                         $dtr->save();
                     }
                 }
-                elseif(strtolower($data->type) == 'sick' && $data->remarks == 'approved'){
+                elseif(strtolower($data->type_of_leave) == 'sick' && $data->remarks == 'approved'){
                     if($dtr == null){
-                        dtr::create([
+                        dailytimerecord::create([
                             'employee_id' => $data->employee_id,
                             'job_id' => $emp_record->job_id,
-                            'date' => Carbon::now()->toDateString(),
+                            'attendance_date' => Carbon::now()->toDateString(),
                             'sl_used' => $equivalent_lc,
                         ]);
                     }
                     elseif($dtr != null){
-                        $dtr->sl_used = $equivalent_lc;
-                        $dtr->date = Carbon::now()->toDateString();
+                        $dtr->sl_used += $equivalent_lc;
+                        $dtr->attendance_date = Carbon::now()->toDateString();
                         $dtr->save();
                     }
                 }
 
                 $message = 'successfully saved.';
+                
             }
             elseif($data != null && $data->remarks == 'authorized' && $data->college == 'human resources'){
                 $message = 'An employee under HR was found.';

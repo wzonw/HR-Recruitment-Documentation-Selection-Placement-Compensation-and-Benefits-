@@ -7,10 +7,10 @@
         <div class="mt-5">
             <form action="{{route('leave-computation-save')}}" method="post">
                 @csrf
-                <input name="id" type="number" value="{{$emp->id}}" readonly hidden>
+                <input name="id" type="number" value="{{$emp->employee_id}}" readonly hidden>
                 <div class="flex items-center">
                     <div class="w-[850px]">
-                        <h1>Employee ID: {{$emp->id}}</h1>
+                        <h1>Employee ID: {{$emp->employee_id}}</h1>
                         <h1>Name: {{$emp->first_name}} {{$emp->last_name}}</h1>
                     </div>
                     <x-button-gold class="w-28 h-8" onclick="return confirm('Are you sure?')">

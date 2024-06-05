@@ -21,8 +21,8 @@
                 <!-- LC Computation Table -->
                 <h1 class="font-semibold">Leave Credit Computation</h1>
                 <div class="w-[1000px] h-7 flex items-end text-center font-medium">
-                    <p class="w-[255px] h-6 border border-b-0 border-black"></p>
-                    <p class="w-[249px] h-6 border-t border-r border-black">Remaining Leave Credit</p>
+                    <p class="w-[348px] h-6 border border-b-0 border-black"></p>
+                    <p class="w-[248px] h-6 border-t border-r border-black">Remaining Leave Credit</p>
                     <p class="w-[247px] h-6 border-t border-black">Earned Leave Credit</p>
                     <p class="w-[249px] h-6 border border-b-0 border-black"></p>
                 </div>
@@ -30,7 +30,7 @@
                     <!-- Header  -->
                     <thead class="text-black">
                         <tr class="h-10">
-                            <th class="w-5 text-center border border-black">ID</th>
+                            <th class="w-20 text-center border border-black">ID</th>
                             <th class="w-36 text-center border border-black">Name</th>
                             <th class="w-20 text-center border border-black">Vacation</th>
                             <th class="w-20 text-center border border-black">Sick</th>
@@ -44,19 +44,19 @@
                         <!-- Rows -->
                         @foreach($employees as $emp)
                         <tr class="h-10 border border-black text-black">
-                            <td class="w-5 text-center border-r border-black">{{$emp->id}}</td>
+                            <td class="w-20 text-center border-r border-black">{{$emp->employee_id}}</td>
                             <td class="w-36 text-center border-r border-black">{{$emp->first_name}} {{$emp->last_name}}</td>
-                            <td class="w-20 text-center border-r border-black">{{$emp->vl_credit}}</td>
-                            <td class="w-20 text-center border-r border-black">{{$emp->sl_credit}}</td>
+                            <td class="w-20 text-center border-r border-black">{{$emp->vacation_credits}}</td>
+                            <td class="w-20 text-center border-r border-black">{{$emp->sick_credits}}</td>
                             <td class="w-20 text-center border-r border-black">1.25</td>
                             <td class="w-20 text-center border-r border-black">1.25</td>
                             <td class="w-20 text-center border-r border-black bg-green-50 font-semibold text-blue-700">
-                                <input name="new_vl_{{$emp->id}}" type="number" readonly
+                                <input name="new_vl_{{$emp->employee_id}}" type="number" readonly
                                     value="{{number_format($emp->vl_credit+1.25, 3, '.', '')}}"
                                     class="w-24 h-9 text-center text-sm ml-3 bg-green-50 border-none">
                             </td>
                             <td class="w-28 text-center border-r border-black bg-green-50 font-semibold text-blue-700">  
-                                <input name="new_sl_{{$emp->id}}" type="number" readonly
+                                <input name="new_sl_{{$emp->employee_id}}" type="number" readonly
                                     value="{{number_format($emp->sl_credit+1.25, 3, '.', '')}}"
                                     class="w-24 h-9 text-center text-sm ml-3 bg-green-50 border-none">
                             </td>

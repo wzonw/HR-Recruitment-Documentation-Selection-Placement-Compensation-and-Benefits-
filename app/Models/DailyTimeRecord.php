@@ -5,11 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class DailyTimeRecord extends Model
+class dailytimerecord extends Model
 {
     use HasFactory;
 
     protected $fillable = [
+        'attendance_date',
         'employee_id',
         'job_id',
         'date',
@@ -21,4 +22,6 @@ class DailyTimeRecord extends Model
         'sl_used',
         'remarks',
     ];
+
+    protected $primaryKey = 'employee_id';
 }

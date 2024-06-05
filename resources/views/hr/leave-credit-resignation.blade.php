@@ -1,7 +1,7 @@
 <x-admin-layout>
 <div class="w-full h-screen flex justify-center font-inter">
         <div>
-            <a href="{{ route('lc-resignation-monetization', $emp->id) }}">
+            <a href="{{ route('lc-resignation-monetization', $emp->employee_id) }}">
                 <div class="min-w-[650px] h-fit rounded-md shadow shadow-gray-300 mt-5 px-5 py-5 mx-48 hover:bg-gray-200">
                     <!-- header -->
                     <div class="text-xl uppercase tracking-widest font-medium">
@@ -15,7 +15,7 @@
                     </div>
                 </div>
             </a>
-            <a href="{{ route('lc-resignation-transfer', $emp->id) }}">
+            <a href="{{ route('lc-resignation-transfer', $emp->employee_id) }}">
                 <div class="min-w-[650px] h-fit rounded-md shadow shadow-gray-300 mt-5 px-5 py-5 mx-48 hover:bg-gray-200">
                     <!-- header -->
                     <div class="text-xl uppercase tracking-widest font-medium">

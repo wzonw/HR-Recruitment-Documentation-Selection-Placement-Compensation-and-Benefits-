@@ -65,7 +65,7 @@
                                         @if($leave->remarks == null && $req->employee_id == $leave->employee_id && $req->type_of_leave == $leave->type_of_leave)
                                         <select name="remarks" id="remarks" class="uppercase text-sm border-none" autofocus>
                                             <option value="approved" class="text-green-600">approved</option>
-                                            <option value="denied" class="text-red-600">denied</option>
+                                            <option value="declined" class="text-red-600">declined</option>
                                         </select>
                                         @else
                                             @if(strtolower($leave->remarks) == 'approved')
@@ -81,7 +81,7 @@
                                         @if($leave->remarks == null && $req->employee_id == $leave->employee_id && $req->type_of_leave == $leave->type_of_leave)
                                         <select name="remarks" id="remarks" class="uppercase text-sm border-none" autofocus>
                                             <option value="authorized" class="text-green-600">authorized</option>
-                                            <option value="denied" class="text-red-600">denied</option>
+                                            <option value="declined" class="text-red-600">declined</option>
                                         </select>
                                         @else
                                             @if(strtolower($leave->remarks) == 'approved')
