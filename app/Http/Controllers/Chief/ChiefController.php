@@ -44,7 +44,7 @@ class ChiefController extends Controller
                                     ]);
 
         $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
                                 ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->get([
                                     'employee_leaves.start_date',
@@ -168,7 +168,7 @@ class ChiefController extends Controller
                                     ]);
 
         $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
                                 ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->get([
                                     'employee_leaves.start_date',
@@ -203,7 +203,7 @@ class ChiefController extends Controller
                             ->first();
 
         $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->get([
@@ -227,7 +227,7 @@ class ChiefController extends Controller
 
     public function leave_request_not_hr(){
         $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->where('college', '!=', 'human resources')
@@ -326,7 +326,7 @@ class ChiefController extends Controller
 
     public function approve_leave_request_not_hr(){
         $datas = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                            ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                            ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
                             ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                             ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                             ->where('employee_leaves.remarks', 'approved')

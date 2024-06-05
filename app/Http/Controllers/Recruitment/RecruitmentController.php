@@ -399,7 +399,15 @@ class RecruitmentController extends Controller
             // create employee record
             $job = JobsAvailable::where('id', $applicant->job_id)->first();
             $school_email = Str::charAt($applicant->first_name, 0).Str::charAt($applicant->middle_name, 0).$applicant->last_name;
+            $emp_id = NOW()->year. $applicant->id + 10000;
+            if(Str::contains($job->job_name, 'faculty')){
+                $is_faculty = 1;
+            }
+            else{
+                $is_faculty = 0;
+            }
             Employee::create([
+                'employee_id' => $emp_id,
                 'job_id' => $applicant->job_id,
                 'employee_type' => $job->status,
                 'school_email' => strtolower($school_email),
@@ -413,6 +421,10 @@ class RecruitmentController extends Controller
                 'birth_date' => $applicant->birth_date,
                 'address' => $applicant->address,
                 'start_of_employment' => NOW(),
+                'current_position' => $job->job_name,
+                'is_faculty' => $is_faculty,
+                'salary' => $job->salary,
+                
             ]);
 
             $applicant->remarks = 'Employee';

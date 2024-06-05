@@ -50,7 +50,7 @@ class CompensationController extends Controller
 
     public function leave_request(){
         $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->get([
@@ -74,7 +74,7 @@ class CompensationController extends Controller
         $leaves = EmployeeLeave::where('employee_leaves.remarks', 'Approved')
                                 ->where('start_date', '<=' ,Carbon::today())
                                 ->where('end_date', '>=' ,Carbon::today())
-                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->get([
                                     'employee_leaves.start_date',
@@ -98,7 +98,7 @@ class CompensationController extends Controller
     public function time_keeping(){
         $data = dtr::whereMonth('date', Carbon::now()->month)
                     ->whereYear('date', Carbon::now()->year)
-                    ->join('employees', 'employees.id', '=', 'dtrs.emp_id')
+                    ->join('employees', 'employees.employee_id', '=', 'dtrs.emp_id')
                     ->get([
                         'dtrs.emp_id',
                         'dtrs.date',
@@ -365,7 +365,7 @@ class CompensationController extends Controller
     {
         $leave_search = $request->input ('query');
 
-        $leaves = EmployeeLeave::join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+        $leaves = EmployeeLeave::join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
         ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
         ->where('employees.name','LIKE', '%' . $leave_search . '%')
         ->orWhere('jobs_availables.status','LIKE', '%' . $leave_search . '%')
@@ -379,7 +379,7 @@ class CompensationController extends Controller
         $lr_search = $request ->input('query');
 
         $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.id', '=', 'employee_leaves.emp_id')
+                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
                                 ->where('employees.name','LIKE', '%' . $lr_search . '%')
@@ -391,7 +391,7 @@ class CompensationController extends Controller
 
     public function tk_filter(Request $request)
     {
-        $query = dtr::join('employees', 'employees.id', '=', 'dtrs.emp_id');
+        $query = dtr::join('employees', 'employees.employee_id', '=', 'dtrs.emp_id');
     
         if ($request->filled('date')) {
             $query->whereDate('dtrs.date', $request->input('date'));

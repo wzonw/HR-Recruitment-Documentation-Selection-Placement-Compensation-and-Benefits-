@@ -117,7 +117,7 @@ class PMController extends Controller
     {
         $employees = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                             ->get([
-                                'employees.id',
+                                'employees.employee_id',
                                 'employees.first_name',
                                 'employees.last_name',
                                 'employees.middle_name',
@@ -133,7 +133,7 @@ class PMController extends Controller
 
     public function emp_detail($id)
     {
-        $user = Employee::where('id', $id)->first();
+        $user = Employee::where('employee_id', $id)->first();
 
         $job = JobsAvailable::where('id', $user->job_id)->first();
 
@@ -177,7 +177,7 @@ class PMController extends Controller
     }
 
     public function export_document_1($id){
-        $data = Employee::where('id', $id)
+        $data = Employee::where('employee_id', $id)
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $data->job_id)->first();
@@ -207,7 +207,7 @@ class PMController extends Controller
     }
 
     public function export_document_2($id){
-        $data = Employee::where('id', $id)
+        $data = Employee::where('employee_id', $id)
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $data->job_id)->first();
@@ -246,7 +246,7 @@ class PMController extends Controller
             ->orWhere('jobs_availables.status', 'LIKE', '%' . $emp_search . '%')
             ->orWhere('jobs_availables.dept', 'LIKE', '%' . $emp_search . '%')
             ->get([
-                'employees.id',
+                'employees.employee_id',
                 'employees.first_name',
                 'employees.last_name',
                 'employees.middle_name',
