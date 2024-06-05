@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\LeaveReqApproval;
+use App\Models\Employee;
 use App\Models\User;
 use App\Notifications\LeaveReqNotif;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,7 +26,7 @@ class UpdateEmpLeaveReq
     public function handle(LeaveReqApproval $event): void
     {
         //
-        $admins = User::where('id', $event->user->id)->get();
-        Notification::send($admins, new LeaveReqNotif($event->user));
+        $admins = Employee::where('employee_id', $event->user->employee_id)->get();
+        Notification::send($admins, new LeaveReqNotif($event->user, $event->dept));
     }
 }

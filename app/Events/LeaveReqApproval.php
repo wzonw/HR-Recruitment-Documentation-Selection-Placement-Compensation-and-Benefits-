@@ -19,7 +19,7 @@ class LeaveReqApproval
     /**
      * Create a new event instance.
      */
-    public function __construct(public leaverequest $user)
+    public function __construct(public leaverequest $user, public $dept)
     {
         //
     }

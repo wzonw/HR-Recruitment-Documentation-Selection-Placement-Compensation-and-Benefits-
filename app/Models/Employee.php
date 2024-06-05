@@ -4,12 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
-class employee extends Model
+
+class Employee extends Model
 {
+    use Notifiable;
     use HasFactory;
-<<<<<<< HEAD
-=======
     
     protected $fillable = [
         'employee_id',
@@ -30,6 +31,7 @@ class employee extends Model
         'is_faculty',
         'salary',
     ];
+
     protected $primaryKey = 'employee_id';
->>>>>>> refs/remotes/origin/hr_0604
+
 }

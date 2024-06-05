@@ -5,15 +5,11 @@ namespace App\Http\Controllers\Compensation;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\DocuRequest;
-<<<<<<< HEAD
 use App\Models\documentrequest;
 use App\Models\dtr;
-use App\Models\employee;
 use App\Models\EmployeeLeave;
-=======
 use App\Models\dailytimerecord;
 use App\Models\Employee;
->>>>>>> refs/remotes/origin/hr_0604
 use App\Models\JobsAvailable;
 use App\Models\leaverequest;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -132,11 +128,7 @@ class CompensationController extends Controller
                 ->whereYear('attendance_date', Carbon::now()->year)
                 ->first();
         
-<<<<<<< HEAD
-        $employee = employee::where('id', $request->id)->first();
-=======
         $employee = Employee::where('employee_id', $request->id)->first();
->>>>>>> refs/remotes/origin/hr_0604
 
         if($dtr == null && $employee != null){
             dailytimerecord::create([
@@ -173,17 +165,10 @@ class CompensationController extends Controller
     }
 
     public function lc_computation(Request $request){
-<<<<<<< HEAD
-        $emp = employee::where('id', $request->id)->first();
-        $data = dtr::where('emp_id', $request->id)
-                    ->whereMonth('date', Carbon::now()->month)
-                    ->whereYear('date', Carbon::now()->year)
-=======
         $emp = Employee::where('employee_id', $request->id)->first();
         $data = dailytimerecord::where('employee_id', $request->id)
                     ->whereMonth('attendance_date', Carbon::now()->month)
                     ->whereYear('attendance_date', Carbon::now()->year)
->>>>>>> refs/remotes/origin/hr_0604
                     ->first();
         if($data == null && $emp != null){
             $message = "Employee ID: ".$emp->employee_id." has no daily time record for the month of ".
@@ -212,11 +197,7 @@ class CompensationController extends Controller
     }
     
     public function lc_computation_save(){
-<<<<<<< HEAD
-        $emp = employee::where('id', request('id'))->first();
-=======
         $emp = Employee::where('employee_id', request('id'))->first();
->>>>>>> refs/remotes/origin/hr_0604
         
         if($emp != null){
             $emp->vacation_credits = request('new_vl');
@@ -282,15 +263,9 @@ class CompensationController extends Controller
     }
 
     public function lc_resignation(Request $request){
-<<<<<<< HEAD
-        $emp = employee::where('id', $request->id)
-                        ->where('first_name', 'LIKE', '%'.$request->first_name.'%')
-                        ->where('last_name', 'LIKE', '%'.$request->last_name.'%')
-=======
         $emp = Employee::where('employee_id', $request->id)
                         //->where('first_name', 'LIKE', '%'. $request->first_name. '%')
                         //->where('last_name', 'LIKE', '%'. $request->last_name. '%')
->>>>>>> refs/remotes/origin/hr_0604
                         ->where('active', 'Y')
                         ->first();
         if($emp == null){
@@ -319,11 +294,7 @@ class CompensationController extends Controller
     }
 
     public function monetize_lc_resignation($id){
-<<<<<<< HEAD
-        $emp = employee::where('id', $id)
-=======
         $emp = Employee::where('employee_id', $id)
->>>>>>> refs/remotes/origin/hr_0604
                         ->where('active', 'Y')
                         ->first();
         
@@ -341,11 +312,7 @@ class CompensationController extends Controller
     }
 
     public function transfer_lc_resignation($id){
-<<<<<<< HEAD
-        $emp = employee::where('id', $id)
-=======
         $emp = Employee::where('employee_id', $id)
->>>>>>> refs/remotes/origin/hr_0604
                         ->where('active', 'Y')
                         ->first();
         
@@ -363,14 +330,9 @@ class CompensationController extends Controller
     }
 
     public function monetize_lc_retirement(Request $request){
-<<<<<<< HEAD
-        $emp = employee::where('id', $request->id)
-                        ->where('name', 'LIKE', '%'.$request->name.'%')
-=======
         $emp = Employee::where('employee_id', $request->id)
                         //->where('first_name', 'LIKE', '%'. $request->first_name. '%')
-                        //->where('last_name', 'LIKE', '%'. $request->last_name. '%') 
->>>>>>> refs/remotes/origin/hr_0604
+                        //->where('last_name', 'LIKE', '%'. $request->last_name. '%')
                         ->where('active', 'Y')
                         ->first();
         
@@ -388,11 +350,7 @@ class CompensationController extends Controller
     }
 
     public function download_file($id){
-<<<<<<< HEAD
-        $emp = employee::where('id', $id)
-=======
         $emp = Employee::where('employee_id', $id)
->>>>>>> refs/remotes/origin/hr_0604
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $emp->job_id)->first();
@@ -406,11 +364,7 @@ class CompensationController extends Controller
     }
 
     public function download_file_transfer($id){
-<<<<<<< HEAD
-        $emp = employee::where('id', $id)
-=======
         $emp = Employee::where('employee_id', $id)
->>>>>>> refs/remotes/origin/hr_0604
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $emp->job_id)->first();

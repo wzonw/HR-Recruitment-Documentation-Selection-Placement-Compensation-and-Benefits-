@@ -3,6 +3,7 @@
 namespace App\Listeners;
 
 use App\Events\DocumentRequestNotif;
+use App\Models\Employee;
 use App\Models\User;
 use App\Notifications\DocumentReqNotif;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -25,7 +26,7 @@ class UpdateEmpDocuReq
     public function handle(DocumentRequestNotif $event): void
     {
         //
-        $admin = User::where('id', $event->user->emp_id)->get();
-        Notification::send($admin, new DocumentReqNotif($event->user));
+        $admin = Employee::where('employee_id', $event->user->employee_id)->get();
+        Notification::send($admin, new DocumentReqNotif($event->user, $event->dept));
     }
 }

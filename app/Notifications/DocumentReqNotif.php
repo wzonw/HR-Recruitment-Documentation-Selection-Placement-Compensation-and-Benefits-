@@ -14,10 +14,11 @@ class DocumentReqNotif extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct($user)
+    public function __construct($user, $dept)
     {
         //
         $this->user = $user;
+        $this->dept = $dept;
     }
 
     /**
@@ -49,8 +50,11 @@ class DocumentReqNotif extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'emp_id' => $this->user->emp_id,
-            'document' => $this->user->documents,
+            'employee_id' => $this->user->employee_id,
+            'type_of_request' => 'Document Request',
+            'reference_num' => $this->user->reference_num,
+            'name_of_department' => $this->dept,
+            'verdict' => $this->user->status,
         ];
     }
 }

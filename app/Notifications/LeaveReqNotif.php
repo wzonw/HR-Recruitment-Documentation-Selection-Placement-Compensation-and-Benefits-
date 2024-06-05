@@ -14,11 +14,11 @@ class LeaveReqNotif extends Notification
     /**
      * Create a new notification instance.
      */
-    public function __construct($user)
+    public function __construct($user, $dept)
     {
         //
         $this->user = $user;
-
+        $this->dept = $dept;
     }
 
     /**
@@ -51,11 +51,11 @@ class LeaveReqNotif extends Notification
     {
         return [
             //
-            'emp_id' => $this->user->emp_id,
-            'start_date' => $this->user->start_date,
-            'end_date' => $this->user->end_date,
-            'remarks' => $this->user->remarks,
-            'type' => $this->user->type,
+            'employee_id' => $this->user->employee_id,
+            'type_of_request' => 'Leave Request',
+            'reference_num' => $this->user->reference_num,
+            'name_of_department' => $this->dept,
+            'verdict' => $this->user->status,
         ];
     }
 }

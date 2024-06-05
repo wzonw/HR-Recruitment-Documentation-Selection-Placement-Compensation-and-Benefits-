@@ -9,4 +9,6 @@ class documentrequest extends Model
 {
     use HasFactory;
         
+    protected $primaryKey = 'reference_num';
+
 }

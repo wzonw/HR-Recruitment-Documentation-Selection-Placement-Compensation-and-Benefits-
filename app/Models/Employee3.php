@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Employee1 extends Model
+class Employee extends Model
 {
     use HasFactory;
     
@@ -28,4 +28,5 @@ class Employee1 extends Model
         'is_faculty',
         'salary',
     ];
+    protected $primaryKey = 'employee_id';
 }

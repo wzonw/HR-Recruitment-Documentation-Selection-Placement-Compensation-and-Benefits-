@@ -5,13 +5,8 @@ namespace App\Http\Controllers\Chief;
 use App\Events\LeaveReqApproval;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
-<<<<<<< HEAD
-use App\Models\dtr;
-use App\Models\employee;
-=======
 use App\Models\dailytimerecord;
 use App\Models\Employee;
->>>>>>> refs/remotes/origin/hr_0604
 use App\Models\leaverequest;
 use App\Models\JobsAvailable;
 use DateTime;
@@ -259,6 +254,8 @@ class ChiefController extends Controller
                             ->where('type_of_leave', $request->type)
                             ->whereNull('remarks')
                             ->first();
+        $e = Employee::where('employee_id', $req->employee_id)->first();
+        $dept = JobsAvailable::where('id', $e->job_id)->first();
         if($req != null && $request->remarks == 'approved'){
             $req->remarks = $request->remarks;
             $req->status = $request->remarks;
@@ -311,7 +308,7 @@ class ChiefController extends Controller
             $message = 'successfully saved.';
 
             //notif via db
-            event(new LeaveReqApproval($req));
+            event(new LeaveReqApproval($req, $dept));
         }
         elseif($req != null && $request->remarks == 'authorized'){
             $req->remarks = $request->remarks;
@@ -320,7 +317,7 @@ class ChiefController extends Controller
             $message = 'successfully saved.';
 
             //notif via db
-            event(new LeaveReqApproval($req));
+            event(new LeaveReqApproval($req, $dept));
 
             //send to faculty module for leave approval of dept head
         }
@@ -331,7 +328,7 @@ class ChiefController extends Controller
             $message = 'successfully saved.';
 
             //notif via db
-            event(new LeaveReqApproval($req));
+            event(new LeaveReqApproval($req, $dept));
 
             //send to faculty module for leave approval of dept head
         }

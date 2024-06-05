@@ -2,6 +2,7 @@
 
 namespace App\Events;
 
+use App\Models\documentrequest;
 use App\Models\DocuRequest;
 use App\Models\User;
 use Illuminate\Broadcasting\Channel;
@@ -19,7 +20,7 @@ class DocumentRequestNotif
     /**
      * Create a new event instance.
      */
-    public function __construct(public DocuRequest $user)
+    public function __construct(public documentrequest $user, public $dept)
     {
         //
     }
