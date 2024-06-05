@@ -6,7 +6,7 @@ use App\Events\LeaveReqApproval;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\dtr;
-use App\Models\Employee;
+use App\Models\employee;
 use App\Models\leaverequest;
 use App\Models\JobsAvailable;
 use DateTime;
@@ -24,7 +24,7 @@ class ChiefController extends Controller
             abort(403);
         }*/
 
-        $NumOfEmployees = Employee::where('active', 'Y')->get();
+        $NumOfEmployees = employee::where('active', 'Y')->get();
         $NumOfEmployees = $NumOfEmployees->count();
 
         $NumOnLeave = leaverequest::where('remarks', 'Approved')
@@ -79,11 +79,11 @@ class ChiefController extends Controller
         }*/
 
         if($request->position == 'null' && $request->college == 'null' && $request->status == 'null'){
-            $NumOfEmp = Employee::where('active', 'Y')->get();
+            $NumOfEmp = employee::where('active', 'Y')->get();
             $NumOfEmp = $NumOfEmp->count();
         }
         elseif($request->position == 'null' && $request->college != 'null' && $request->status == 'null'){
-            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            $NumOfEmp = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->where('employees.active', 'Y')
                                 ->where('jobs_availables.college', $request->college)
                                 ->get([
@@ -92,7 +92,7 @@ class ChiefController extends Controller
             $NumOfEmp = $NumOfEmp->count();
         }
         elseif($request->position != 'null' && $request->college == 'null' && $request->status == 'null'){
-            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            $NumOfEmp = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->where('employees.active', 'Y')
                                 ->where('jobs_availables.job_name', 'LIKE','%'.$request->position.'%')
                                 ->get([
@@ -101,7 +101,7 @@ class ChiefController extends Controller
             $NumOfEmp = $NumOfEmp->count();
         }
         elseif($request->position == 'null' && $request->college == 'null' && $request->status != 'null'){
-            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            $NumOfEmp = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->where('employees.active', 'Y')
                                 ->where('jobs_availables.status', $request->status)
                                 ->get([
@@ -110,7 +110,7 @@ class ChiefController extends Controller
             $NumOfEmp = $NumOfEmp->count();
         }
         elseif($request->position != 'null' && $request->college == 'null' && $request->status != 'null'){
-            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            $NumOfEmp = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->where('employees.active', 'Y')
                                 ->where('jobs_availables.status', $request->status)
                                 ->where('jobs_availables.job_name', 'LIKE','%'.$request->position.'%')
@@ -120,7 +120,7 @@ class ChiefController extends Controller
             $NumOfEmp = $NumOfEmp->count();
         }
         elseif($request->position != 'null' && $request->college != 'null' && $request->status == 'null'){
-            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            $NumOfEmp = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->where('employees.active', 'Y')
                                 ->where('jobs_availables.college', $request->college)
                                 ->where('jobs_availables.job_name', 'LIKE','%'.$request->position.'%')
@@ -130,7 +130,7 @@ class ChiefController extends Controller
             $NumOfEmp = $NumOfEmp->count();
         }
         elseif($request->position == 'null' && $request->college != 'null' && $request->status != 'null'){
-            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            $NumOfEmp = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->where('employees.active', 'Y')
                                 ->where('jobs_availables.college', $request->college)
                                 ->where('jobs_availables.status', $request->status)
@@ -140,7 +140,7 @@ class ChiefController extends Controller
             $NumOfEmp = $NumOfEmp->count();
         }
         else{
-            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            $NumOfEmp = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->where('employees.active', 'Y')
                                 ->where('jobs_availables.college', $request->college)
                                 ->where('jobs_availables.status', $request->status)
@@ -267,7 +267,7 @@ class ChiefController extends Controller
                         ->whereMonth('date', Carbon::now()->month)
                         ->first();
             
-            $emp_record = Employee::where('employee_id', $req->employee_id)->first();
+            $emp_record = employee::where('employee_id', $req->employee_id)->first();
 
             // input equivalent leave credit in table
             if(strtolower($req->type_of_leave) == 'vacation' && $req->remarks == 'approved'){
@@ -366,7 +366,7 @@ class ChiefController extends Controller
                             ->whereMonth('date', Carbon::now()->month)
                             ->first();
                 
-                $emp_record = Employee::where('employee_id', $data->employee_id)->first();
+                $emp_record = employee::where('employee_id', $data->employee_id)->first();
     
                 // input equivalent leave credit in table
                 if(strtolower($data->type_of_leave) == 'vacation' && $data->remarks == 'approved'){

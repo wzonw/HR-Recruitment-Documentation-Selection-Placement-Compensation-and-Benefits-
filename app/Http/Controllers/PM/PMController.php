@@ -6,8 +6,9 @@ use App\Events\DocumentRequestNotif;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\DocuRequest;
-use App\Models\Employee;
-use App\Models\EmployeeLeave;
+use App\Models\documentrequest;
+use App\Models\employee;
+use App\Models\leaverequest;
 use App\Models\JobsAvailable;
 use App\Models\User;
 use App\Notifications\DocumentReqNotif;
@@ -39,18 +40,18 @@ class PMController extends Controller
         }
         */
 
-        $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
+        $NumOfDocuReq = documentrequest::where('status', null)->get();
         $NumOfDocuReq = $NumOfDocuReq->count();
 
-        $NumOfEmp = Employee::where('active', 'Y')->get();
+        $NumOfEmp = employee::where('active', 'Y')->get();
         $NumOfEmp = $NumOfEmp->count();
 
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
-        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
-                                    ->where('start_date', '<=' ,Carbon::today())
-                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = leaverequest::where('status', 'Approved')
+                                    ->where('inclusive_start_date', '<=' ,Carbon::today())
+                                    ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
 
         $PTJobs = JobsAvailable::where('status', 'COS/JO')
@@ -72,14 +73,14 @@ class PMController extends Controller
 
     public function update_index(Request $request)
     {
-        $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
+        $NumOfDocuReq = documentrequest::where('status', null)->get();
         $NumOfDocuReq = $NumOfDocuReq->count();
 
         if($request->college == 'null'){
             return redirect()->route('dashboard');
         }
         else{
-            $NumOfEmp = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+            $NumOfEmp = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->where('employees.active', 'Y')
                                 ->where('jobs_availables.college', $request->college)
                                 ->get([
@@ -91,9 +92,9 @@ class PMController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
-        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
-                                    ->where('start_date', '<=' ,Carbon::today())
-                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = leaverequest::where('status', 'Approved')
+                                    ->where('inclusive_start_date', '<=' ,Carbon::today())
+                                    ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
 
         $PTJobs = JobsAvailable::where('status', 'COS/JO')
@@ -115,7 +116,7 @@ class PMController extends Controller
 
     public function emp_list()
     {
-        $employees = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+        $employees = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                             ->get([
                                 'employees.employee_id',
                                 'employees.first_name',
@@ -133,11 +134,11 @@ class PMController extends Controller
 
     public function emp_detail($id)
     {
-        $user = Employee::where('employee_id', $id)->first();
+        $user = employee::where('employee_id', $id)->first();
 
         $job = JobsAvailable::where('id', $user->job_id)->first();
 
-        $leaves = EmployeeLeave::where('emp_id', $id)->get();
+        $leaves = leaverequest::where('employees_id', $id)->get();
 
         $files = Application::where('email', $user->personal_email)->first();
 
@@ -152,18 +153,22 @@ class PMController extends Controller
     }
 
     public function document_request(){
-        $requests = DocuRequest::where('remarks', null)->get();
+        $requests = documentrequest::where('status', 'Pending')->get();
+
+        foreach($requests as $request){
+            $request->requests = json_decode($request->requests);
+        }
         return view('hr.view-request', [
             'requests' => $requests,
         ]);
     }
 
     public function notify_emp($id){
-        $employee = DocuRequest::where('emp_id', $id)
-                                ->where('remarks', null)
+        $employee = documentrequest::where('employees_id', $id)
+                                ->where('status', null)
                                 ->first();  
         if($employee != null){
-            $employee->remarks = 'done';
+            $employee->status = 'done';
             $employee->save();
 
             event(new DocumentRequestNotif($employee));
@@ -177,7 +182,7 @@ class PMController extends Controller
     }
 
     public function export_document_1($id){
-        $data = Employee::where('employee_id', $id)
+        $data = employee::where('employee_id', $id)
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $data->job_id)->first();
@@ -207,7 +212,7 @@ class PMController extends Controller
     }
 
     public function export_document_2($id){
-        $data = Employee::where('employee_id', $id)
+        $data = employee::where('employee_id', $id)
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $data->job_id)->first();
@@ -240,7 +245,7 @@ class PMController extends Controller
     {
         $emp_search = $request->input('query');
     
-        $employees = Employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
+        $employees = employee::join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
             ->where('employees.name', 'LIKE', '%' . $emp_search . '%')
             ->orWhere('jobs_availables.job_name', 'LIKE', '%' . $emp_search . '%')
             ->orWhere('jobs_availables.status', 'LIKE', '%' . $emp_search . '%')
@@ -264,7 +269,7 @@ class PMController extends Controller
     {
         $req_search = $request->input('query');
 
-        $requests = DocuRequest::where('name','LIKE', '%' . $req_search . '%')
+        $requests = documentrequest::where('name','LIKE', '%' . $req_search . '%')
         ->orWhere('documents','LIKE', '%' . $req_search . '%')
         ->get();
 

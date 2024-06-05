@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Compensation;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\DocuRequest;
+use App\Models\documentrequest;
 use App\Models\dtr;
-use App\Models\Employee;
+use App\Models\employee;
 use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
 use App\Models\leaverequest;
@@ -23,7 +24,7 @@ class CompensationController extends Controller
             abort(403);
         }*/
 
-        $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
+        $NumOfDocuReq = documentrequest::where('remarks', null)->get();
         $NumOfDocuReq = $NumOfDocuReq->count();
 
         $NumOfApplicants = Application::all();
@@ -126,7 +127,7 @@ class CompensationController extends Controller
                 ->whereYear('date', Carbon::now()->year)
                 ->first();
         
-        $employee = Employee::where('id', $request->id)->first();
+        $employee = employee::where('id', $request->id)->first();
 
         if($dtr == null && $employee != null){
             dtr::create([
@@ -163,7 +164,7 @@ class CompensationController extends Controller
     }
 
     public function lc_computation(Request $request){
-        $emp = Employee::where('id', $request->id)->first();
+        $emp = employee::where('id', $request->id)->first();
         $data = dtr::where('emp_id', $request->id)
                     ->whereMonth('date', Carbon::now()->month)
                     ->whereYear('date', Carbon::now()->year)
@@ -195,7 +196,7 @@ class CompensationController extends Controller
     }
     
     public function lc_computation_save(){
-        $emp = Employee::where('id', request('id'))->first();
+        $emp = employee::where('id', request('id'))->first();
         
         if($emp != null){
             $emp->vl_credit = request('new_vl');
@@ -218,7 +219,7 @@ class CompensationController extends Controller
         $employee_dtr = dtr::whereMonth('date', Carbon::now()->month)
                             ->whereYear('date', Carbon::now()->year)
                             ->get();
-        $employees = Employee::where('active', 'Y')->get();
+        $employees = employee::where('active', 'Y')->get();
         
         foreach($employee_dtr as $dtr){
             foreach($employees as $employee){ 
@@ -237,7 +238,7 @@ class CompensationController extends Controller
         $employee_dtr = dtr::whereMonth('date', Carbon::now()->month)
                             ->whereYear('date', Carbon::now()->year)
                             ->get();
-        $employees = Employee::where('active', 'Y')->get();
+        $employees = employee::where('active', 'Y')->get();
 
         foreach($employee_dtr as $dtr){
             foreach($employees as $employee){ 
@@ -253,7 +254,7 @@ class CompensationController extends Controller
             $employee->save();
         }
         
-        $employee_records = Employee::where('active', 'Y')->get();
+        $employee_records = employee::where('active', 'Y')->get();
 
         return view('hr.leave-credit-list', [
             'employees' => $employee_records,
@@ -261,7 +262,7 @@ class CompensationController extends Controller
     }
 
     public function lc_resignation(Request $request){
-        $emp = Employee::where('id', $request->id)
+        $emp = employee::where('id', $request->id)
                         ->where('first_name', 'LIKE', '%'.$request->first_name.'%')
                         ->where('last_name', 'LIKE', '%'.$request->last_name.'%')
                         ->where('active', 'Y')
@@ -278,7 +279,7 @@ class CompensationController extends Controller
     }
 
     public function monetize_lc_resignation($id){
-        $emp = Employee::where('id', $id)
+        $emp = employee::where('id', $id)
                         ->where('active', 'Y')
                         ->first();
         
@@ -296,7 +297,7 @@ class CompensationController extends Controller
     }
 
     public function transfer_lc_resignation($id){
-        $emp = Employee::where('id', $id)
+        $emp = employee::where('id', $id)
                         ->where('active', 'Y')
                         ->first();
         
@@ -314,7 +315,7 @@ class CompensationController extends Controller
     }
 
     public function monetize_lc_retirement(Request $request){
-        $emp = Employee::where('id', $request->id)
+        $emp = employee::where('id', $request->id)
                         ->where('name', 'LIKE', '%'.$request->name.'%')
                         ->where('active', 'Y')
                         ->first();
@@ -333,7 +334,7 @@ class CompensationController extends Controller
     }
 
     public function download_file($id){
-        $emp = Employee::where('id', $id)
+        $emp = employee::where('id', $id)
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $emp->job_id)->first();
@@ -347,7 +348,7 @@ class CompensationController extends Controller
     }
 
     public function download_file_transfer($id){
-        $emp = Employee::where('id', $id)
+        $emp = employee::where('id', $id)
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $emp->job_id)->first();

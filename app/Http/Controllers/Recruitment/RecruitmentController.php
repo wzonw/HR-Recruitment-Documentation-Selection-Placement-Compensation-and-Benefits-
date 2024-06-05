@@ -14,7 +14,8 @@ use App\Events\StatusChanged;
 use App\Mail\ApplicantSigning;
 use App\Mail\ProceedToOffice;
 use App\Models\DocuRequest;
-use App\Models\Employee;
+use App\Models\documentrequest;
+use App\Models\employee;
 use App\Models\EmployeeLeave;
 use App\Notifications\NewStatus;
 use Illuminate\Http\RedirectResponse;
@@ -38,7 +39,7 @@ class RecruitmentController extends Controller
             abort(403);
         }*/
 
-        $NumOfDocuReq = DocuRequest::where('remarks', null)->get();
+        $NumOfDocuReq = documentrequest::where('remarks', null)->get();
         $NumOfDocuReq = $NumOfDocuReq->count();
 
         $NumOfApplicants = Application::all();
@@ -367,11 +368,11 @@ class RecruitmentController extends Controller
     public function become_employee($id){
         $applicant = Application::where('id', $id)->first();
 
-        $emp_w_job = Employee::where('job_id', $applicant->job_id)
+        $emp_w_job = employee::where('job_id', $applicant->job_id)
                             ->where('active', 'Y')
                             ->count();
         $name = $applicant->first_name.' '.$applicant->last_name;
-        $emp_acc = Employee::where('first_name', $applicant->first_name)
+        $emp_acc = employee::where('first_name', $applicant->first_name)
                             ->where('last_name', $applicant->last_name)
                             ->where('personal_email', $applicant->email)
                             ->where('active', 'Y')
@@ -406,7 +407,7 @@ class RecruitmentController extends Controller
             else{
                 $is_faculty = 0;
             }
-            Employee::create([
+            employee::create([
                 'employee_id' => $emp_id,
                 'job_id' => $applicant->job_id,
                 'employee_type' => $job->status,
@@ -436,7 +437,7 @@ class RecruitmentController extends Controller
                                 ->where('active', 'Y')
                                 ->first();
 
-            $emp = Employee::where('first_name', $applicant->first_name)
+            $emp = employee::where('first_name', $applicant->first_name)
                             ->where('last_name', $applicant->last_name)
                             ->where('email', $applicant->email)
                             ->where('active', 'Y')

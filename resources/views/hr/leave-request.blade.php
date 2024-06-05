@@ -58,7 +58,7 @@
                             <td class="w-36 pl-3">{{ $leave->first_name }} {{ $leave->last_name }}</td>
                             -->
                             <td class="w-24 pl-3">{{ $leave->status }}</td>
-                            <td class="w-36 pl-3">{{ $leave->college }}</td>
+                            <td class="w-36 pl-3">{{ $leave->office_department }}</td>
                             <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->inclusive_start_date)) }}</td>
                             <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->inclusive_end_date)) }}</td>
                             <td class="w-28 pl-3 uppercase">{{ $leave->type_of_leave }}</td>
@@ -66,9 +66,9 @@
                                 <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                             </td>
                             <td class="text-center uppercase">
-                                @if(strtolower($leave->remarks) == 'approved')
+                                @if(strtolower($leave->status) == 'approved')
                                     <p class="text-green-600">{{ $leave->remarks }}</p>
-                                @elseif(strtolower($leave->remarks) == 'authorized')
+                                @elseif(strtolower($leave->status) == 'authorized')
                                     <p class="text-blue-600">{{ $leave->remarks }}</p>
                                 @else
                                     <p class="text-red-600">{{ $leave->remarks }}</p>
