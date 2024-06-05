@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\dtr;
 use App\Models\Employee;
-use App\Models\EmployeeLeave;
+use App\Models\leaverequest;
 use App\Models\JobsAvailable;
 use DateTime;
 use Illuminate\Http\Request;
@@ -27,9 +27,9 @@ class ChiefController extends Controller
         $NumOfEmployees = Employee::where('active', 'Y')->get();
         $NumOfEmployees = $NumOfEmployees->count();
 
-        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
-                                    ->where('start_date', '<=' ,Carbon::today())
-                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = leaverequest::where('remarks', 'Approved')
+                                    ->where('inclusive_start_date', '<=' ,Carbon::today())
+                                    ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
 
         $applications = Application::join('jobs_availables', 'jobs_availables.id', '=', 'applications.job_id')
@@ -43,22 +43,22 @@ class ChiefController extends Controller
                                         'jobs_availables.job_name',
                                     ]);
 
-        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
-                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
+        $leaves = leaverequest::orderBy('leaverequests.inclusive_start_date', 'ASC')
+                                ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
+                                ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
                                 ->get([
-                                    'employee_leaves.start_date',
-                                    'employee_leaves.end_date',
-                                    'employee_leaves.type',
-                                    'employee_leaves.remarks',
+                                    'leaverequests.inclusive_start_date',
+                                    'leaverequests.inclusive_end_date',
+                                    'leaverequests.type_of_leave',
+                                    'leaverequests.remarks',
                                     'employees.first_name',
                                     'employees.last_name',
                                     'employees.middle_name',
                                 ]);
                                 
         foreach($leaves as $leave){
-            $leave->start_date = date("d M", strtotime($leave->start_date));
-            $leave->end_date = date("d M", strtotime($leave->end_date));
+            $leave->inclusive_start_date = date("d M", strtotime($leave->inclusive_start_date));
+            $leave->inclusive_end_date = date("d M", strtotime($leave->inclusive_end_date));
         }
 
         return view('hr.dashboard.chief-index', [
@@ -151,9 +151,9 @@ class ChiefController extends Controller
             $NumOfEmp = $NumOfEmp->count();
         }
 
-        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
-                                    ->where('start_date', '<=' ,Carbon::today())
-                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = leaverequest::where('remarks', 'Approved')
+                                    ->where('inclusive_start_date', '<=' ,Carbon::today())
+                                    ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
 
         $applications = Application::join('jobs_availables', 'jobs_availables.id', '=', 'applications.job_id')
@@ -167,22 +167,22 @@ class ChiefController extends Controller
                                         'jobs_availables.job_name',
                                     ]);
 
-        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
-                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
+        $leaves = leaverequest::orderBy('leaverequests.inclusive_start_date', 'ASC')
+                                ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
+                                ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
                                 ->get([
-                                    'employee_leaves.start_date',
-                                    'employee_leaves.end_date',
-                                    'employee_leaves.type',
-                                    'employee_leaves.remarks',
+                                    'leaverequests.inclusive_start_date',
+                                    'leaverequests.inclusive_end_date',
+                                    'leaverequests.type_of_leave',
+                                    'leaverequests.remarks',
                                     'employees.first_name',
                                     'employees.last_name',
                                     'employees.middle_name',
                                 ]);
                                 
         foreach($leaves as $leave){
-            $leave->start_date = date("d M", strtotime($leave->start_date));
-            $leave->end_date = date("d M", strtotime($leave->end_date));
+            $leave->inclusive_start_date = date("d M", strtotime($leave->inclusive_start_date));
+            $leave->inclusive_end_date = date("d M", strtotime($leave->inclusive_end_date));
         }
         
         return view('hr.dashboard.chief-index', [
@@ -197,22 +197,21 @@ class ChiefController extends Controller
     }
 
     public function leave_request_id($id, $type){
-        $req = EmployeeLeave::where('emp_id', $id)
-                            ->whereMonth('start_date', Carbon::now()->month)
-                            ->where('type', $type)
+        $req = leaverequest::where('employee_id', $id)
+                            ->whereMonth('inclusive_start_date', Carbon::now()->month)
+                            ->where('type_of_leave', $type)
                             ->first();
 
-        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
+        $leaves = leaverequest::orderBy('leaverequests.inclusive_start_date', 'ASC')
+                                ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
-                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
+                                ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
                                 ->get([
-                                    'employee_leaves.emp_id',
-                                    'employee_leaves.start_date',
-                                    'employee_leaves.end_date',
-                                    'employee_leaves.type',
-                                    'employee_leaves.leave_form',
-                                    'employee_leaves.remarks',
+                                    'leaverequests.employee_id',
+                                    'leaverequests.inclusive_start_date',
+                                    'leaverequests.inclusive_end_date',
+                                    'leaverequests.type_of_leave',
+                                    'leaverequests.remarks',
                                     'employees.first_name',
                                     'employees.last_name',
                                     'employees.middle_name', 
@@ -226,18 +225,18 @@ class ChiefController extends Controller
     }
 
     public function leave_request_not_hr(){
-        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
+        $leaves = leaverequest::orderBy('leaverequests.inclusive_start_date', 'ASC')
+                                ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
-                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
+                                ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
                                 ->where('college', '!=', 'human resources')
                                 ->get([
-                                    'employee_leaves.emp_id',
-                                    'employee_leaves.start_date',
-                                    'employee_leaves.end_date',
-                                    'employee_leaves.type',
-                                    'employee_leaves.leave_form',
-                                    'employee_leaves.remarks',
+                                    'leaverequests.employee_id',
+                                    'leaverequests.inclusive_start_date',
+                                    'leaverequests.inclusive_end_date',
+                                    'leaverequests.type_of_leave',
+                                    'leaverequests.leave_form',
+                                    'leaverequests.remarks',
                                     'employees.first_name',
                                     'employees.last_name',
                                     'employees.middle_name',
@@ -250,31 +249,31 @@ class ChiefController extends Controller
     }
 
     public function approve_leave_request(Request $request){
-        $req = EmployeeLeave::where('emp_id', $request->id)
-                            ->whereMonth('start_date', Carbon::now()->month)
-                            ->where('type', $request->type)
+        $req = leaverequest::where('employee_id', $request->id)
+                            ->whereMonth('inclusive_start_date', Carbon::now()->month)
+                            ->where('type_of_leave', $request->type)
                             ->whereNull('remarks')
                             ->first();
         if($req != null && $request->remarks == 'approved'){
             $req->remarks = $request->remarks;
 
             $lc_per_day = 0.005209*8;
-            $start = Carbon::parse($req->start_date);
-            $end = Carbon::parse($req->end_date);
+            $start = Carbon::parse($req->inclusive_start_date);
+            $end = Carbon::parse($req->inclusive_end_date);
             $days_on_leave = $start->diffInDays($end) + 1;
             $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
 
-            $dtr = dtr::where('emp_id', $req->emp_id)
+            $dtr = dtr::where('employee_id', $req->employee_id)
                         ->whereMonth('date', Carbon::now()->month)
                         ->first();
             
-            $emp_record = Employee::where('id', $req->emp_id)->first();
+            $emp_record = Employee::where('employee_id', $req->employee_id)->first();
 
             // input equivalent leave credit in table
-            if(strtolower($req->type) == 'vacation' && $req->remarks == 'approved'){
+            if(strtolower($req->type_of_leave) == 'vacation' && $req->remarks == 'approved'){
                 if($dtr == null){
                     dtr::create([
-                        'emp_id' => $req->emp_id,
+                        'employee_id' => $req->employee_id,
                         'job_id' => $emp_record->job_id,
                         'date' => Carbon::now()->toDateString(),
                         'vl_used' => $equivalent_lc,
@@ -286,10 +285,10 @@ class ChiefController extends Controller
                     $dtr->save();
                 }
             }
-            elseif(strtolower($req->type) == 'sick' && $req->remarks == 'approved'){
+            elseif(strtolower($req->type_of_leave) == 'sick' && $req->remarks == 'approved'){
                 if($dtr == null){
                     dtr::create([
-                        'emp_id' => $req->emp_id,
+                        'employee_id' => $req->employee_id,
                         'job_id' => $emp_record->job_id,
                         'date' => Carbon::now()->toDateString(),
                         'sl_used' => $equivalent_lc,
@@ -318,6 +317,16 @@ class ChiefController extends Controller
 
             //send to faculty module for leave approval of dept head
         }
+        elseif($req != null && $request->remarks == 'denied'){
+            $req->remarks = $request->remarks;
+            $req->save();
+            $message = 'successfully saved.';
+
+            //notif via db
+            event(new LeaveReqApproval($req));
+
+            //send to faculty module for leave approval of dept head
+        }
         else{
             $message = 'Employee ID not found.';
         }
@@ -325,19 +334,19 @@ class ChiefController extends Controller
     }
 
     public function approve_leave_request_not_hr(){
-        $datas = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                            ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
+        $datas = leaverequest::orderBy('leaverequests.inclusive_start_date', 'ASC')
+                            ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
                             ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
-                            ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
-                            ->where('employee_leaves.remarks', 'approved')
+                            ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
+                            ->where('leaverequests.remarks', 'approved')
                             ->where('jobs_availables.college', '!=', 'human resources')
                             ->get([
-                                'employee_leaves.emp_id',
-                                'employee_leaves.start_date',
-                                'employee_leaves.end_date',
-                                'employee_leaves.type',
-                                'employee_leaves.leave_form',
-                                'employee_leaves.remarks',
+                                'leaverequests.employee_id',
+                                'leaverequests.inclusive_start_date',
+                                'leaverequests.inclusive_end_date',
+                                'leaverequests.type_of_leave',
+                                'leaverequests.leave_form',
+                                'leaverequests.remarks',
                                 'employees.first_name',
                                 'employees.last_name',
                                 'employees.middle_name',
@@ -348,22 +357,22 @@ class ChiefController extends Controller
         foreach($datas as $data){
             if($data != null && $data->remarks == 'approved' && $data->college != 'human resources'){
                 $lc_per_day = 0.005209*8;
-                $start = Carbon::parse($data->start_date);
+                $start = Carbon::parse($data->inclusive_start_date);
                 $end = Carbon::parse($data->end_date);
                 $days_on_leave = $start->diffInDays($end) + 1;
                 $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
     
-                $dtr = dtr::where('emp_id', $data->emp_id)
+                $dtr = dtr::where('employee_id', $data->employee_id)
                             ->whereMonth('date', Carbon::now()->month)
                             ->first();
                 
-                $emp_record = Employee::where('id', $data->emp_id)->first();
+                $emp_record = Employee::where('employee_id', $data->employee_id)->first();
     
                 // input equivalent leave credit in table
-                if(strtolower($data->type) == 'vacation' && $data->remarks == 'approved'){
+                if(strtolower($data->type_of_leave) == 'vacation' && $data->remarks == 'approved'){
                     if($dtr == null){
                         dtr::create([
-                            'emp_id' => $data->emp_id,
+                            'employee_id' => $data->employee_id,
                             'job_id' => $emp_record->job_id,
                             'date' => Carbon::now()->toDateString(),
                             'vl_used' => $equivalent_lc,
@@ -378,7 +387,7 @@ class ChiefController extends Controller
                 elseif(strtolower($data->type) == 'sick' && $data->remarks == 'approved'){
                     if($dtr == null){
                         dtr::create([
-                            'emp_id' => $data->emp_id,
+                            'employee_id' => $data->employee_id,
                             'job_id' => $emp_record->job_id,
                             'date' => Carbon::now()->toDateString(),
                             'sl_used' => $equivalent_lc,

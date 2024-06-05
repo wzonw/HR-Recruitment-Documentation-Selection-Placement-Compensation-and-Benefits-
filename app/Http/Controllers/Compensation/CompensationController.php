@@ -9,6 +9,7 @@ use App\Models\dtr;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
+use App\Models\leaverequest;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -49,17 +50,16 @@ class CompensationController extends Controller
     }
 
     public function leave_request(){
-        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
+        $leaves = leaverequest::orderBy('leaverequests.inclusive_start_date', 'ASC')
+                                ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
-                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
+                                ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
                                 ->get([
-                                    'employee_leaves.emp_id',
-                                    'employee_leaves.start_date',
-                                    'employee_leaves.end_date',
-                                    'employee_leaves.type',
-                                    'employee_leaves.leave_form',
-                                    'employee_leaves.remarks',
+                                    'leaverequests.employee_id',
+                                    'leaverequests.inclusive_start_date',
+                                    'leaverequests.inclusive_end_date',
+                                    'leaverequests.type_of_leave',
+                                    'leaverequests.remarks',
                                     'employees.first_name', 
                                     'employees.middle_name', 
                                     'employees.last_name', 
@@ -71,17 +71,16 @@ class CompensationController extends Controller
     }
 
     public function leave_list(){
-        $leaves = EmployeeLeave::where('employee_leaves.remarks', 'Approved')
-                                ->where('start_date', '<=' ,Carbon::today())
-                                ->where('end_date', '>=' ,Carbon::today())
-                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
+        $leaves = EmployeeLeave::where('leaverequests.remarks', 'Approved')
+                                ->where('inclusive_start_date', '<=' ,Carbon::today())
+                                ->where('inclusive_end_date', '>=' ,Carbon::today())
+                                ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->get([
-                                    'employee_leaves.start_date',
-                                    'employee_leaves.end_date',
-                                    'employee_leaves.type',
-                                    'employee_leaves.leave_form',
-                                    'employee_leaves.remarks',
+                                    'leaverequests.inclusive_start_date',
+                                    'leaverequests.inclusive_end_date',
+                                    'leaverequests.type_of_leave',
+                                    'employee_leaves.status',
                                     'employees.first_name', 
                                     'employees.middle_name', 
                                     'employees.last_name',

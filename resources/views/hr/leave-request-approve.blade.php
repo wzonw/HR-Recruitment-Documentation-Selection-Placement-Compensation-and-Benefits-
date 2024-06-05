@@ -13,17 +13,17 @@
                 </div>               
             </form>
 
-            <form action="{{route('leave-request-success', $req->emp_id)}}" method="post" class="py-3">
+            <form action="{{route('leave-request-success', $req->employee_id)}}" method="post" class="py-3">
                 @csrf
                 <div class="w-full h-screen pt-2 pb-5 bg-white rounded-lg shadow-md  justify-center">
                     <div class="mb-3 pr-6 flex justify-end h-8 text-black text-base text-left font-normal font-inter">
                         <div class="inline-flex justify-center items-center space-x-2 mr-5">
                             <x-label class="w-24" for="id" value="{{ __('Employee ID') }}" />
-                            <x-input id="id" class="block mt-1 w-24 h-8 text-gray-500" type="text" name="id" value="{{$req->emp_id}}" readonly />
+                            <x-input id="id" class="block mt-1 w-24 h-8 text-gray-500" type="text" name="id" value="{{$req->employee_id}}" readonly />
                         </div>
                         <div class="justify-center items-center space-x-2 mr-5 hidden">
                             <x-label class="w-24" for="type" value="{{ __('Type') }}" />
-                            <x-input id="type" class="block mt-1 w-24 h-8 text-gray-500" type="text" name="type" value="{{$req->type}}" readonly />
+                            <x-input id="type" class="block mt-1 w-24 h-8 text-gray-500" type="text" name="type" value="{{$req->type_of_leave}}" readonly />
                         </div>
                         <x-button-gold class="w-28" onclick="return confirm('Are you sure?')">
                             Save
@@ -50,19 +50,19 @@
                                 @foreach ($leaves as $leave)
                                 <tr class="h-10 shadow-sm text-black">
                                     <td class="w-36 pl-3 hover:text-gray-400">
-                                        <a href="{{route('leave-request-id', [$leave->emp_id, $leave->type])}}">{{ $leave->first_name }} {{ $leave->last_name }}</a>
+                                        <a href="{{route('leave-request-id', [$leave->employee_id, $leave->type_of_leave])}}">{{ $leave->first_name }} {{ $leave->last_name }}</a>
                                     </td>
                                     <td class="w-24 pl-3">{{ $leave->status }}</td>
                                     <td class="w-36 pl-3">{{ $leave->college }}</td>
-                                    <td class="w-28 pl-3">{{ $leave->start_date }}</td>
-                                    <td class="w-28 pl-3">{{ $leave->end_date }}</td>
-                                    <td class="w-28 pl-3 uppercase">{{ $leave->type }}</td>
+                                    <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->inclusive_start_date)) }}</td>
+                                    <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->inclusive_end_date)) }}</td>
+                                    <td class="w-28 pl-3 uppercase">{{ $leave->type_of_leave }}</td>
                                     <td class="w-32 text-center border-l border-r border-black">
                                         <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                                     </td>
                                     @if(strtolower($leave->college) == 'human resources')
                                     <td class="w-32 text-center uppercase">
-                                        @if($leave->remarks == null && $req->emp_id == $leave->emp_id && $req->type == $leave->type)
+                                        @if($leave->remarks == null && $req->employee_id == $leave->employee_id && $req->type_of_leave == $leave->type_of_leave)
                                         <select name="remarks" id="remarks" class="uppercase text-sm border-none" autofocus>
                                             <option value="approved" class="text-green-600">approved</option>
                                             <option value="denied" class="text-red-600">denied</option>
@@ -78,7 +78,7 @@
                                     @else
 
                                     <td class="w-32 text-center uppercase">
-                                        @if($leave->remarks == null && $req->emp_id == $leave->emp_id && $req->type == $leave->type)
+                                        @if($leave->remarks == null && $req->employee_id == $leave->employee_id && $req->type_of_leave == $leave->type_of_leave)
                                         <select name="remarks" id="remarks" class="uppercase text-sm border-none" autofocus>
                                             <option value="authorized" class="text-green-600">authorized</option>
                                             <option value="denied" class="text-red-600">denied</option>

@@ -52,16 +52,16 @@
                         <tr class="h-10 shadow-sm text-black">
                             <!-- for hr chief -->
                             <td class="w-36 pl-3 hover:text-gray-400">
-                                <a href="{{route('leave-request-id', [$leave->emp_id, $leave->type])}}">{{ $leave->first_name }} {{ $leave->last_name }}</a>
+                                <a href="{{route('leave-request-id', [$leave->employee_id, $leave->type_of_leave])}}">{{ $leave->first_name }} {{ $leave->last_name }}</a>
                             </td>
                             <!-- for compe 
                             <td class="w-36 pl-3">{{ $leave->first_name }} {{ $leave->last_name }}</td>
                             -->
                             <td class="w-24 pl-3">{{ $leave->status }}</td>
                             <td class="w-36 pl-3">{{ $leave->college }}</td>
-                            <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->start_date)) }}</td>
-                            <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->end_date)) }}</td>
-                            <td class="w-28 pl-3 uppercase">{{ $leave->type }}</td>
+                            <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->inclusive_start_date)) }}</td>
+                            <td class="w-28 pl-3">{{ date('d M Y', strtotime($leave->inclusive_end_date)) }}</td>
+                            <td class="w-28 pl-3 uppercase">{{ $leave->type_of_leave }}</td>
                             <td class="w-28 text-center border-l border-r border-black">
                                 <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                             </td>

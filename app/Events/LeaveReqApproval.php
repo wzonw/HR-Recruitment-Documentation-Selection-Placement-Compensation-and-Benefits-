@@ -3,6 +3,7 @@
 namespace App\Events;
 
 use App\Models\EmployeeLeave;
+use App\Models\leaverequest;
 use Illuminate\Broadcasting\Channel;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Broadcasting\PresenceChannel;
@@ -18,7 +19,7 @@ class LeaveReqApproval
     /**
      * Create a new event instance.
      */
-    public function __construct(public EmployeeLeave $user)
+    public function __construct(public leaverequest $user)
     {
         //
     }
