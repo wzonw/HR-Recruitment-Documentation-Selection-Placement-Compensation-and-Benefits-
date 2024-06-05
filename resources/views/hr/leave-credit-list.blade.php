@@ -15,7 +15,7 @@
                 <!-- Header  -->
                 <thead class="text-black">
                     <tr class="h-10">
-                        <th class="w-5 text-center border border-black">ID</th>
+                        <th class="w-20 text-center border border-black">ID</th>
                         <th class="w-36 text-center border border-black">Name</th>
                         <th class="w-20 text-center border border-black">Vacation</th>
                         <th class="w-20 text-center border border-black">Sick</th>
@@ -26,10 +26,10 @@
                     <!-- Rows -->
                     @foreach($employees as $emp)
                     <tr class="h-10 border border-black text-black">
-                        <td class="w-5 text-center border-r border-black">{{$emp->id}}</td>
+                        <td class="w-20 text-center border-r border-black">{{$emp->employee_id}}</td>
                         <td class="w-36 text-center border-r border-black">{{$emp->first_name}} {{$emp->last_name}}</td>
-                        <td class="w-20 text-center border-r border-black">{{$emp->vl_credit}}</td>
-                        <td class="w-20 text-center border-r border-black">{{$emp->sl_credit}}</td>
+                        <td class="w-20 text-center border-r border-black">{{$emp->vacation_credits}}</td>
+                        <td class="w-20 text-center border-r border-black">{{$emp->sick_credits}}</td>
                         <td class="w-20 text-center border-r border-black">
                             @if($emp->cto == null)
                             @else

@@ -8,4 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class leaverequest extends Model
 {
     use HasFactory;
+
+    protected $primaryKey = 'reference_num';
 }

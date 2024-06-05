@@ -82,8 +82,10 @@
                         <div class="w-full h-full flex flex-wrap justify-center m-3">
                             <x-input id="id" class="block mt-1 w-72 font-bold" type="text" name="id"
                             placeholder="Employee ID" autofocus required/>
-                            <x-input id="name" class="block mt-1 w-72 font-bold" type="text" name="name"
-                            placeholder="Employee Name" required/>
+                            <x-input id="first_name" class="block mt-1 w-72 font-bold" type="text" name="first_name"
+                            placeholder="Employee First Name"/>
+                            <x-input id="last_name" class="block mt-1 w-72 font-bold" type="text" name="last_name"
+                            placeholder="Employee Last Name"/>
                         </div>
                         <div class="flex justify-center">
                             <x-button-gold class="p-2">

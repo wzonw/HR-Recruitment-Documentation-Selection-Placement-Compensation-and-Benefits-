@@ -5,9 +5,8 @@ namespace App\Http\Controllers\Compensation;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
 use App\Models\DocuRequest;
-use App\Models\dtr;
+use App\Models\dailytimerecord;
 use App\Models\Employee;
-use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
 use App\Models\leaverequest;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -29,9 +28,9 @@ class CompensationController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
-        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
-                                    ->where('start_date', '<=' ,Carbon::today())
-                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = leaverequest::where('remarks', 'Approved')
+                                    ->where('inclusive_start_date', '<=' ,Carbon::today())
+                                    ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
 
         $PTJobs = JobsAvailable::where('status', 'COS/JO')
@@ -71,16 +70,16 @@ class CompensationController extends Controller
     }
 
     public function leave_list(){
-        $leaves = EmployeeLeave::where('leaverequests.remarks', 'Approved')
-                                ->where('inclusive_start_date', '<=' ,Carbon::today())
-                                ->where('inclusive_end_date', '>=' ,Carbon::today())
+        $leaves = leaverequest::where('leaverequests.remarks', 'Approved')
+                                ->where('leaverequests.inclusive_start_date', '<=' ,Carbon::today())
+                                ->where('leaverequests.inclusive_end_date', '>=' ,Carbon::today())
                                 ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->get([
                                     'leaverequests.inclusive_start_date',
                                     'leaverequests.inclusive_end_date',
                                     'leaverequests.type_of_leave',
-                                    'employee_leaves.status',
+                                    'leaverequests.remarks',
                                     'employees.first_name', 
                                     'employees.middle_name', 
                                     'employees.last_name',
@@ -95,16 +94,16 @@ class CompensationController extends Controller
     }
 
     public function time_keeping(){
-        $data = dtr::whereMonth('date', Carbon::now()->month)
-                    ->whereYear('date', Carbon::now()->year)
-                    ->join('employees', 'employees.employee_id', '=', 'dtrs.emp_id')
+        $data = dailytimerecord::whereMonth('attendance_date', Carbon::now()->month)
+                    ->whereYear('attendance_date', Carbon::now()->year)
+                    ->join('employees', 'employees.employee_id', '=', 'dailytimerecords.employee_id')
                     ->get([
-                        'dtrs.emp_id',
-                        'dtrs.date',
-                        'dtrs.absent',
-                        'dtrs.undertime',
-                        'dtrs.overtime',
-                        'dtrs.late',
+                        'dailytimerecords.employee_id',
+                        'dailytimerecords.attendance_date',
+                        'dailytimerecords.absent',
+                        'dailytimerecords.undertime',
+                        'dailytimerecords.overtime',
+                        'dailytimerecords.late',
                         'employees.first_name', 
                         'employees.middle_name', 
                         'employees.last_name',
@@ -121,18 +120,18 @@ class CompensationController extends Controller
     }
 
     public function add_record(Request $request){
-        $dtr = dtr::where('emp_id', $request->id)
-                ->whereMonth('date', Carbon::now()->month)
-                ->whereYear('date', Carbon::now()->year)
+        $dtr = dailytimerecord::where('employee_id', $request->id)
+                ->whereMonth('attendance_date', Carbon::now()->month)
+                ->whereYear('attendance_date', Carbon::now()->year)
                 ->first();
         
-        $employee = Employee::where('id', $request->id)->first();
+        $employee = Employee::where('employee_id', $request->id)->first();
 
         if($dtr == null && $employee != null){
-            dtr::create([
-                'emp_id' => $request->id,
+            dailytimerecord::create([
+                'employee_id' => $request->id,
                 'job_id' => $employee->job_id,
-                'date' => Carbon::now(),
+                'attendance_date' => Carbon::now(),
                 'absent' => $request->absent,
                 'undertime' => $request->undertime,
                 'late' => $request->late,
@@ -163,13 +162,13 @@ class CompensationController extends Controller
     }
 
     public function lc_computation(Request $request){
-        $emp = Employee::where('id', $request->id)->first();
-        $data = dtr::where('emp_id', $request->id)
-                    ->whereMonth('date', Carbon::now()->month)
-                    ->whereYear('date', Carbon::now()->year)
+        $emp = Employee::where('employee_id', $request->id)->first();
+        $data = dailytimerecord::where('employee_id', $request->id)
+                    ->whereMonth('attendance_date', Carbon::now()->month)
+                    ->whereYear('attendance_date', Carbon::now()->year)
                     ->first();
         if($data == null && $emp != null){
-            $message = "Employee ID: ".$emp->id." has no daily time record for the month of ".
+            $message = "Employee ID: ".$emp->employee_id." has no daily time record for the month of ".
                         date('F', strtotime(Carbon::now()));
             return redirect()->route('leave-credit')->with('message', $message);
         }
@@ -180,8 +179,8 @@ class CompensationController extends Controller
         else{
             return view('hr.leave-credit-computation', [
                 'emp' => $emp,
-                'vl' => $emp->vl_credit,
-                'sl' => $emp->sl_credit,
+                'vl' => $emp->vacation_credits,
+                'sl' => $emp->sick_credits,
                 'vl_used' => $data->vl_used,
                 'sl_used' => $data->sl_used,
                 'absent' => $data->absent,
@@ -195,11 +194,11 @@ class CompensationController extends Controller
     }
     
     public function lc_computation_save(){
-        $emp = Employee::where('id', request('id'))->first();
+        $emp = Employee::where('employee_id', request('id'))->first();
         
         if($emp != null){
-            $emp->vl_credit = request('new_vl');
-            $emp->sl_credit = request('new_sl');
+            $emp->vacation_credits = request('new_vl');
+            $emp->sick_credits = request('new_sl');
             $emp->cto = request('new_cto');
             $emp->save();
 
@@ -215,15 +214,15 @@ class CompensationController extends Controller
     }
 
     public function lc_computation_complete_attendance(){
-        $employee_dtr = dtr::whereMonth('date', Carbon::now()->month)
-                            ->whereYear('date', Carbon::now()->year)
+        $employee_dtr = dailytimerecord::whereMonth('attendance_date', Carbon::now()->month)
+                            ->whereYear('attendance_date', Carbon::now()->year)
                             ->get();
         $employees = Employee::where('active', 'Y')->get();
         
-        foreach($employee_dtr as $dtr){
-            foreach($employees as $employee){ 
-                if($dtr->emp_id == $employee->id){
-                    unset($employees[$employee->id-1]);
+        foreach($employee_dtr as $key=>$value){
+            foreach($employees as $k=>$v){ 
+                if($value->employee_id == $v->employee_id){
+                    unset($employees[$k]);
                 }
             }
         }
@@ -234,22 +233,22 @@ class CompensationController extends Controller
     }
 
     public function save_new_leave_credit(Request $request){
-        $employee_dtr = dtr::whereMonth('date', Carbon::now()->month)
-                            ->whereYear('date', Carbon::now()->year)
+        $employee_dtr = dailytimerecord::whereMonth('attendance_date', Carbon::now()->month)
+                            ->whereYear('attendance_date', Carbon::now()->year)
                             ->get();
         $employees = Employee::where('active', 'Y')->get();
 
         foreach($employee_dtr as $dtr){
             foreach($employees as $employee){ 
-                if($dtr->emp_id == $employee->id){
-                    unset($employees[$employee->id-1]);
+                if($dtr->employee_id == $employee->employee_id){
+                    unset($employees[$employee->employee_id-1]);
                 }
             }
         }
 
         foreach($employees as $employee){
-            $employee->vl_credit = request('new_vl_'.$employee->id);
-            $employee->sl_credit = request('new_sl_'.$employee->id);
+            $employee->vacation_credits = request('new_vl_'.$employee->employee_id);
+            $employee->sick_credits = request('new_sl_'.$employee->employee_id);
             $employee->save();
         }
         
@@ -261,9 +260,9 @@ class CompensationController extends Controller
     }
 
     public function lc_resignation(Request $request){
-        $emp = Employee::where('id', $request->id)
-                        ->where('first_name', 'LIKE', '%'.$request->first_name.'%')
-                        ->where('last_name', 'LIKE', '%'.$request->last_name.'%')
+        $emp = Employee::where('employee_id', $request->id)
+                        //->where('first_name', 'LIKE', '%'. $request->first_name. '%')
+                        //->where('last_name', 'LIKE', '%'. $request->last_name. '%')
                         ->where('active', 'Y')
                         ->first();
         if($emp == null){
@@ -271,6 +270,20 @@ class CompensationController extends Controller
             return redirect()->route('leave-credit')->with('message', $message);
         }
         else{
+            if($request->vl != null && $request->sl == null){
+                $emp->vacation_credits = $request->vl;
+                $emp->save();
+            }
+            elseif($request->vl == null && $request->sl != null){
+                $emp->sick_credits = $request->sl;
+                $emp->save();
+            }
+            elseif($request->vl != null && $request->sl != null){
+                $emp->vacation_credits = $request->vl;
+                $emp->sick_credits = $request->sl;
+                $emp->save();
+            }
+
             return view('hr.leave-credit-resignation', [
                 'emp' => $emp,
             ]);
@@ -278,7 +291,7 @@ class CompensationController extends Controller
     }
 
     public function monetize_lc_resignation($id){
-        $emp = Employee::where('id', $id)
+        $emp = Employee::where('employee_id', $id)
                         ->where('active', 'Y')
                         ->first();
         
@@ -296,7 +309,7 @@ class CompensationController extends Controller
     }
 
     public function transfer_lc_resignation($id){
-        $emp = Employee::where('id', $id)
+        $emp = Employee::where('employee_id', $id)
                         ->where('active', 'Y')
                         ->first();
         
@@ -314,8 +327,9 @@ class CompensationController extends Controller
     }
 
     public function monetize_lc_retirement(Request $request){
-        $emp = Employee::where('id', $request->id)
-                        ->where('name', 'LIKE', '%'.$request->name.'%')
+        $emp = Employee::where('employee_id', $request->id)
+                        //->where('first_name', 'LIKE', '%'. $request->first_name. '%')
+                        //->where('last_name', 'LIKE', '%'. $request->last_name. '%') 
                         ->where('active', 'Y')
                         ->first();
         
@@ -333,7 +347,7 @@ class CompensationController extends Controller
     }
 
     public function download_file($id){
-        $emp = Employee::where('id', $id)
+        $emp = Employee::where('employee_id', $id)
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $emp->job_id)->first();
@@ -347,7 +361,7 @@ class CompensationController extends Controller
     }
 
     public function download_file_transfer($id){
-        $emp = Employee::where('id', $id)
+        $emp = Employee::where('employee_id', $id)
                         ->where('active', 'Y')
                         ->first();
         $job = JobsAvailable::where('id', $emp->job_id)->first();
@@ -364,7 +378,7 @@ class CompensationController extends Controller
     {
         $leave_search = $request->input ('query');
 
-        $leaves = EmployeeLeave::join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
+        $leaves = leaverequest::join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
         ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
         ->where('employees.name','LIKE', '%' . $leave_search . '%')
         ->orWhere('jobs_availables.status','LIKE', '%' . $leave_search . '%')
@@ -377,10 +391,10 @@ class CompensationController extends Controller
     {
         $lr_search = $request ->input('query');
 
-        $leaves = EmployeeLeave::orderBy('employee_leaves.start_date', 'ASC')
-                                ->join('employees', 'employees.employee_id', '=', 'employee_leaves.emp_id')
+        $leaves = leaverequest::orderBy('leaverequests.inclusive_start_date', 'ASC')
+                                ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
-                                ->whereMonth('employee_leaves.start_date', Carbon::now()->month)
+                                ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
                                 ->where('employees.name','LIKE', '%' . $lr_search . '%')
                                 ->orWhere('jobs_availables.status','LIKE', '%' . $lr_search . '%')
                                 ->get();
@@ -390,13 +404,13 @@ class CompensationController extends Controller
 
     public function tk_filter(Request $request)
     {
-        $query = dtr::join('employees', 'employees.employee_id', '=', 'dtrs.emp_id');
+        $query = dailytimerecord::join('employees', 'employees.employee_id', '=', 'dailytimerecords.employee_id');
     
         if ($request->filled('date')) {
-            $query->whereDate('dtrs.date', $request->input('date'));
+            $query->whereDate('dailytimerecords.attendance_date', $request->input('date'));
         } else {
-            $query->whereMonth('dtrs.date', Carbon::now()->month)
-                  ->whereYear('dtrs.date', Carbon::now()->year);
+            $query->whereMonth('dailytimerecords.date', Carbon::now()->month)
+                  ->whereYear('dailytimerecords.date', Carbon::now()->year);
         }
     
         $data = $query->get();

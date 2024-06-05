@@ -9,6 +9,7 @@ use App\Models\DocuRequest;
 use App\Models\Employee;
 use App\Models\EmployeeLeave;
 use App\Models\JobsAvailable;
+use App\Models\leaverequest;
 use App\Models\User;
 use App\Notifications\DocumentReqNotif;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -48,9 +49,9 @@ class PMController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
-        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
-                                    ->where('start_date', '<=' ,Carbon::today())
-                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = leaverequest::where('remarks', 'Approved')
+                                    ->where('inclusive_start_date', '<=' ,Carbon::today())
+                                    ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
 
         $PTJobs = JobsAvailable::where('status', 'COS/JO')
@@ -91,9 +92,9 @@ class PMController extends Controller
         $NumOfApplicants = Application::all();
         $NumOfApplicants = $NumOfApplicants->count();
 
-        $NumOnLeave = EmployeeLeave::where('remarks', 'Approved')
-                                    ->where('start_date', '<=' ,Carbon::today())
-                                    ->where('end_date', '>=' ,Carbon::today());
+        $NumOnLeave = leaverequest::where('remarks', 'Approved')
+                                    ->where('inclusive_start_date', '<=' ,Carbon::today())
+                                    ->where('inclusive_end_date', '>=' ,Carbon::today());
         $NumOnLeave = $NumOnLeave->count();
 
         $PTJobs = JobsAvailable::where('status', 'COS/JO')
@@ -137,7 +138,7 @@ class PMController extends Controller
 
         $job = JobsAvailable::where('id', $user->job_id)->first();
 
-        $leaves = EmployeeLeave::where('emp_id', $id)->get();
+        $leaves = leaverequest::where('employee_id', $id)->get();
 
         $files = Application::where('email', $user->personal_email)->first();
 
@@ -159,7 +160,7 @@ class PMController extends Controller
     }
 
     public function notify_emp($id){
-        $employee = DocuRequest::where('emp_id', $id)
+        $employee = DocuRequest::where('employee_id', $id)
                                 ->where('remarks', null)
                                 ->first();  
         if($employee != null){

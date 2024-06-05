@@ -28,4 +28,5 @@ class Employee extends Model
         'is_faculty',
         'salary',
     ];
+    protected $primaryKey = 'employee_id';
 }
