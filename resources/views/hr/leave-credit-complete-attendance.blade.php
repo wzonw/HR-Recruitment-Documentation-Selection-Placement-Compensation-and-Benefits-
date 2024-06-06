@@ -6,7 +6,7 @@
             </p>
         </div>
         
-        <div class="h-[530px] mt-5 overflow-auto">
+        <div class="w-[1000px] h-[530px] mt-5 overflow-auto">
             <form action="{{route('lc-complete-attendance-success')}}" method="post">
                 @csrf
                 <div class="flex justify-end">
