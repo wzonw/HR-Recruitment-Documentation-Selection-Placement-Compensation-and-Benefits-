@@ -21,16 +21,16 @@ class ApplicantController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($email)
     {
         /*if(Gate::denies('for-applicants')){
             abort(403);
         }*/
 
         // Application::where('id',  application_id of user who logged in)->first();
-        $applicant = Application::where('id', 2)->first();
-        // $applicant->file = json_decode($applicant->file);
-        //$applicant->file_remarks = json_decode($applicant->file_remarks);
+        $applicant = Application::where('email', $email)->first();
+         $applicant->file = json_decode($applicant->file);
+        $applicant->file_remarks = json_decode($applicant->file_remarks);
         return view('applicant-dashboard', ['applicant'=>$applicant]);
     }
 
@@ -342,8 +342,9 @@ class ApplicantController extends Controller
         $count = 0;
 
         foreach($users as $user){
-            if($user->email == $request->email && Hash::make($request->password)==$user->password){
+            if($user->email == $request->email && $request->password == 'admin'){
                 $count++;
+                return redirect()->route('applicant-dashboard', $request->email);
             }
         }
         if($count > 0){

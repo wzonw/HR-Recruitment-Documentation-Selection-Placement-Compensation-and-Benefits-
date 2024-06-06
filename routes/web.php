@@ -19,7 +19,7 @@ Route::get('/landing', function () {
     return view('livewire.landing-page');
 })->name('landing-page');
 
-Route::get('/applicant/dashboard', [\App\Http\Controllers\Applicant\ApplicantController::class, 'index'])
+Route::get('/applicant/dashboard//{email}', [\App\Http\Controllers\Applicant\ApplicantController::class, 'index'])
 ->name('applicant-dashboard');
 
 Route::get('/applicant/login', function () {
