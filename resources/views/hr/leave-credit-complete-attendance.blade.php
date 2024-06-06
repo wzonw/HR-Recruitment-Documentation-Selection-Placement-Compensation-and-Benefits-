@@ -52,12 +52,12 @@
                             <td class="w-20 text-center border-r border-black">1.25</td>
                             <td class="w-20 text-center border-r border-black bg-green-50 font-semibold text-blue-700">
                                 <input name="new_vl_{{$emp->employee_id}}" type="number" readonly
-                                    value="{{number_format($emp->vl_credit+1.25, 3, '.', '')}}"
+                                    value="{{number_format($emp->vacation_credits+1.25, 3, '.', '')}}"
                                     class="w-24 h-9 text-center text-sm ml-3 bg-green-50 border-none">
                             </td>
                             <td class="w-28 text-center border-r border-black bg-green-50 font-semibold text-blue-700">  
                                 <input name="new_sl_{{$emp->employee_id}}" type="number" readonly
-                                    value="{{number_format($emp->sl_credit+1.25, 3, '.', '')}}"
+                                    value="{{number_format($emp->sick_credits+1.25, 3, '.', '')}}"
                                     class="w-24 h-9 text-center text-sm ml-3 bg-green-50 border-none">
                             </td>
                         </tr>
