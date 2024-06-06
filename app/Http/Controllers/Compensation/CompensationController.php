@@ -384,7 +384,9 @@ class CompensationController extends Controller
 
         $leaves = leaverequest::join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
         ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
-        ->where('employees.name','LIKE', '%' . $leave_search . '%')
+        ->where('employees.first_name','LIKE', '%' . $leave_search . '%')
+        ->orWhere('employees.middle_name','LIKE', '%' . $leave_search . '%')
+        ->orWhere('employees.last_name','LIKE', '%' . $leave_search . '%')
         ->orWhere('jobs_availables.status','LIKE', '%' . $leave_search . '%')
                             ->get();
 
@@ -399,7 +401,9 @@ class CompensationController extends Controller
                                 ->join('employees', 'employees.employee_id', '=', 'leaverequests.employee_id')
                                 ->join('jobs_availables', 'jobs_availables.id', '=', 'employees.job_id')
                                 ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
-                                ->where('employees.name','LIKE', '%' . $lr_search . '%')
+                                ->where('employees.first_name','LIKE', '%' . $lr_search . '%')
+                                ->orWhere('employees.middle_name','LIKE', '%' . $lr_search . '%')
+                                ->orWhere('employees.last_name','LIKE', '%' . $lr_search . '%')
                                 ->orWhere('jobs_availables.status','LIKE', '%' . $lr_search . '%')
                                 ->get();
 
