@@ -66,9 +66,9 @@
                                 <a href="https://www.denr.gov.ph/images/Downloadable_Forms/Revised_Application_for_Leave_2020.pdf">Leave Form</a>
                             </td>
                             <td class="text-center uppercase">
-                                @if(strtolower($leave->status) == 'approved')
+                                @if(strtolower($leave->remarks) == 'approved')
                                     <p class="text-green-600">{{ $leave->remarks }}</p>
-                                @elseif(strtolower($leave->status) == 'authorized')
+                                @elseif(strtolower($leave->remarks) == 'authorized')
                                     <p class="text-blue-600">{{ $leave->remarks }}</p>
                                 @else
                                     <p class="text-red-600">{{ $leave->remarks }}</p>
