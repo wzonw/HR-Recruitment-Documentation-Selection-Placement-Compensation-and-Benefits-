@@ -19,6 +19,16 @@ Route::get('/landing', function () {
     return view('livewire.landing-page');
 })->name('landing-page');
 
+Route::middleware([
+    'auth:sanctum',
+    config('jetstream.auth_session'),
+    'verified',
+])->group(function () {
+    Route::get('/applicant/dashboard', function () {
+        return redirect()->route('applicant-dashboard');
+    })->name('dashboard');
+});
+
 Route::get('/applicant/dashboard', [\App\Http\Controllers\Applicant\ApplicantController::class, 'index'])
 ->name('applicant-dashboard');
 

@@ -11,7 +11,7 @@
         <!-- Applicant name, status button -->
         <div class="items-baseline">
             <p class="w-fit min-h-max  text-indigo-800 text-3xl font-bold font-inter">
-                {{ $applicant->first_name.' '.$applicant->last_name }}
+                {{ $applicant->first_name.' '.$applicant->middle_name.' '.$applicant->last_name }}
             </p>
             <p class="w-20 h-5 text-neutral-950 text-opacity-50 text-base font-normal font-inter">
                 Applicant

@@ -64,6 +64,18 @@
             <x-input-error for="age" class="mt-2" />
         </div>
 
+        <div class="col-span-6 sm:col-span-4 my-2">
+            <x-label for="religion" value="{{ __('Religion') }}" />
+            <x-input id="religion" type="text" class="mt-1 block w-full" name="religion" required autocomplete="religion" />
+            <x-input-error for="religion" class="mt-2" />
+        </div>
+
+        <div class="col-span-6 sm:col-span-4 my-2">
+            <x-label for="civil_status" value="{{ __('Civil Status') }}" />
+            <x-input id="civil_status" type="text" class="mt-1 block w-full" name="civil_status" required autocomplete="civil_status" />
+            <x-input-error for="civil_status" class="mt-2" />
+        </div>
+
 
         <!-- Email -->
         <div class="col-span-6 sm:col-span-4 my-2">
