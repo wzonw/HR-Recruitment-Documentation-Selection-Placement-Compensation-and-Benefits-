@@ -241,10 +241,10 @@ class CompensationController extends Controller
                             ->get();
         $employees = employee::where('active', 'Y')->get();
 
-        foreach($employee_dtr as $dtr){
-            foreach($employees as $employee){ 
-                if($dtr->employee_id == $employee->employee_id){
-                    unset($employees[$employee->employee_id-1]);
+        foreach($employee_dtr as $key=>$value){
+            foreach($employees as $k=>$v){ 
+                if($value->employee_id == $v->employee_id){
+                    unset($employees[$k]);
                 }
             }
         }

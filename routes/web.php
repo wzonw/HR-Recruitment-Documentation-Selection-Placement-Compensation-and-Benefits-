@@ -65,7 +65,7 @@ Route::get('/view/applicant/list', [\App\Http\Controllers\Recruitment\Recruitmen
 Route::get('/view/applicant/profile/{id}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'applicant_profile'])
 ->name('view-applicant-profile');
 
-Route::get('/view/applicant/profile/{file}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'view_file'])
+Route::get('/view/applicant/profile/view/{file}', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'view_file'])
 ->name('view-file');
 
 Route::get('/job/posting', [\App\Http\Controllers\Recruitment\RecruitmentController::class, 'job_posting_dropdown'])

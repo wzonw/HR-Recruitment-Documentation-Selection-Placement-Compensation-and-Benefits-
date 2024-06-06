@@ -81,7 +81,7 @@ class RecruitmentController extends Controller
     {
         $data = $file;
         
-        if(Auth::user()->role_id == 3){
+        //if(Auth::user()->role_id == 3){
             $remarks = [];
             $applicant = Application::where('file', 'LIKE', '%'.$file.'%')->first();
             $index = array_search($file, json_decode($applicant->file));
@@ -116,7 +116,7 @@ class RecruitmentController extends Controller
                 $applicant->save();
             }
 
-        }
+        //}
         return view('livewire.view-file', compact('data'));
     }
 

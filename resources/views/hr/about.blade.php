@@ -19,7 +19,7 @@
                     Employee ID:
                 </p>
                 <p class="w-32 min-h-max text-black text-base font-medium font-inter leading-loose">
-                    {{ $user->id }}
+                    {{ $user->employee_id }}
                 </p>                   
             </div>
             <div class="flex space-x-3">
@@ -86,8 +86,8 @@
             <div class="w-72 h-44 mt-2 ml-4 overflow-auto">
                 @foreach($leaves as $leave)
                 <p class="bg-neutral-100 w-72 min-h-max rounded px-2 py-2">
-                    {{date("d M y", strtotime($leave->start_date))}} - {{date("d M y", strtotime($leave->end_date))}} 
-                    <span class="font-bold">({{$leave->type}})</span>
+                    {{date("d M y", strtotime($leave->inclusive_start_date))}} - {{date("d M y", strtotime($leave->inclusive_end_date))}} 
+                    <span class="font-bold">({{$leave->type_of_leave}})</span>
                 </p>
                 @endforeach
             </div>
