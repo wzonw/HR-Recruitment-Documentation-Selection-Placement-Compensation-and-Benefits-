@@ -58,6 +58,7 @@ class CompensationController extends Controller
                                 ->whereMonth('leaverequests.inclusive_start_date', Carbon::now()->month)
                                 ->get([
                                     'leaverequests.employee_id',
+                                    'leaverequests.office_department',
                                     'leaverequests.inclusive_start_date',
                                     'leaverequests.inclusive_end_date',
                                     'leaverequests.type_of_leave',
