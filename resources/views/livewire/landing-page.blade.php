@@ -25,7 +25,7 @@
             </div>
 
             <div class="sm:fixed sm:top-0 sm:right-0 p-6 text-right z-10">
-                <a href="{{ route('applicant-dashboard') }}" class="font-semibold focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500" style="color:white">Applicant Page (Log in)</a>
+                <a href="{{ route('sample') }}" class="font-semibold focus:outline focus:outline-2 focus:rounded-sm focus:outline-red-500" style="color:white">Applicant Page (Log in)</a>
             </div>
 
             <div class="sm:fixed text-center" style=" width: 50%;color: #2D349A; font-size: 64px; font-weight: 800; box-shadow:4px 4px 4px; border-radius:10px; border:1px; background-color:#ffffff8b;">

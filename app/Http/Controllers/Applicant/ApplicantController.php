@@ -7,11 +7,14 @@ use App\Mail\SendOTP;
 use App\Models\Application;
 use App\Models\JobApplication;
 use App\Models\JobsAvailable;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Hash;
 
 class ApplicantController extends Controller
 {
@@ -26,8 +29,8 @@ class ApplicantController extends Controller
 
         // Application::where('id',  application_id of user who logged in)->first();
         $applicant = Application::where('id', 2)->first();
-        $applicant->file = json_decode($applicant->file);
-        $applicant->file_remarks = json_decode($applicant->file_remarks);
+        // $applicant->file = json_decode($applicant->file);
+        //$applicant->file_remarks = json_decode($applicant->file_remarks);
         return view('applicant-dashboard', ['applicant'=>$applicant]);
     }
 
@@ -328,9 +331,29 @@ class ApplicantController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function applicant_login()
     {
-        //
+        return view('livewire.sample');
+    }
+
+    public function applicant_login_success(Request $request)
+    {
+        $users = User::all();
+        $count = 0;
+
+        foreach($users as $user){
+            if($user->email == $request->email && Hash::make($request->password)==$user->password){
+                $count++;
+            }
+        }
+        if($count > 0){
+            return redirect()->route('applicant-dashboard');
+        }
+        else{
+            $message = 'incorrect credentials.';
+            
+            return redirect()->route('sample')->with('message', $message);
+        }
     }
 
     /**
