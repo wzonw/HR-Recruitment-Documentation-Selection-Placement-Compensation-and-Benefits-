@@ -19,6 +19,10 @@ use Illuminate\Support\Facades\Route;
     return view('livewire.landing-page');
 })->name('landing-page');*/
 
+Route::get('/dtr/report', function () { 
+    return view('hr.dtr-report');
+})->name('dashboard-1');
+
 // hr
 Route::get('/', [\App\Http\Controllers\PM\PMController::class, 'index'])
 ->name('dashboard-1');
