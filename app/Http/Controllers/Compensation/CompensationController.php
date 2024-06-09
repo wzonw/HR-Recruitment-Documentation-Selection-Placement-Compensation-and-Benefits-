@@ -165,6 +165,23 @@ class CompensationController extends Controller
         return redirect()->route('add-dtr')->with('message', $message);
     }
 
+    public function dtr_report_generate(){
+        $data = dtr::where('date', date('Y-m-d', strtotime(Carbon::now())))
+                    ->join('employees', 'employees.employee_id', '=', 'dtrs.employee_id')
+                    ->get([
+                        'dtrs.employee_id',
+                        'dtrs.date',
+                        'dtrs.absent',
+                        'dtrs.undertime',
+                        'dtrs.overtime',
+                        'dtrs.late',
+                        'employees.first_name', 
+                        'employees.middle_name', 
+                        'employees.last_name',
+                    ]);
+        return view('hr.dtr-report-generate', compact('data'));
+    }
+
     public function dtr_report_full_time($day){
         if($day == 15){
             $month = Carbon::NOW()->month;
@@ -346,11 +363,13 @@ class CompensationController extends Controller
             else{
                 $message = 'No employees found.';    
             }
+            
+            return redirect()->route('dtr-report-generate')->with('message', $message);
         }
         else{
             $message = 'Reports for full time employees are only generated every 15th and 30th day of the month.';
+            return redirect()->route('dtr-report')->with('message', $message);
         }
-        return redirect()->route('dtr-report')->with('message', $message);
     }
 
     public function dtr_report_part_time($day){
@@ -442,11 +461,13 @@ class CompensationController extends Controller
             else{
                 $message = 'No employees found.';    
             }
+
+            return redirect()->route('dtr-report-generate')->with('message', $message);
         }
         else{
             $message = 'Reports for part time employees are only generated every 30th day of the month.';
+            return redirect()->route('dtr-report')->with('message', $message);
         }
-        return redirect()->route('dtr-report')->with('message', $message);
     }
 
     public function lc_computation(Request $request){
