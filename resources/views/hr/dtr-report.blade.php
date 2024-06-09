@@ -13,7 +13,7 @@
         @endif
 
         <div class="flex justify-center py-5 space-x-10">
-            <a href="{{ route('dtr-report-full-time',  30) }}">
+            <a href="{{ route('dtr-report-full-time',  NOW()->day) }}">
                 <div class="w-[450px] h-fit rounded-md shadow shadow-gray-300 p-5 hover:bg-gray-200">
                     <div class="text-xl uppercase tracking-widest font-medium">
                         <div class="flex">
