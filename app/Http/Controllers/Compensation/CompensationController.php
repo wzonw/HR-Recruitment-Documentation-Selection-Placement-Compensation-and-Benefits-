@@ -165,6 +165,263 @@ class CompensationController extends Controller
         return redirect()->route('add-dtr')->with('message', $message);
     }
 
+    public function dtr_report_full_time($day){
+        if($day == 15){
+            $month = Carbon::NOW()->month;
+            $year = Carbon::NOW()->year;
+            $weekdays=0;
+            for($day=1; $day<=15; $day++) {
+                $wd = date("w",mktime(0,0,0,$month,$day,$year));
+                if($wd > 0 && $wd < 6){
+                    $weekdays += 1;
+                }
+            }
+            $complete_working_hrs = $weekdays * 9; // complete working hrs of the month (9hrs/day)
+
+            $full_timers = employee::where('employee_type', 'Plantilla')->get();
+
+            if($full_timers != null){
+                foreach($full_timers as $full_timer){
+                    $employee = employee::where('employee_id', $full_timer->employee_id)->first();
+                    $employee_dtr = dailytimerecord::where('employee_id', $employee->employee_id)
+                                                    ->whereMonth('attendance_date', NOW()->month)
+                                                    ->whereDay('attendance_date', '<=', 15)
+                                                    ->get();
+                    
+                    // if the number of dtr records != expected (complete) number of dtr records of the months
+                    $absent = 0;
+                    if($employee_dtr->count() != $weekdays){
+                        $absent = $weekdays - $employee_dtr->count();
+                    }
+        
+                    // calculate working hrs of the employee
+                    $working_hrs = 0;
+                    foreach($employee_dtr as $dtr){
+                        $sec = strtotime($dtr->time_out)-strtotime($dtr->time_in);
+                        $hr = floor(($sec % 86400) / 3600);
+                        $working_hrs += $hr;
+                    }
+        
+                    if($working_hrs != $complete_working_hrs){
+                        $late = 0;
+                        $undertime = 0;
+                        foreach($employee_dtr as $dtr){
+                            // late
+                            if($dtr->time_in > '08:00:00'){
+                                $sec = strtotime($dtr->time_in)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $late += $hr;
+                            }
+                            // undertime
+                            if($dtr->time_out < '17:00:00'){
+                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $undertime += $hr;
+                            }
+                        }
+                        $monthly_report = dtr::where('employee_id', $employee->employee_id)
+                                            ->whereMonth('date', NOW()->month)
+                                            ->first();
+                        if($monthly_report == null){
+                            dtr::create([
+                                'employee_id' => $employee->employee_id,
+                                'job_id' => $employee->job_id,
+                                'date' => NOW(),
+                                'late' => $late,
+                                'undertime' => $undertime,
+                                'absent' => $absent,
+                            ]);
+                        }
+                        else{
+                            $monthly_report->late = $late;
+                            $monthly_report->undertime = $undertime;
+                            $monthly_report->absent = $absent;
+                            $monthly_report->save();
+                        }
+                    }
+                }
+
+                $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
+            }
+            else{
+                $message = 'No employees found.';    
+            }
+        }
+        elseif($day == 30){
+            $month = Carbon::NOW()->month;
+            $year = Carbon::NOW()->year;
+            $daysInMonth = date('t', strtotime(Carbon::NOW()));
+            $weekdays=0;
+            for($day=16; $day<=$daysInMonth; $day++) {
+                $wd = date("w",mktime(0,0,0,$month,$day,$year));
+                if($wd > 0 && $wd < 6){
+                    $weekdays += 1;
+                }
+            }
+            $complete_working_hrs = $weekdays * 9; // complete working hrs of the month (9hrs/day)
+
+            $full_timers = employee::where('employee_type', 'Plantilla')->get();
+
+            if($full_timers != null){
+                foreach($full_timers as $full_timer){
+                    $employee = employee::where('employee_id', $full_timer->employee_id)->first();
+                    $employee_dtr = dailytimerecord::where('employee_id', $employee->employee_id)
+                                                    ->whereMonth('attendance_date', NOW()->month)
+                                                    ->whereDay('attendance_date', '>', 15)
+                                                    ->get();
+                    
+                    // if the number of dtr records != expected (complete) number of dtr records of the months
+                    $absent = 0;
+                    if($employee_dtr->count() != $weekdays){
+                        $absent = $weekdays - $employee_dtr->count();
+                    }
+        
+                    // calculate working hrs of the employee
+                    $working_hrs = 0;
+                    foreach($employee_dtr as $dtr){
+                        $sec = strtotime($dtr->time_out)-strtotime($dtr->time_in);
+                        $hr = floor(($sec % 86400) / 3600);
+                        $working_hrs += $hr;
+                    }
+        
+                    if($working_hrs != $complete_working_hrs){
+                        $late = 0;
+                        $undertime = 0;
+                        foreach($employee_dtr as $dtr){
+                            // late
+                            if($dtr->time_in > '08:00:00'){
+                                $sec = strtotime($dtr->time_in)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $late += $hr;
+                            }
+                            // undertime
+                            if($dtr->time_out < '17:00:00'){
+                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $undertime += $hr;
+                            }
+                        }
+                        $monthly_report = dtr::where('employee_id', $employee->employee_id)
+                                            ->whereMonth('date', NOW()->month)
+                                            ->first();
+                        if($monthly_report == null){
+                            dtr::create([
+                                'employee_id' => $employee->employee_id,
+                                'job_id' => $employee->job_id,
+                                'date' => NOW(),
+                                'late' => $late,
+                                'undertime' => $undertime,
+                                'absent' => $absent,
+                            ]);
+                        }
+                        else{
+                            $monthly_report->late = $late;
+                            $monthly_report->undertime = $undertime;
+                            $monthly_report->absent = $absent;
+                            $monthly_report->save();
+                        }
+                    }
+                }
+
+                $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
+            }
+            else{
+                $message = 'No employees found.';    
+            }
+        }
+        else{
+            $message = 'Reports for full time employees are only generated every 15th and 30th day of the month.';
+        }
+        return redirect()->route('dtr-report')->with('message', $message);
+    }
+
+    public function dtr_report_part_time($day){
+        if($day == 30){
+            $month = Carbon::NOW()->month;
+            $year = Carbon::NOW()->year;
+            $daysInMonth = date('t', strtotime(Carbon::NOW()));
+            $weekdays=20;
+            for($day=29; $day<=$daysInMonth; $day++) {
+                $wd = date("w",mktime(0,0,0,$month,$day,$year));
+                if($wd > 0 && $wd < 6){
+                    $weekdays += 1;
+                }
+            }
+
+            $complete_working_hrs = $weekdays * 9; // complete working hrs of the month (9hrs/day)
+
+            $part_timers = employee::where('employee_type', 'COS/JO')->get();
+
+            if($part_timers != null){
+                foreach($part_timers as $part_timer){
+                    $employee = employee::where('employee_id', $part_timer->employee_id)->first();
+                    $employee_dtr = dailytimerecord::where('employee_id', $employee->employee_id)->get();
+                    
+                    // if the number of dtr records != expected (complete) number of dtr records of the months
+                    $absent = 0;
+                    if($employee_dtr->count() != $weekdays){
+                        $absent = $weekdays - $employee_dtr->count();
+                    }
+        
+                    // calculate working hrs of the employee
+                    $working_hrs = 0;
+                    foreach($employee_dtr as $dtr){
+                        $sec = strtotime($dtr->time_out)-strtotime($dtr->time_in);
+                        $hr = floor(($sec % 86400) / 3600);
+                        $working_hrs += $hr;
+                    }
+        
+                    if($working_hrs != $complete_working_hrs){
+                        $late = 0;
+                        $undertime = 0;
+                        foreach($employee_dtr as $dtr){
+                            // late
+                            if($dtr->time_in > '08:00:00'){
+                                $sec = strtotime($dtr->time_in)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $late += $hr;
+                            }
+                            // undertime
+                            if($dtr->time_out < '17:00:00'){
+                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $undertime += $hr;
+                            }
+                        }
+                        $monthly_report = dtr::where('employee_id', $employee->employee_id)
+                                            ->whereMonth('date', NOW()->month)
+                                            ->first();
+                        if($monthly_report == null){
+                            dtr::create([
+                                'employee_id' => $employee->employee_id,
+                                'job_id' => $employee->job_id,
+                                'date' => NOW(),
+                                'late' => $late,
+                                'undertime' => $undertime,
+                                'absent' => $absent,
+                            ]);
+                        }
+                        else{
+                            $monthly_report->late = $late;
+                            $monthly_report->undertime = $undertime;
+                            $monthly_report->absent = $absent;
+                            $monthly_report->save();
+                        }
+                    }
+                }
+
+                $message = 'Successfully generated a dtr report of part time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
+            }
+            else{
+                $message = 'No employees found.';    
+            }
+        }
+        else{
+            $message = 'Reports for part time employees are only generated every 30th day of the month.';
+        }
+        return redirect()->route('dtr-report')->with('message', $message);
+    }
+
     public function lc_computation(Request $request){
         $emp = Employee::where('employee_id', $request->id)->first();
         $data = dailytimerecord::where('employee_id', $request->id)

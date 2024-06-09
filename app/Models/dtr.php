@@ -10,7 +10,7 @@ class dtr extends Model
     use HasFactory;
 
     protected $fillable = [
-        'emp_id',
+        'employee_id',
         'job_id',
         'date',
         'absent',

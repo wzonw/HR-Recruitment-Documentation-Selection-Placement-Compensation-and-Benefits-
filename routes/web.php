@@ -21,7 +21,13 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/dtr/report', function () { 
     return view('hr.dtr-report');
-})->name('dashboard-1');
+})->name('dtr-report');
+
+Route::get('/dtr/report/full-time/{day}', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr_report_full_time'])
+->name('dtr-report-full-time');
+
+Route::get('/dtr/report/part-time/{day}', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr_report_part_time'])
+->name('dtr-report-part-time');
 
 // hr
 Route::get('/', [\App\Http\Controllers\PM\PMController::class, 'index'])
