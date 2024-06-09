@@ -205,6 +205,7 @@ class CompensationController extends Controller
                     if($working_hrs != $complete_working_hrs){
                         $late = 0;
                         $undertime = 0;
+                        $overtime = 0;
                         foreach($employee_dtr as $dtr){
                             // late
                             if($dtr->time_in > '08:00:00'){
@@ -218,6 +219,12 @@ class CompensationController extends Controller
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
+                            // overtime
+                            if($dtr->time_out > '17:00:00'){
+                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $overtime += $hr;
+                            }
                         }
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
                                             ->whereMonth('date', NOW()->month)
@@ -230,12 +237,14 @@ class CompensationController extends Controller
                                 'late' => $late,
                                 'undertime' => $undertime,
                                 'absent' => $absent,
+                                'overtime' => $overtime,
                             ]);
                         }
                         else{
                             $monthly_report->late = $late;
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
+                            $monthly_report->overtime = $overtime;
                             $monthly_report->save();
                         }
                     }
@@ -287,6 +296,7 @@ class CompensationController extends Controller
                     if($working_hrs != $complete_working_hrs){
                         $late = 0;
                         $undertime = 0;
+                        $overtime = 0;
                         foreach($employee_dtr as $dtr){
                             // late
                             if($dtr->time_in > '08:00:00'){
@@ -300,6 +310,12 @@ class CompensationController extends Controller
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
+                            // overtime
+                            if($dtr->time_out > '17:00:00'){
+                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $overtime += $hr;
+                            }
                         }
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
                                             ->whereMonth('date', NOW()->month)
@@ -312,12 +328,14 @@ class CompensationController extends Controller
                                 'late' => $late,
                                 'undertime' => $undertime,
                                 'absent' => $absent,
+                                'overtime' => $overtime,
                             ]);
                         }
                         else{
                             $monthly_report->late = $late;
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
+                            $monthly_report->overtime = $overtime;
                             $monthly_report->save();
                         }
                     }
@@ -374,6 +392,7 @@ class CompensationController extends Controller
                     if($working_hrs != $complete_working_hrs){
                         $late = 0;
                         $undertime = 0;
+                        $overtime = 0;
                         foreach($employee_dtr as $dtr){
                             // late
                             if($dtr->time_in > '08:00:00'){
@@ -387,6 +406,12 @@ class CompensationController extends Controller
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
+                            // overtime
+                            if($dtr->time_out > '17:00:00'){
+                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $hr = $sec / 3600;
+                                $overtime += $hr;
+                            }
                         }
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
                                             ->whereMonth('date', NOW()->month)
@@ -399,12 +424,14 @@ class CompensationController extends Controller
                                 'late' => $late,
                                 'undertime' => $undertime,
                                 'absent' => $absent,
+                                'overtime' => $overtime,
                             ]);
                         }
                         else{
                             $monthly_report->late = $late;
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
+                            $monthly_report->overtime = $overtime;
                             $monthly_report->save();
                         }
                     }
