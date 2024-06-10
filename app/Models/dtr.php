@@ -12,7 +12,7 @@ class dtr extends Model
     protected $fillable = [
         'employee_id',
         'job_id',
-        'date',
+        'attendance_date',
         'absent',
         'undertime',
         'late',

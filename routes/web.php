@@ -29,7 +29,7 @@ Route::get('/dtr/report/full-time/{day}', [\App\Http\Controllers\Compensation\Co
 Route::get('/dtr/report/part-time/{day}', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr_report_part_time'])
 ->name('dtr-report-part-time');
 
-Route::get('/dtr/report/generate', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr_report_generate'])
+Route::get('/dtr/report/generate/{type}', [\App\Http\Controllers\Compensation\CompensationController::class, 'dtr_report_generate'])
 ->name('dtr-report-generate');
 
 // hr

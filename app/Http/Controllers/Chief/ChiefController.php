@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Chief;
 use App\Events\LeaveReqApproval;
 use App\Http\Controllers\Controller;
 use App\Models\Application;
-use App\Models\dailytimerecord;
+use App\Models\dtr;
 use App\Models\Employee;
 use App\Models\leaverequest;
 use App\Models\JobsAvailable;
@@ -266,7 +266,7 @@ class ChiefController extends Controller
             $days_on_leave = $start->diffInDays($end) + 1;
             $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
 
-            $dtr = dailytimerecord::where('employee_id', $req->employee_id)
+            $dtr = dtr::where('employee_id', $req->employee_id)
                         ->whereMonth('attendance_date', Carbon::now()->month)
                         ->first();
             
@@ -275,7 +275,7 @@ class ChiefController extends Controller
             // input equivalent leave credit in table
             if(strtolower($req->type_of_leave) == 'vacation' && $req->remarks == 'approved'){
                 if($dtr == null){
-                    dailytimerecord::create([
+                    dtr::create([
                         'employee_id' => $req->employee_id,
                         'job_id' => $emp_record->job_id,
                         'attendance_date' => Carbon::now()->toDateString(),
@@ -290,7 +290,7 @@ class ChiefController extends Controller
             }
             elseif(strtolower($req->type_of_leave) == 'sick' && $req->remarks == 'approved'){
                 if($dtr == null){
-                    dailytimerecord::create([
+                    dtr::create([
                         'employee_id' => $req->employee_id,
                         'job_id' => $emp_record->job_id,
                         'attendance_date' => Carbon::now()->toDateString(),
@@ -368,7 +368,7 @@ class ChiefController extends Controller
                 $days_on_leave = $start->diffInDays($end) + 1;
                 $equivalent_lc = number_format($days_on_leave*$lc_per_day, 3, '.', '');
     
-                $dtr = dailytimerecord::where('employee_id', $data->employee_id)
+                $dtr = dtr::where('employee_id', $data->employee_id)
                             ->whereMonth('attendance_date', Carbon::now()->month)
                             ->first();
                 
@@ -377,7 +377,7 @@ class ChiefController extends Controller
                 // input equivalent leave credit in table
                 if(strtolower($data->type_of_leave) == 'vacation' && $data->remarks == 'approved'){
                     if($dtr == null){
-                        dailytimerecord::create([
+                        dtr::create([
                             'employee_id' => $data->employee_id,
                             'job_id' => $emp_record->job_id,
                             'attendance_date' => Carbon::now()->toDateString(),
@@ -392,7 +392,7 @@ class ChiefController extends Controller
                 }
                 elseif(strtolower($data->type_of_leave) == 'sick' && $data->remarks == 'approved'){
                     if($dtr == null){
-                        dailytimerecord::create([
+                        dtr::create([
                             'employee_id' => $data->employee_id,
                             'job_id' => $emp_record->job_id,
                             'attendance_date' => Carbon::now()->toDateString(),

@@ -49,7 +49,7 @@
                 @foreach($data as $data)
                 <tr class="h-10 text-black">
                     <td class="w-36 pl-5 border-r border-black">{{$data->first_name}} {{$data->last_name}}</td>
-                    <td class="w-20 text-center border-r border-black">{{$data->date}}</td>
+                    <td class="w-20 text-center border-r border-black">{{$data->attendance_date}}</td>
                     <td class="w-20 text-center border-r border-black">{{$data->absent}}</td>
                     <td class="w-20 text-center border-r border-black">{{$data->undertime}}</td>
                     <td class="w-28 text-center border-r border-black">{{$data->overtime}}</td>

@@ -124,7 +124,7 @@ class CompensationController extends Controller
     }
 
     public function add_record(Request $request){
-        $dtr = dailytimerecord::where('employee_id', $request->id)
+        $dtr = dtr::where('employee_id', $request->id)
                 ->whereMonth('attendance_date', Carbon::now()->month)
                 ->whereYear('attendance_date', Carbon::now()->year)
                 ->first();
@@ -132,7 +132,7 @@ class CompensationController extends Controller
         $employee = Employee::where('employee_id', $request->id)->first();
 
         if($dtr == null && $employee != null){
-            dailytimerecord::create([
+            dtr::create([
                 'employee_id' => $request->id,
                 'job_id' => $employee->job_id,
                 'attendance_date' => Carbon::now(),
@@ -165,12 +165,19 @@ class CompensationController extends Controller
         return redirect()->route('add-dtr')->with('message', $message);
     }
 
-    public function dtr_report_generate(){
-        $data = dtr::where('date', date('Y-m-d', strtotime(Carbon::now())))
+    public function dtr_report_generate($type){
+        if($type == 'Full-time'){
+            $type = 'Plantilla';
+        }
+        elseif($type == 'Part-time'){
+            $type = 'COS/JO';
+        }
+        $data = dtr::where('attendance_date', date('Y-m-d', strtotime(Carbon::now())))
                     ->join('employees', 'employees.employee_id', '=', 'dtrs.employee_id')
+                    ->where('employees.employee_type', $type)
                     ->get([
                         'dtrs.employee_id',
-                        'dtrs.date',
+                        'dtrs.attendance_date',
                         'dtrs.absent',
                         'dtrs.undertime',
                         'dtrs.overtime',
@@ -232,25 +239,25 @@ class CompensationController extends Controller
                             }
                             // undertime
                             if($dtr->time_out < '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $sec = strtotime('17:00:00')-strtotime($dtr->time_out);
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
                             // overtime
                             if($dtr->time_out > '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $sec = strtotime($dtr->time_out)-strtotime('17:00:00');
                                 $hr = $sec / 3600;
                                 $overtime += $hr;
                             }
                         }
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
-                                            ->whereMonth('date', NOW()->month)
+                                            ->whereMonth('attendance_date', NOW()->month)
                                             ->first();
                         if($monthly_report == null){
                             dtr::create([
                                 'employee_id' => $employee->employee_id,
                                 'job_id' => $employee->job_id,
-                                'date' => NOW(),
+                                'attendance_date' => NOW(),
                                 'late' => $late,
                                 'undertime' => $undertime,
                                 'absent' => $absent,
@@ -258,20 +265,27 @@ class CompensationController extends Controller
                             ]);
                         }
                         else{
+                            $monthly_report->attendance_date = NOW();
                             $monthly_report->late = $late;
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
                             $monthly_report->overtime = $overtime;
                             $monthly_report->save();
                         }
+
+                        $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
+                    }
+                    else{
+                        $message = 'Complete attendance for the month of '.date('F', strtotime(Carbon::NOW()->month));    
                     }
                 }
 
-                $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
             }
             else{
                 $message = 'No employees found.';    
             }
+            $type = 'Full-time';
+            return redirect()->route('dtr-report-generate', $type)->with('message', $message);
         }
         elseif($day == 30){
             $month = Carbon::NOW()->month;
@@ -323,25 +337,25 @@ class CompensationController extends Controller
                             }
                             // undertime
                             if($dtr->time_out < '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $sec = strtotime('17:00:00')-strtotime($dtr->time_out);
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
                             // overtime
                             if($dtr->time_out > '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $sec = strtotime($dtr->time_out)-strtotime('17:00:00');
                                 $hr = $sec / 3600;
                                 $overtime += $hr;
                             }
                         }
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
-                                            ->whereMonth('date', NOW()->month)
+                                            ->whereMonth('attendance_date', NOW()->month)
                                             ->first();
                         if($monthly_report == null){
                             dtr::create([
                                 'employee_id' => $employee->employee_id,
                                 'job_id' => $employee->job_id,
-                                'date' => NOW(),
+                                'attendance_date' => NOW(),
                                 'late' => $late,
                                 'undertime' => $undertime,
                                 'absent' => $absent,
@@ -349,22 +363,27 @@ class CompensationController extends Controller
                             ]);
                         }
                         else{
+                            $monthly_report->attendance_date = NOW();
                             $monthly_report->late = $late;
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
                             $monthly_report->overtime = $overtime;
                             $monthly_report->save();
                         }
+
+                        $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
+                    }
+                    else{
+                        $message = 'Complete attendance for the month of '.date('F', strtotime(Carbon::NOW()->month));    
                     }
                 }
 
-                $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
             }
             else{
                 $message = 'No employees found.';    
             }
-            
-            return redirect()->route('dtr-report-generate')->with('message', $message);
+            $type = 'Full-time';
+            return redirect()->route('dtr-report-generate', $type)->with('message', $message);
         }
         else{
             $message = 'Reports for full time employees are only generated every 15th and 30th day of the month.';
@@ -421,25 +440,25 @@ class CompensationController extends Controller
                             }
                             // undertime
                             if($dtr->time_out < '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $sec = strtotime('17:00:00')-strtotime($dtr->time_out);
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
                             // overtime
                             if($dtr->time_out > '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('08:00:00');
+                                $sec = strtotime($dtr->time_out)-strtotime('17:00:00');
                                 $hr = $sec / 3600;
                                 $overtime += $hr;
                             }
                         }
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
-                                            ->whereMonth('date', NOW()->month)
+                                            ->whereMonth('attendance_date', NOW()->month)
                                             ->first();
                         if($monthly_report == null){
                             dtr::create([
                                 'employee_id' => $employee->employee_id,
                                 'job_id' => $employee->job_id,
-                                'date' => NOW(),
+                                'attendance_date' => NOW(),
                                 'late' => $late,
                                 'undertime' => $undertime,
                                 'absent' => $absent,
@@ -447,22 +466,27 @@ class CompensationController extends Controller
                             ]);
                         }
                         else{
+                            $monthly_report->attendance_date = NOW();
                             $monthly_report->late = $late;
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
                             $monthly_report->overtime = $overtime;
                             $monthly_report->save();
                         }
+
+                        $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
+                    }
+                    else{
+                        $message = 'Complete attendance for the month of '.date('F', strtotime(Carbon::NOW()->month));    
                     }
                 }
 
-                $message = 'Successfully generated a dtr report of part time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
             }
             else{
                 $message = 'No employees found.';    
             }
-
-            return redirect()->route('dtr-report-generate')->with('message', $message);
+            $type = 'Part-time';
+            return redirect()->route('dtr-report-generate', $type)->with('message', $message);
         }
         else{
             $message = 'Reports for part time employees are only generated every 30th day of the month.';
@@ -472,7 +496,7 @@ class CompensationController extends Controller
 
     public function lc_computation(Request $request){
         $emp = Employee::where('employee_id', $request->id)->first();
-        $data = dailytimerecord::where('employee_id', $request->id)
+        $data = dtr::where('employee_id', $request->id)
                     ->whereMonth('attendance_date', Carbon::now()->month)
                     ->whereYear('attendance_date', Carbon::now()->year)
                     ->first();
@@ -523,7 +547,7 @@ class CompensationController extends Controller
     }
 
     public function lc_computation_complete_attendance(){
-        $employee_dtr = dailytimerecord::whereMonth('attendance_date', Carbon::now()->month)
+        $employee_dtr = dtr::whereMonth('attendance_date', Carbon::now()->month)
                             ->whereYear('attendance_date', Carbon::now()->year)
                             ->get();
         $employees = employee::where('active', 'Y')->get();
@@ -542,7 +566,7 @@ class CompensationController extends Controller
     }
 
     public function save_new_leave_credit(Request $request){
-        $employee_dtr = dailytimerecord::whereMonth('attendance_date', Carbon::now()->month)
+        $employee_dtr = dtr::whereMonth('attendance_date', Carbon::now()->month)
                             ->whereYear('attendance_date', Carbon::now()->year)
                             ->get();
         $employees = employee::where('active', 'Y')->get();
