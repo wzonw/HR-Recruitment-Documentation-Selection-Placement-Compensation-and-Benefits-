@@ -33,7 +33,7 @@
                     <th class="w-20 text-center border border-black">Undertime (hrs)</th>
                     <th class="w-20 text-center border border-black">Overtime (hrs)</th>
                     <th class="w-20 text-center border border-black">Late time (hrs)</th>
-                    <th class="w-10"></th>
+                    <th class="w-10 text-center">CTO (hrs)</th>
                 </tr>
             </thead>
             <tbody>
@@ -45,6 +45,7 @@
                     <td class="w-20 text-center border border-black"></td>
                     <td class="w-28 text-center border border-black"></td>
                     <td class="w-28 text-center border border-black"></td>
+                    <td class="w-9 text-center border border-black"></td>
                 </tr>
                 @foreach($data as $data)
                 <tr class="h-10 text-black">
@@ -54,7 +55,7 @@
                     <td class="w-20 text-center border-r border-black">{{$data->undertime}}</td>
                     <td class="w-28 text-center border-r border-black">{{$data->overtime}}</td>
                     <td class="w-28 text-center border-r border-black">{{$data->late}}</td>
-                    <td class="w-9 pl-2.5 border-r border-black"></td>
+                    <td class="w-9 text-center border-r border-black">{{$data->cto}}</td>
                 </tr>
                 @endforeach
             </tbody>

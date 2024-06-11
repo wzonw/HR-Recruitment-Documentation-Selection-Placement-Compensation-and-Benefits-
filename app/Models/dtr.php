@@ -16,6 +16,7 @@ class dtr extends Model
         'absent',
         'undertime',
         'late',
+        'cto',
         'overtime',
         'vl_used',
         'sl_used',

@@ -182,6 +182,7 @@ class CompensationController extends Controller
                         'dtrs.undertime',
                         'dtrs.overtime',
                         'dtrs.late',
+                        'dtrs.cto',
                         'employees.first_name', 
                         'employees.middle_name', 
                         'employees.last_name',
@@ -191,65 +192,93 @@ class CompensationController extends Controller
 
     public function dtr_report_full_time($day){
         if($day == 15){
+            $employees = Employee::where('employee_type', 'Plantilla')
+                            ->where('active', 1)
+                            ->get();
             $month = Carbon::NOW()->month;
             $year = Carbon::NOW()->year;
-            $weekdays=0;
-            for($day=1; $day<=15; $day++) {
-                $wd = date("w",mktime(0,0,0,$month,$day,$year));
-                if($wd > 0 && $wd < 6){
-                    $weekdays += 1;
-                }
-            }
-            $complete_working_hrs = $weekdays * 9; // complete working hrs of the month (9hrs/day)
+            $daysInMonth =  Carbon::NOW()->daysInMonth;
 
-            $full_timers = employee::where('employee_type', 'Plantilla')->get();
+            if($employees != null){
+                /* calculate the expected working days and hours */
+                foreach($employees as $employee){
+                    /* calculate the expected working days of employee (current month) */
+                    $workdays=0;
+                    $employee->work_days = json_decode($employee->work_days);
+                    for($day=1; $day<=15; $day++) {
+                        $wd = date("w",mktime(0,0,0,$month,$day,$year));
+                        if(in_array($wd, $employee->work_days)){
+                            $workdays += 1;
+                        }
+                    }
 
-            if($full_timers != null){
-                foreach($full_timers as $full_timer){
-                    $employee = employee::where('employee_id', $full_timer->employee_id)->first();
+                    /* calculate the expected working hours of employee (per day) */
+                    $work_sec = strtotime($employee->end_of_shift) - strtotime($employee->start_of_shift);
+                    $work_hours = floor(($work_sec % 86400) / 3600);
+
+                    /* calculate the expected working hours of employee (for the current month) */
+                    $complete_working_hrs = $workdays * $work_hours;
+
+                    /* employee's dtr for the current month, current year */
                     $employee_dtr = dailytimerecord::where('employee_id', $employee->employee_id)
                                                     ->whereMonth('attendance_date', NOW()->month)
+                                                    ->whereYear('attendance_date', NOW()->year)
                                                     ->whereDay('attendance_date', '<=', 15)
                                                     ->get();
-                    
-                    // if the number of dtr records != expected (complete) number of dtr records of the months
+
+                    /* absences, late, undertime, overtime */
                     $absent = 0;
-                    if($employee_dtr->count() != $weekdays){
-                        $absent = $weekdays - $employee_dtr->count();
+                    $late = 0;
+                    $undertime = 0;
+                    $overtime = 0;
+                    $cto = 0;
+
+                    /* calculate for cto (working hrs during rest day) */
+                    foreach($employee_dtr as $key=>$dtr){
+                        $d = date("w",strtotime($dtr->attendance_date));
+                        if(in_array($d, $employee->work_days) == false){
+                            $s = strtotime($dtr->time_out)-strtotime($dtr->time_in);
+                            $h = floor(($s % 86400) / 3600);
+                            $cto += $h * 1.5; 
+                            unset($employee_dtr[$key]);
+                        }
                     }
-        
-                    // calculate working hrs of the employee
+
+                    /* calculate for absences */
+                    if($employee_dtr->count() < $workdays){
+                        $absent = $workdays - $employee_dtr->count();
+                    }
+
+                    /* calculate working hrs of the employee excluding rest days */
                     $working_hrs = 0;
                     foreach($employee_dtr as $dtr){
                         $sec = strtotime($dtr->time_out)-strtotime($dtr->time_in);
                         $hr = floor(($sec % 86400) / 3600);
                         $working_hrs += $hr;
                     }
-        
+
                     if($working_hrs != $complete_working_hrs){
-                        $late = 0;
-                        $undertime = 0;
-                        $overtime = 0;
                         foreach($employee_dtr as $dtr){
                             // late
-                            if($dtr->time_in > '08:00:00'){
-                                $sec = strtotime($dtr->time_in)-strtotime('08:00:00');
+                            if($dtr->time_in > $employee->start_of_shift){
+                                $sec = strtotime($dtr->time_in)-strtotime($employee->start_of_shift);
                                 $hr = $sec / 3600;
                                 $late += $hr;
                             }
                             // undertime
-                            if($dtr->time_out < '17:00:00'){
-                                $sec = strtotime('17:00:00')-strtotime($dtr->time_out);
+                            if($dtr->time_out < $employee->end_of_shift){
+                                $sec = strtotime($employee->end_of_shift)-strtotime($dtr->time_out);
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
                             // overtime
-                            if($dtr->time_out > '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('17:00:00');
+                            if($dtr->time_out > $employee->end_of_shift){
+                                $sec = strtotime($dtr->time_out)-strtotime($employee->end_of_shift);
                                 $hr = $sec / 3600;
                                 $overtime += $hr;
                             }
                         }
+
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
                                             ->whereMonth('attendance_date', NOW()->month)
                                             ->first();
@@ -262,6 +291,7 @@ class CompensationController extends Controller
                                 'undertime' => $undertime,
                                 'absent' => $absent,
                                 'overtime' => $overtime,
+                                'cto' => $cto,
                             ]);
                         }
                         else{
@@ -270,84 +300,109 @@ class CompensationController extends Controller
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
                             $monthly_report->overtime = $overtime;
+                            $monthly_report->cto = $cto;
                             $monthly_report->save();
                         }
 
-                        $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
-                    }
-                    else{
-                        $message = 'Complete attendance for the month of '.date('F', strtotime(Carbon::NOW()->month));    
                     }
                 }
-
+                $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()));
             }
             else{
                 $message = 'No employees found.';    
             }
+
             $type = 'Full-time';
             return redirect()->route('dtr-report-generate', $type)->with('message', $message);
         }
         elseif($day == 30){
+            $employees = Employee::where('employee_type', 'Plantilla')
+                            ->where('active', 1)
+                            ->get();
             $month = Carbon::NOW()->month;
             $year = Carbon::NOW()->year;
-            $daysInMonth = date('t', strtotime(Carbon::NOW()));
-            $weekdays=0;
-            for($day=16; $day<=$daysInMonth; $day++) {
-                $wd = date("w",mktime(0,0,0,$month,$day,$year));
-                if($wd > 0 && $wd < 6){
-                    $weekdays += 1;
-                }
-            }
-            $complete_working_hrs = $weekdays * 9; // complete working hrs of the month (9hrs/day)
+            $daysInMonth =  Carbon::NOW()->daysInMonth;
 
-            $full_timers = employee::where('employee_type', 'Plantilla')->get();
+            if($employees != null){
+                /* calculate the expected working days and hours */
+                foreach($employees as $employee){
+                    /* calculate the expected working days of employee (current month) */
+                    $workdays=0;
+                    $employee->work_days = json_decode($employee->work_days);
+                    for($day=16; $day<=$daysInMonth; $day++) {
+                        $wd = date("w",mktime(0,0,0,$month,$day,$year));
+                        if(in_array($wd, $employee->work_days)){
+                            $workdays += 1;
+                        }
+                    }
 
-            if($full_timers != null){
-                foreach($full_timers as $full_timer){
-                    $employee = employee::where('employee_id', $full_timer->employee_id)->first();
+                    /* calculate the expected working hours of employee (per day) */
+                    $work_sec = strtotime($employee->end_of_shift) - strtotime($employee->start_of_shift);
+                    $work_hours = floor(($work_sec % 86400) / 3600);
+
+                    /* calculate the expected working hours of employee (for the current month) */
+                    $complete_working_hrs = $workdays * $work_hours;
+
+                    /* employee's dtr for the current month, current year */
                     $employee_dtr = dailytimerecord::where('employee_id', $employee->employee_id)
                                                     ->whereMonth('attendance_date', NOW()->month)
+                                                    ->whereYear('attendance_date', NOW()->year)
                                                     ->whereDay('attendance_date', '>', 15)
                                                     ->get();
-                    
-                    // if the number of dtr records != expected (complete) number of dtr records of the months
+
+                    /* absences, late, undertime, overtime */
                     $absent = 0;
-                    if($employee_dtr->count() != $weekdays){
-                        $absent = $weekdays - $employee_dtr->count();
+                    $late = 0;
+                    $undertime = 0;
+                    $overtime = 0;
+                    $cto = 0;
+
+                    /* calculate for cto (working hrs during rest day) */
+                    foreach($employee_dtr as $key=>$dtr){
+                        $d = date("w",strtotime($dtr->attendance_date));
+                        if(in_array($d, $employee->work_days) == false){
+                            $s = strtotime($dtr->time_out)-strtotime($dtr->time_in);
+                            $h = floor(($s % 86400) / 3600);
+                            $cto += $h * 1.5; 
+                            unset($employee_dtr[$key]);
+                        }
                     }
-        
-                    // calculate working hrs of the employee
+
+                    /* calculate for absences */
+                    if($employee_dtr->count() < $workdays){
+                        $absent = $workdays - $employee_dtr->count();
+                    }
+
+                    /* calculate working hrs of the employee excluding rest days */
                     $working_hrs = 0;
                     foreach($employee_dtr as $dtr){
                         $sec = strtotime($dtr->time_out)-strtotime($dtr->time_in);
                         $hr = floor(($sec % 86400) / 3600);
                         $working_hrs += $hr;
                     }
-        
+
                     if($working_hrs != $complete_working_hrs){
-                        $late = 0;
-                        $undertime = 0;
-                        $overtime = 0;
                         foreach($employee_dtr as $dtr){
                             // late
-                            if($dtr->time_in > '08:00:00'){
-                                $sec = strtotime($dtr->time_in)-strtotime('08:00:00');
+                            if($dtr->time_in > $employee->start_of_shift){
+                                $sec = strtotime($dtr->time_in)-strtotime($employee->start_of_shift);
                                 $hr = $sec / 3600;
                                 $late += $hr;
                             }
                             // undertime
-                            if($dtr->time_out < '17:00:00'){
-                                $sec = strtotime('17:00:00')-strtotime($dtr->time_out);
+                            if($dtr->time_out < $employee->end_of_shift){
+                                $sec = strtotime($employee->end_of_shift)-strtotime($dtr->time_out);
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
                             // overtime
-                            if($dtr->time_out > '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('17:00:00');
+                            if($dtr->time_out > $employee->end_of_shift){
+                                $sec = strtotime($dtr->time_out)-strtotime($employee->end_of_shift);
                                 $hr = $sec / 3600;
                                 $overtime += $hr;
                             }
                         }
+
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
                                             ->whereMonth('attendance_date', NOW()->month)
                                             ->first();
@@ -360,6 +415,7 @@ class CompensationController extends Controller
                                 'undertime' => $undertime,
                                 'absent' => $absent,
                                 'overtime' => $overtime,
+                                'cto' => $cto,
                             ]);
                         }
                         else{
@@ -368,20 +424,18 @@ class CompensationController extends Controller
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
                             $monthly_report->overtime = $overtime;
+                            $monthly_report->cto = $cto;
                             $monthly_report->save();
                         }
 
-                        $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
-                    }
-                    else{
-                        $message = 'Complete attendance for the month of '.date('F', strtotime(Carbon::NOW()->month));    
                     }
                 }
-
+                $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()));
             }
             else{
                 $message = 'No employees found.';    
             }
+
             $type = 'Full-time';
             return redirect()->route('dtr-report-generate', $type)->with('message', $message);
         }
@@ -393,64 +447,92 @@ class CompensationController extends Controller
 
     public function dtr_report_part_time($day){
         if($day == 30){
+            $employees = Employee::where('employee_type', 'COS/JO')
+                            ->where('active', 1)
+                            ->get();
             $month = Carbon::NOW()->month;
             $year = Carbon::NOW()->year;
-            $daysInMonth = date('t', strtotime(Carbon::NOW()));
-            $weekdays=20;
-            for($day=29; $day<=$daysInMonth; $day++) {
-                $wd = date("w",mktime(0,0,0,$month,$day,$year));
-                if($wd > 0 && $wd < 6){
-                    $weekdays += 1;
-                }
-            }
+            $daysInMonth =  Carbon::NOW()->daysInMonth;
 
-            $complete_working_hrs = $weekdays * 9; // complete working hrs of the month (9hrs/day)
-
-            $part_timers = employee::where('employee_type', 'COS/JO')->get();
-
-            if($part_timers != null){
-                foreach($part_timers as $part_timer){
-                    $employee = employee::where('employee_id', $part_timer->employee_id)->first();
-                    $employee_dtr = dailytimerecord::where('employee_id', $employee->employee_id)->get();
-                    
-                    // if the number of dtr records != expected (complete) number of dtr records of the months
-                    $absent = 0;
-                    if($employee_dtr->count() != $weekdays){
-                        $absent = $weekdays - $employee_dtr->count();
+            if($employees != null){
+                /* calculate the expected working days and hours */
+                foreach($employees as $employee){
+                    /* calculate the expected working days of employee (current month) */
+                    $workdays=0;
+                    $employee->work_days = json_decode($employee->work_days);
+                    for($day=1; $day<=$daysInMonth; $day++) {
+                        $wd = date("w",mktime(0,0,0,$month,$day,$year));
+                        if(in_array($wd, $employee->work_days)){
+                            $workdays += 1;
+                        }
                     }
-        
-                    // calculate working hrs of the employee
+
+                    /* calculate the expected working hours of employee (per day) */
+                    $work_sec = strtotime($employee->end_of_shift) - strtotime($employee->start_of_shift);
+                    $work_hours = floor(($work_sec % 86400) / 3600);
+
+                    /* calculate the expected working hours of employee (for the current month) */
+                    $complete_working_hrs = $workdays * $work_hours;
+
+                    /* employee's dtr for the current month, current year */
+                    $employee_dtr = dailytimerecord::where('employee_id', $employee->employee_id)
+                                                    ->whereMonth('attendance_date', NOW()->month)
+                                                    ->whereYear('attendance_date', NOW()->year)
+                                                    ->get();
+
+                    /* absences, late, undertime, overtime */
+                    $absent = 0;
+                    $late = 0;
+                    $undertime = 0;
+                    $overtime = 0;
+                    $cto = 0;
+
+                    /* calculate for cto (working hrs during rest day) */
+                    foreach($employee_dtr as $key=>$dtr){
+                        $d = date("w",strtotime($dtr->attendance_date));
+                        if(in_array($d, $employee->work_days) == false){
+                            $s = strtotime($dtr->time_out)-strtotime($dtr->time_in);
+                            $h = floor(($s % 86400) / 3600);
+                            $cto += $h * 1.5; 
+                            unset($employee_dtr[$key]);
+                        }
+                    }
+
+                    /* calculate for absences */
+                    if($employee_dtr->count() < $workdays){
+                        $absent = $workdays - $employee_dtr->count();
+                    }
+
+                    /* calculate working hrs of the employee excluding rest days */
                     $working_hrs = 0;
                     foreach($employee_dtr as $dtr){
                         $sec = strtotime($dtr->time_out)-strtotime($dtr->time_in);
                         $hr = floor(($sec % 86400) / 3600);
                         $working_hrs += $hr;
                     }
-        
+
                     if($working_hrs != $complete_working_hrs){
-                        $late = 0;
-                        $undertime = 0;
-                        $overtime = 0;
                         foreach($employee_dtr as $dtr){
                             // late
-                            if($dtr->time_in > '08:00:00'){
-                                $sec = strtotime($dtr->time_in)-strtotime('08:00:00');
+                            if($dtr->time_in > $employee->start_of_shift){
+                                $sec = strtotime($dtr->time_in)-strtotime($employee->start_of_shift);
                                 $hr = $sec / 3600;
                                 $late += $hr;
                             }
                             // undertime
-                            if($dtr->time_out < '17:00:00'){
-                                $sec = strtotime('17:00:00')-strtotime($dtr->time_out);
+                            if($dtr->time_out < $employee->end_of_shift){
+                                $sec = strtotime($employee->end_of_shift)-strtotime($dtr->time_out);
                                 $hr = $sec / 3600;
                                 $undertime += $hr;
                             }
                             // overtime
-                            if($dtr->time_out > '17:00:00'){
-                                $sec = strtotime($dtr->time_out)-strtotime('17:00:00');
+                            if($dtr->time_out > $employee->end_of_shift){
+                                $sec = strtotime($dtr->time_out)-strtotime($employee->end_of_shift);
                                 $hr = $sec / 3600;
                                 $overtime += $hr;
                             }
                         }
+
                         $monthly_report = dtr::where('employee_id', $employee->employee_id)
                                             ->whereMonth('attendance_date', NOW()->month)
                                             ->first();
@@ -463,6 +545,7 @@ class CompensationController extends Controller
                                 'undertime' => $undertime,
                                 'absent' => $absent,
                                 'overtime' => $overtime,
+                                'cto' => $cto,
                             ]);
                         }
                         else{
@@ -471,20 +554,18 @@ class CompensationController extends Controller
                             $monthly_report->undertime = $undertime;
                             $monthly_report->absent = $absent;
                             $monthly_report->overtime = $overtime;
+                            $monthly_report->cto = $cto;
                             $monthly_report->save();
                         }
 
-                        $message = 'Successfully generated a dtr report of full time employees for the month of '.date('F', strtotime(Carbon::NOW()->month));    
-                    }
-                    else{
-                        $message = 'Complete attendance for the month of '.date('F', strtotime(Carbon::NOW()->month));    
                     }
                 }
-
+                $message = 'Successfully generated a dtr report of part time employees for the month of '.date('F', strtotime(Carbon::NOW()));
             }
             else{
                 $message = 'No employees found.';    
             }
+
             $type = 'Part-time';
             return redirect()->route('dtr-report-generate', $type)->with('message', $message);
         }
